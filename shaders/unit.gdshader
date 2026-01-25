@@ -14,10 +14,11 @@ uniform float threshold : hint_range(0.0, 1.0) = 0.1;
 uniform float edge_distance : hint_range(0.0, 1.0) = 0.055;
 
 // --- Border Controls ---
-uniform bool use_active_color = false;
-uniform vec4 default_border_color : source_color = vec4(0.0, 0.0, 0.0, 1.0); // Black default
-uniform vec4 active_border_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);  // color active
-uniform float border_width : hint_range(0.0, 10.0) = 1.0;
+uniform bool use_active_state = false;
+uniform vec4 default_border_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform vec4 active_border_color : source_color = vec4(1.0, 0.0, 0.0, 1.0);
+uniform float default_border_width : hint_range(0.0, 10.0) = 0.5;
+uniform float active_border_width : hint_range(0.0, 10.0) = 0.25;
 
 float get_shape_alpha(sampler2D tex, vec2 uv, vec2 l_uv) {
     vec4 tex_color = texture(tex, uv);
@@ -52,12 +53,13 @@ void fragment() {
     float current_a = get_shape_alpha(TEXTURE, UV, local_uv);
     color.a = current_a;
 
-    // Determine which color to use based on the boolean
-    vec4 final_border_color = use_active_color ? active_border_color : default_border_color;
+    // Determine color AND width based on the active state
+    vec4 final_border_color = use_active_state ? active_border_color : default_border_color;
+    float final_width = use_active_state ? active_border_width : default_border_width;
 
-    // Border Logic: Only run if the border color isn't fully transparent
+    // Border Logic
     if (final_border_color.a > 0.0 && current_a <= 0.0) {
-        vec2 size = TEXTURE_PIXEL_SIZE * border_width;
+        vec2 size = TEXTURE_PIXEL_SIZE * final_width;
         
         float neighbor_a = 0.0;
         neighbor_a += get_shape_alpha(TEXTURE, UV + vec2(0.0, -size.y), local_uv + vec2(0.0, -size.y));

@@ -1,0 +1,100 @@
+[gd_scene load_steps=12 format=3 uid="uid://kx24nn30dqql"]
+
+[ext_resource type="Script" uid="uid://dk26clul6uf2m" path="res://src/arrow.gd" id="1_pije4"]
+[ext_resource type="Shader" uid="uid://dkuolre4wrkc2" path="res://shaders/transparentback.gdshader" id="2_drvah"]
+[ext_resource type="Texture2D" uid="uid://fik2xyspevag" path="res://assets/tilesets/urizen_onebit_tileset__v2d0.png" id="3_5jw1r"]
+[ext_resource type="AudioStream" uid="uid://c7krfqadttu4b" path="res://assets/sfx/Minifantasy_Dungeon_SFX/20_orc_special_atk.wav" id="4_etvk7"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pije4"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 8.0
+direction = Vector3(-1, 0, 0)
+spread = 5.0
+gravity = Vector3(0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pije4"]
+shader = ExtResource("2_drvah")
+shader_parameter/threshold = 0.1
+shader_parameter/edge_distance = 0.1010000047975
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g0f7c"]
+atlas = ExtResource("3_5jw1r")
+region = Rect2(1028, 274, 12, 12)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_24gab"]
+radius = 2.828427
+
+[sub_resource type="Animation" id="Animation_drvah"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.7853982]
+}
+
+[sub_resource type="Animation" id="Animation_pije4"]
+resource_name = "spin"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.7853982, 7.0685834705770345]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5jw1r"]
+_data = {
+&"RESET": SubResource("Animation_drvah"),
+&"spin": SubResource("Animation_pije4")
+}
+
+[node name="Fireball" type="Area2D"]
+collision_layer = 0
+collision_mask = 3
+monitorable = false
+script = ExtResource("1_pije4")
+speed = 50.0
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+modulate = Color(1, 0.6784314, 0, 1)
+position = Vector2(-4, 1)
+amount = 100
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_pije4")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_pije4")
+rotation = 0.7853982
+scale = Vector2(0.99999994, 0.99999994)
+texture = SubResource("AtlasTexture_g0f7c")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(5, 0)
+shape = SubResource("CircleShape2D_24gab")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_etvk7")
+autoplay = true
+bus = &"Sfx"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_5jw1r")
+}
+autoplay = "spin"
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

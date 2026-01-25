@@ -21,6 +21,11 @@ shader_parameter/squash_amount = 0.02400000114
 shader_parameter/sprite_height = 12.0
 shader_parameter/threshold = 0.1
 shader_parameter/edge_distance = 0.4
+shader_parameter/use_active_state = false
+shader_parameter/default_border_color = Color(0, 0, 0, 1)
+shader_parameter/active_border_color = Color(1, 0, 0, 1)
+shader_parameter/default_border_width = 0.5
+shader_parameter/active_border_width = 0.25
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_aqvaj"]
 properties/0/path = NodePath(".:position")
@@ -39,10 +44,6 @@ collision_mask = 3
 input_pickable = true
 motion_mode = 1
 script = ExtResource("1_tcob5")
-
-[node name="HealthComponent" parent="." instance=ExtResource("2_lhq1v")]
-position = Vector2(0, -7.9999995)
-scale = Vector2(0.05, 0.04)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 9.536743e-07)
@@ -64,6 +65,10 @@ metadata/_edit_use_anchors_ = true
 material = SubResource("ShaderMaterial_eg14d")
 position = Vector2(-6, -6)
 tile_set = ExtResource("5_atvym")
+
+[node name="HealthComponent" parent="." instance=ExtResource("2_lhq1v")]
+position = Vector2(0, -9)
+scale = Vector2(0.05, 0.04)
 
 [node name="SoundComponent" parent="." instance=ExtResource("6_siou7")]
 

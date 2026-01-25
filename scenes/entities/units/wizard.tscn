@@ -1,25 +1,27 @@
-[gd_scene load_steps=10 format=3 uid="uid://fix3rwufx5qv"]
+[gd_scene load_steps=12 format=3 uid="uid://bpaubt37se7ph"]
 
-[ext_resource type="Script" uid="uid://sjnwhxik4yas" path="res://src/villager.gd" id="1_t12mu"]
-[ext_resource type="PackedScene" uid="uid://cldxrxi6cj4ln" path="res://scenes/components/HealthComponent.tscn" id="2_vrepr"]
-[ext_resource type="Shader" uid="uid://d21b4b7xrre2h" path="res://shaders/unit.gdshader" id="4_aqvaj"]
-[ext_resource type="TileSet" uid="uid://cgig36v2tr1w3" path="res://resources/urizen.tres" id="4_eg14d"]
-[ext_resource type="PackedScene" uid="uid://e2608e4n3uw5" path="res://scenes/components/UnitController.tscn" id="4_q8lqd"]
-[ext_resource type="PackedScene" uid="uid://gngxsuir4syw" path="res://scenes/components/SoundComponent.tscn" id="6_aqvaj"]
+[ext_resource type="Script" uid="uid://dajbdq8amc8ui" path="res://src/wizard.gd" id="1_ndbdr"]
+[ext_resource type="PackedScene" uid="uid://e2608e4n3uw5" path="res://scenes/components/UnitController.tscn" id="2_ndbdr"]
+[ext_resource type="Shader" uid="uid://d21b4b7xrre2h" path="res://shaders/unit.gdshader" id="3_43iac"]
+[ext_resource type="TileSet" uid="uid://cgig36v2tr1w3" path="res://resources/urizen.tres" id="4_882si"]
+[ext_resource type="PackedScene" uid="uid://cldxrxi6cj4ln" path="res://scenes/components/HealthComponent.tscn" id="5_k2ugn"]
+[ext_resource type="PackedScene" uid="uid://gngxsuir4syw" path="res://scenes/components/SoundComponent.tscn" id="6_s267n"]
+[ext_resource type="PackedScene" uid="uid://tyw1x20ujt2x" path="res://scenes/components/RangeAttackComponent.tscn" id="7_2i0vj"]
+[ext_resource type="PackedScene" uid="uid://kx24nn30dqql" path="res://scenes/entities/objects/fireball.tscn" id="8_ndbdr"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vrepr"]
 radius = 6.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_eg14d"]
 resource_local_to_scene = true
-shader = ExtResource("4_aqvaj")
+shader = ExtResource("3_43iac")
 shader_parameter/random_phase = 0.0
 shader_parameter/speed = 5.00000023424012
 shader_parameter/height = 0.0
 shader_parameter/squash_amount = 0.02400000114
 shader_parameter/sprite_height = 12.0
 shader_parameter/threshold = 0.1
-shader_parameter/edge_distance = 0.0550000026125
+shader_parameter/edge_distance = 0.4
 shader_parameter/use_active_state = false
 shader_parameter/default_border_color = Color(0, 0, 0, 1)
 shader_parameter/active_border_color = Color(1, 0, 0, 1)
@@ -37,18 +39,18 @@ properties/2/path = NodePath("Sprite:scale")
 properties/2/spawn = true
 properties/2/replication_mode = 1
 
-[node name="Villager" type="CharacterBody2D" groups=["units"]]
+[node name="Wizard" type="CharacterBody2D" groups=["units"]]
 collision_layer = 2
 collision_mask = 3
 input_pickable = true
 motion_mode = 1
-script = ExtResource("1_t12mu")
+script = ExtResource("1_ndbdr")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 9.536743e-07)
 shape = SubResource("CircleShape2D_vrepr")
 
-[node name="UnitController" parent="." instance=ExtResource("4_q8lqd")]
+[node name="UnitController" parent="." instance=ExtResource("2_ndbdr")]
 position = Vector2(-6, -5.999999)
 
 [node name="SelectionCircle" type="Sprite2D" parent="."]
@@ -63,16 +65,19 @@ metadata/_edit_use_anchors_ = true
 [node name="Sprite" type="TileMapLayer" parent="."]
 material = SubResource("ShaderMaterial_eg14d")
 position = Vector2(-6, -6)
-tile_set = ExtResource("4_eg14d")
+tile_set = ExtResource("4_882si")
 
-[node name="HealthComponent" parent="." instance=ExtResource("2_vrepr")]
+[node name="HealthComponent" parent="." instance=ExtResource("5_k2ugn")]
 position = Vector2(0, -9)
 scale = Vector2(0.05, 0.04)
 
-[node name="SoundComponent" parent="." instance=ExtResource("6_aqvaj")]
+[node name="SoundComponent" parent="." instance=ExtResource("6_s267n")]
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_aqvaj")
+
+[node name="RangeAttackComponent" parent="." instance=ExtResource("7_2i0vj")]
+projectile_scene = ExtResource("8_ndbdr")
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

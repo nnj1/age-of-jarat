@@ -2,6 +2,8 @@ extends CharacterBody2D
 
 class_name Unit
 
+@onready var main_game_node = get_tree().get_root().get_node('Game')
+
 var sprite_atlas_coords_corners = [
 	Vector2i(104,2),
 	Vector2i(144,10)
@@ -12,10 +14,13 @@ var target_position: Vector2 = Vector2.ZERO
 var is_moving: bool = false
 var looking_right = false
 
+var random_atlas_coords: Vector2i
+
 @onready var selection_visual = $SelectionCircle # A Sprite2D child used for feedback
 
 func prepare(spawning_player_id: int = 1):
 	set_multiplayer_authority(spawning_player_id)
+	
 
 func _ready():
 	if not is_multiplayer_authority(): return
@@ -32,7 +37,7 @@ func _ready():
 		selection_visual.visible = false
 		
 	# pick a random player sprite
-	var random_atlas_coords = get_vectors_in_range(sprite_atlas_coords_corners[0], sprite_atlas_coords_corners[1]).pick_random()
+	random_atlas_coords = get_vectors_in_range(sprite_atlas_coords_corners[0], sprite_atlas_coords_corners[1]).pick_random()
 	
 	# TODO: make this an rpc call
 	set_unit_texture.rpc(random_atlas_coords)
@@ -51,6 +56,10 @@ func set_selected(value: bool):
 		selection_visual.visible = value
 	# 3. Update the health bar visibility via the component
 	$HealthComponent.set_bar_visibility(value)
+	
+	# set up the outline for the sprite
+	if get_node_or_null('UnitController'):
+		$Sprite.material.set_shader_parameter('use_active_state', value)
 
 func _on_mouse_entered():
 	# Useful if you want the cursor to change when hovering over a clickable unit
@@ -86,13 +95,7 @@ func set_move_target(new_target: Vector2):
 func _physics_process(_delta):
 	if not is_multiplayer_authority(): return
 	
-	if get_node_or_null('UnitController'):
-		if $UnitController.is_selected:
-			$Sprite.material.set_shader_parameter('use_active_color', true)
-		else:
-			$Sprite.material.set_shader_parameter('use_active_color', false)
 
-	
 	if not is_moving:
 		return
 	

@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://66pne335f347"]
+[gd_scene load_steps=10 format=3 uid="uid://66pne335f347"]
 
 [ext_resource type="Script" uid="uid://chlhpappba5gk" path="res://src/game.gd" id="1_3wwfn"]
 [ext_resource type="PackedScene" uid="uid://byu0g7vffd20f" path="res://scenes/components/SelectionManager.tscn" id="1_fqmia"]
 [ext_resource type="PackedScene" uid="uid://fix3rwufx5qv" path="res://scenes/entities/units/villager.tscn" id="2_ifh15"]
+[ext_resource type="Script" uid="uid://dnh1musdqbcs1" path="res://src/tab_container.gd" id="2_leqql"]
 [ext_resource type="Script" uid="uid://c5x4xpsy8a7b1" path="res://src/minimap_camera.gd" id="2_t5sjj"]
 [ext_resource type="Script" uid="uid://cn6q5tu3cq7yb" path="res://src/camera_2d.gd" id="3_ifh15"]
 [ext_resource type="PackedScene" uid="uid://24ncf3ybr3hc" path="res://scenes/maps/procedural.tscn" id="3_ks7w8"]
@@ -43,11 +44,14 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = -178.0
-offset_right = -683.0
+offset_right = -556.0
 grow_horizontal = 2
 grow_vertical = 0
+focus_mode = 2
 theme_override_font_sizes/font_size = 32
 current_tab = 0
+drag_to_rearrange_enabled = true
+script = ExtResource("2_leqql")
 
 [node name="Game" type="Panel" parent="UI/TabContainer"]
 layout_mode = 2
@@ -58,10 +62,98 @@ visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Options" type="Panel" parent="UI/TabContainer"]
+[node name="Unit" type="Panel" parent="UI/TabContainer"]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/TabContainer/Unit"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/TabContainer/Unit/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="Label" type="Label" parent="UI/TabContainer/Unit/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "unit_name"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/TabContainer/Unit/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/bold_font_size = 20
+theme_override_font_sizes/bold_italics_font_size = 20
+theme_override_font_sizes/italics_font_size = 20
+theme_override_font_sizes/mono_font_size = 20
+text = "unit "
+
+[node name="TextureRect" type="TextureRect" parent="UI/TabContainer/Unit/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+expand_mode = 3
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="UI/TabContainer/Unit/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+
+[node name="Button" type="Button" parent="UI/TabContainer/Unit/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Build"
+
+[node name="Button2" type="Button" parent="UI/TabContainer/Unit/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Upgrade"
+
+[node name="CheckButton" type="CheckButton" parent="UI/TabContainer/Unit/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+button_pressed = true
+text = "AI on?"
+alignment = 1
+
+[node name="Button4" type="Button" parent="UI/TabContainer/Unit/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Delete"
+
+[node name="Options" type="Panel" parent="UI/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/TabContainer/Options"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/TabContainer/Options/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button2" type="Button" parent="UI/TabContainer/Options/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Exit to Menu"
+
+[node name="Button" type="Button" parent="UI/TabContainer/Options/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Exit to Desktop"
 
 [node name="Panel2" type="Panel" parent="UI"]
 custom_minimum_size = Vector2(200, 50)
@@ -142,3 +234,6 @@ current = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_fqmia")
+
+[connection signal="pressed" from="UI/TabContainer/Options/HBoxContainer/VBoxContainer/Button2" to="." method="exit_game_to_menu"]
+[connection signal="pressed" from="UI/TabContainer/Options/HBoxContainer/VBoxContainer/Button" to="." method="exit_game_to_desktop"]

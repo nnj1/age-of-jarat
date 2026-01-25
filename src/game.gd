@@ -5,6 +5,9 @@ func _ready() -> void:
 	$UI/Panel2/Minimap/SubViewport.world_2d = get_tree().root.get_viewport().world_2d
 	
 	$map/procedural/MapInteractionComponent.tile_pressed.connect(update_object_menu)
+	
+	# HIDE UNIT TAB BY DEFAULT
+	set_tab_hidden_by_name($UI/TabContainer, 'Unit', true)
 
 func _process(_delta: float) -> void:
 	# Get the FPS
@@ -27,6 +30,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			spawn_villager(get_global_mouse_position())
 		if event.pressed and event.keycode == KEY_W:
 			spawn_warrior(get_global_mouse_position())
+		if event.pressed and event.keycode == KEY_M:
+			spawn_wizard(get_global_mouse_position())
 
 func spawn_villager(spawn_pos: Vector2):
 	var villager = preload("res://scenes/entities/units/villager.tscn").instantiate()
@@ -39,6 +44,12 @@ func spawn_warrior(spawn_pos: Vector2):
 	warrior.prepare(1)
 	warrior.position = spawn_pos
 	$entities/units.add_child(warrior, true)
+	
+func spawn_wizard(spawn_pos: Vector2):
+	var wizard = preload("res://scenes/entities/units/wizard.tscn").instantiate()
+	wizard.prepare(1)
+	wizard.position = spawn_pos
+	$entities/units.add_child(wizard, true)
 
 @warning_ignore("unused_parameter")
 func update_object_menu(layer_node, map_coords, atlas_coords):
@@ -54,3 +65,53 @@ func update_object_menu(layer_node, map_coords, atlas_coords):
 	
 	# 3. Add Label to Panel, and Panel to the Scene
 	$UI/TabContainer/Object.add_child(label)
+
+
+
+func show_unit_details(unit):
+	# SHOW THE TAB
+	set_tab_hidden_by_name($UI/TabContainer, 'Unit', false)
+	$UI/TabContainer/Unit.show()
+	
+	# set up some references for easy access later
+	var delete_button = $UI/TabContainer/Unit/HBoxContainer/VBoxContainer2/Button4
+	
+	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer/Label.text = str(unit.name)
+	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer/RichTextLabel.text = str(unit.random_atlas_coords)
+	$UI/TabContainer/Unit/HBoxContainer/TextureRect.texture = get_cropped_tile_texture(unit.random_atlas_coords)
+	
+	var delete_unit = func():
+		if unit:
+			if 'on_death' in unit:
+				unit.on_death()
+				# HIDE THE TAB if unit is deleted
+				set_tab_hidden_by_name($UI/TabContainer, 'Unit', true)
+	
+	# Connect signal to button after clearing prior signals
+	for connection in delete_button.get_signal_connection_list("pressed"):
+		connection.signal.disconnect(connection.callable)
+	delete_button.pressed.connect(delete_unit)
+	
+func get_cropped_tile_texture(atlas_coords: Vector2i) -> AtlasTexture:
+	var source = preload('res://resources/urizen.tres').get_source(0) as TileSetAtlasSource
+	
+	if source:
+		var atlas_tex = AtlasTexture.new()
+		atlas_tex.atlas = source.texture
+		atlas_tex.region = source.get_tile_texture_region(atlas_coords)
+		return atlas_tex
+	return null
+
+func set_tab_hidden_by_name(tab_container: TabContainer, tab_name: String, state: bool):
+	for i in range(tab_container.get_tab_count()):
+		if tab_container.get_tab_title(i) == tab_name:
+			tab_container.set_tab_hidden(i, state)
+			return
+
+func exit_game_to_menu():
+	#TODO: close any connections if server or host
+	pass
+
+func exit_game_to_desktop():
+	#TODO: close any connections if server or host
+	get_tree().quit()

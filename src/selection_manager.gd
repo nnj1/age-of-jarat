@@ -1,5 +1,7 @@
 extends Node2D
 
+@onready var main_game_node = get_tree().get_root().get_node('Game')
+
 # Selection variables
 var dragging = false
 var selected_units = []
@@ -107,7 +109,7 @@ func _draw():
 func handle_single_selection(click_pos: Vector2, shift: bool):
 	var all_units = get_tree().get_nodes_in_group("units")
 	var closest_unit = null
-	var min_dist = 40.0 # Interaction radius
+	var min_dist = 5.0 # Interaction radius
 
 	for unit in all_units:
 		var dist = unit.global_position.distance_to(click_pos)
@@ -128,6 +130,10 @@ func select_units_in_box(_shift: bool):
 			add_to_selection(unit)
 
 func add_to_selection(unit):
+	
+	# This was the last unit added to the selection, show it's details in the UI
+	main_game_node.show_unit_details(unit)
+	
 	if not selected_units.has(unit):
 		selected_units.append(unit)
 		unit.set_selected(true)
