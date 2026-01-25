@@ -1,6 +1,19 @@
-[gd_scene load_steps=2 format=3 uid="uid://e8adp3fu350m"]
+[gd_scene load_steps=3 format=3 uid="uid://e8adp3fu350m"]
 
 [ext_resource type="Script" uid="uid://b6g8yv0kuf3w" path="res://src/melee_attack_component.gd" id="1_dsc6n"]
 
-[node name="MeleeAttackComponent" type="Node"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_dsc6n"]
+radius = 21.0
+
+[node name="MeleeAttackComponent" type="Node2D"]
 script = ExtResource("1_dsc6n")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("CircleShape2D_dsc6n")
+
+[node name="AttackTimer" type="Timer" parent="."]
+one_shot = true

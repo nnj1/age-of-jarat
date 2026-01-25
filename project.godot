@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+GlobalVars="*res://src/global_vars.gd"
 PostProcessor="*res://scenes/autoloads/PostProcessor.tscn"
 CursorManager="*res://scenes/autoloads/CursorManager.tscn"
 MusicManager="*res://scenes/autoloads/MusicManager.tscn"

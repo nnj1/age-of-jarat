@@ -5,14 +5,16 @@ class_name Unit
 @onready var main_game_node = get_tree().get_root().get_node('Game')
 
 var sprite_atlas_coords_corners = [
-	Vector2i(104,2),
-	Vector2i(144,10)
+	Vector2i(104,0),
+	Vector2i(200,32)
 ]
 
 @export var speed: float = 25.0
 var target_position: Vector2 = Vector2.ZERO
 var is_moving: bool = false
 var looking_right = false
+
+var knockback_velocity: Vector2 = Vector2.ZERO
 
 var random_atlas_coords: Vector2i
 
@@ -30,15 +32,20 @@ func _ready():
 	$HealthComponent.died.connect(on_death)
 	
 	$HealthComponent.just_took_damage.connect($SoundComponent.play_hurt_sound)
-	
+	$HealthComponent.just_took_damage.connect(play_damage_modulate_animation)
 	
 	target_position = global_position
 	if selection_visual:
 		selection_visual.visible = false
-		
-	# pick a random player sprite
-	random_atlas_coords = get_vectors_in_range(sprite_atlas_coords_corners[0], sprite_atlas_coords_corners[1]).pick_random()
 	
+	
+	# pick a random player sprite
+	random_atlas_coords = GlobalVars.get_vectors_in_range(sprite_atlas_coords_corners[0], sprite_atlas_coords_corners[1]).pick_random()
+	
+	# make sure it's nonblack otherwise pick again
+	while not is_atlas_tile_non_black(random_atlas_coords):
+		random_atlas_coords = GlobalVars.get_vectors_in_range(sprite_atlas_coords_corners[0], sprite_atlas_coords_corners[1]).pick_random()
+
 	# TODO: make this an rpc call
 	set_unit_texture.rpc(random_atlas_coords)
 	
@@ -92,45 +99,81 @@ func set_move_target(new_target: Vector2):
 			$Sprite.position.x -= 12
 			looking_right = false
 
+func apply_knockback(force: Vector2) -> void:
+	knockback_velocity = force
+
 func _physics_process(_delta):
 	if not is_multiplayer_authority(): return
 	
 
 	if not is_moving:
-		return
-	
-	var distance_to_target = global_position.distance_to(target_position)
-	
-	# 1. Check if we are close enough to stop BEFORE moving
-	# Increase the tolerance (e.g., 2.0 or 4.0) for high speeds
-	if distance_to_target < 2.0:
-		global_position = target_position # Snap to exact target
-		velocity = Vector2.ZERO
-		is_moving = false
-		stop_jumping()
-		return
-
-	# 2. Calculate direction and velocity
-	var direction = global_position.direction_to(target_position)
-	velocity = direction * speed
-	
-	# 3. Move and Slide
-	move_and_slide()
-
-func get_vectors_in_range(p1: Vector2i, p2: Vector2i) -> Array[Vector2i]:
-	var points: Array[Vector2i] = []
-	
-	# Create a Rect2i from two points. 
-	# abs() ensures it works even if p2 is "behind" p1.
-	var rect = Rect2i(p1, Vector2i.ZERO).expand(p2)
-	
-	# Loop through the X and Y range
-	# We use rect.end + 1 if you want the border included
-	for x in range(rect.position.x, rect.end.x + 1):
-		for y in range(rect.position.y, rect.end.y + 1):
-			points.append(Vector2i(x, y))
+		# only susceptible to knockback, if not moving
+		# Gradually friction away the knockback so they don't slide forever
+		knockback_velocity = lerp(knockback_velocity, Vector2.ZERO, 0.1)
+		velocity = knockback_velocity
+		move_and_slide()
+	else:
+		var distance_to_target = global_position.distance_to(target_position)
+		
+		# 1. Check if we are close enough to stop BEFORE moving
+		# Increase the tolerance (e.g., 2.0 or 4.0) for high speeds
+		if distance_to_target < 2.0:
+			global_position = target_position # Snap to exact target
+			velocity = Vector2.ZERO
+			is_moving = false
+			stop_jumping()
+			return
 			
-	return points
+		# Gradually friction away the knockback so they don't slide forever
+		knockback_velocity = lerp(knockback_velocity, Vector2.ZERO, 0.1)
+
+		# 2. Calculate direction and velocity
+		var direction = global_position.direction_to(target_position)
+		velocity = direction * speed + knockback_velocity
+		
+		
+		# 3. Move and Slide
+		move_and_slide()
 
 func on_death():
 	queue_free()
+
+func play_damage_modulate_animation():
+	var tween = get_tree().create_tween()
+	# Transition to Red
+	tween.tween_property($Sprite, "modulate", Color.RED, 0.1).set_trans(Tween.TRANS_SINE)
+	# Transition back to White (Normal)
+	tween.tween_property($Sprite, "modulate", Color.WHITE, 0.1).set_trans(Tween.TRANS_SINE)
+
+func is_atlas_tile_non_black(atlas_coords: Vector2i, tileset_path: String = 'res://resources/urizen.tres', source_id: int = 0) -> bool:
+	# 1. Load the TileSet resource
+	var tile_set = load(tileset_path) as TileSet
+	if not tile_set:
+		push_error("Failed to load TileSet at: " + tileset_path)
+		return false
+
+	# 2. Get the specific Atlas Source
+	var source = tile_set.get_source(source_id) as TileSetAtlasSource
+	if not source:
+		push_error("Source ID %d not found in TileSet" % source_id)
+		return false
+
+	# 3. Get the Image data from the texture
+	var texture = source.texture
+	if not texture: return false
+	var image = texture.get_image()
+	
+	# 4. Use Godot's built-in helper to find exactly where the tile sits in the image
+	var region = source.get_tile_texture_region(atlas_coords)
+	
+	# 5. Scan the pixels in that region
+	for y in range(region.position.y, region.end.y):
+		for x in range(region.position.x, region.end.x):
+			var pixel_color = image.get_pixel(x, y)
+			
+			# We check 'v' (Value/Brightness) and 'a' (Alpha)
+			# This ignores pixels that are black OR fully transparent
+			if pixel_color.v > 0.01 and pixel_color.a > 0.05:
+				return true
+				
+	return false

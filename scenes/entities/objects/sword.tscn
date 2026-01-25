@@ -1,0 +1,83 @@
+[gd_scene load_steps=10 format=3 uid="uid://bhitb2ojiygb0"]
+
+[ext_resource type="Script" uid="uid://cd7rge7ovxsr7" path="res://src/sword.gd" id="1_jbfry"]
+[ext_resource type="Shader" uid="uid://dkuolre4wrkc2" path="res://shaders/transparentback.gdshader" id="2_bg6c2"]
+[ext_resource type="AudioStream" uid="uid://c5eukgiwomp0y" path="res://assets/sfx/Minifantasy_Dungeon_SFX/26_sword_hit_1.wav" id="3_bolrv"]
+[ext_resource type="Texture2D" uid="uid://fik2xyspevag" path="res://assets/tilesets/urizen_onebit_tileset__v2d0.png" id="3_whm4f"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gxj1c"]
+shader = ExtResource("2_bg6c2")
+shader_parameter/threshold = 0.1
+shader_parameter/edge_distance = 0.4
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bolrv"]
+atlas = ExtResource("3_whm4f")
+region = Rect2(339, 79, 12, 12)
+
+[sub_resource type="Animation" id="Animation_whm4f"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AudioStreamPlayer2D:playing")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_bg6c2"]
+resource_name = "thrust"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.53333336, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(3, 0), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AudioStreamPlayer2D:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7dwjh"]
+_data = {
+&"RESET": SubResource("Animation_whm4f"),
+&"thrust": SubResource("Animation_bg6c2")
+}
+
+[node name="Sword" type="Node2D"]
+z_index = 3
+script = ExtResource("1_jbfry")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_gxj1c")
+rotation = 0.7853982
+scale = Vector2(0.9999999, 0.9999999)
+texture = SubResource("AtlasTexture_bolrv")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_bolrv")
+bus = &"Sfx"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_7dwjh")
+}
+speed_scale = 5.0

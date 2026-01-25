@@ -10,6 +10,7 @@ extends Node
 @export var right_click_sound: AudioStream = preload('res://assets/sfx/UI Soundpack/UI Soundpack/MP3/African1.mp3')
 @export var escape_key_sound: AudioStream = preload("res://assets/sfx/Fantasy UI SFX/Fantasy UI SFX/Fantasy/Fantasy_UI (2).wav")
 @export var tilde_key_sound: AudioStream = preload("res://assets/sfx/Fantasy UI SFX/Fantasy UI SFX/Fantasy/Fantasy_UI (17).wav")
+@export var tab_key_sound: AudioStream = preload("res://assets/sfx/UI Soundpack/UI Soundpack/MP3/Wood Block1.mp3")
 
 @export_group("Settings")
 @export var pool_size: int = 8
@@ -54,6 +55,8 @@ func _input(event: InputEvent) -> void:
 				play_sfx(escape_key_sound)
 			KEY_QUOTELEFT: # This is the Tilde (~) key
 				play_sfx(tilde_key_sound)
+			KEY_TAB: # This is the Tilde (~) key
+				play_sfx(tab_key_sound)
 
 ## Public play function
 func play_sfx(stream: AudioStream):

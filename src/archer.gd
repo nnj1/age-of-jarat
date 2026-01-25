@@ -10,7 +10,7 @@ func prepare(spawning_player_id: int = 1):
 	
 func _ready():
 	# Connect important combat signals
-	$MeleeAttackComponent.just_melee_attacked.connect($SoundComponent.play_attack_grunt)
+	$RangeAttackComponent.just_range_attacked.connect($SoundComponent.play_attack_grunt)
 	
 	super._ready()
 	

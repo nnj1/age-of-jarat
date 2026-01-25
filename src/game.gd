@@ -1,5 +1,12 @@
 extends Node2D
 
+var materials = {
+	'food': 0,
+	'wood': 0,
+	'stone': 0,
+	'gold': 0
+}
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$UI/Panel2/Minimap/SubViewport.world_2d = get_tree().root.get_viewport().world_2d
@@ -22,7 +29,14 @@ func _process(_delta: float) -> void:
 	var date_string = "%04d-%02d-%02d" % [datetime.year, datetime.month, datetime.day]
 	
 	# Update the label text
-	$UI/Label.text = "FPS: %d | Date: %s | Time: %s" % [fps, date_string, time_string]
+	$UI/VBoxContainer/Label.text = "FPS: %d | Date: %s | Time: %s" % [fps, date_string, time_string]
+	
+	# Update the materials UI
+	update_material_display()
+	
+func update_material_display():
+	for mat_name in materials.keys():
+		get_node('UI/VBoxContainer/HBoxContainer/' + mat_name).text = str(materials[mat_name])
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey:
@@ -32,6 +46,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			spawn_warrior(get_global_mouse_position())
 		if event.pressed and event.keycode == KEY_M:
 			spawn_wizard(get_global_mouse_position())
+		if event.pressed and event.keycode == KEY_A:
+			spawn_archer(get_global_mouse_position())
 
 func spawn_villager(spawn_pos: Vector2):
 	var villager = preload("res://scenes/entities/units/villager.tscn").instantiate()
@@ -44,6 +60,12 @@ func spawn_warrior(spawn_pos: Vector2):
 	warrior.prepare(1)
 	warrior.position = spawn_pos
 	$entities/units.add_child(warrior, true)
+
+func spawn_archer(spawn_pos: Vector2):
+	var archer = preload("res://scenes/entities/units/archer.tscn").instantiate()
+	archer.prepare(1)
+	archer.position = spawn_pos
+	$entities/units.add_child(archer, true)
 	
 func spawn_wizard(spawn_pos: Vector2):
 	var wizard = preload("res://scenes/entities/units/wizard.tscn").instantiate()
@@ -65,8 +87,6 @@ func update_object_menu(layer_node, map_coords, atlas_coords):
 	
 	# 3. Add Label to Panel, and Panel to the Scene
 	$UI/TabContainer/Object.add_child(label)
-
-
 
 func show_unit_details(unit):
 	# SHOW THE TAB

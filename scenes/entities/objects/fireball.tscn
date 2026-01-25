@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://kx24nn30dqql"]
+[gd_scene load_steps=13 format=3 uid="uid://kx24nn30dqql"]
 
 [ext_resource type="Script" uid="uid://dk26clul6uf2m" path="res://src/arrow.gd" id="1_pije4"]
 [ext_resource type="Shader" uid="uid://dkuolre4wrkc2" path="res://shaders/transparentback.gdshader" id="2_drvah"]
 [ext_resource type="Texture2D" uid="uid://fik2xyspevag" path="res://assets/tilesets/urizen_onebit_tileset__v2d0.png" id="3_5jw1r"]
 [ext_resource type="AudioStream" uid="uid://c7krfqadttu4b" path="res://assets/sfx/Minifantasy_Dungeon_SFX/20_orc_special_atk.wav" id="4_etvk7"]
+[ext_resource type="Texture2D" uid="uid://cuprnbxb0f7v6" path="res://assets/sprites/2d_lights_and_shadows_neutral_point_light.webp" id="5_drvah"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pije4"]
 particle_flag_disable_z = true
@@ -96,5 +97,9 @@ libraries = {
 &"": SubResource("AnimationLibrary_5jw1r")
 }
 autoplay = "spin"
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+texture = ExtResource("5_drvah")
+texture_scale = 0.25
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

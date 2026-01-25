@@ -1,12 +1,45 @@
-[gd_scene load_steps=10 format=3 uid="uid://66pne335f347"]
+[gd_scene load_steps=17 format=3 uid="uid://66pne335f347"]
 
 [ext_resource type="Script" uid="uid://chlhpappba5gk" path="res://src/game.gd" id="1_3wwfn"]
 [ext_resource type="PackedScene" uid="uid://byu0g7vffd20f" path="res://scenes/components/SelectionManager.tscn" id="1_fqmia"]
 [ext_resource type="PackedScene" uid="uid://fix3rwufx5qv" path="res://scenes/entities/units/villager.tscn" id="2_ifh15"]
 [ext_resource type="Script" uid="uid://dnh1musdqbcs1" path="res://src/tab_container.gd" id="2_leqql"]
+[ext_resource type="Shader" uid="uid://d21b4b7xrre2h" path="res://shaders/unit.gdshader" id="2_rbptj"]
 [ext_resource type="Script" uid="uid://c5x4xpsy8a7b1" path="res://src/minimap_camera.gd" id="2_t5sjj"]
+[ext_resource type="Texture2D" uid="uid://fik2xyspevag" path="res://assets/tilesets/urizen_onebit_tileset__v2d0.png" id="3_5amgp"]
 [ext_resource type="Script" uid="uid://cn6q5tu3cq7yb" path="res://src/camera_2d.gd" id="3_ifh15"]
 [ext_resource type="PackedScene" uid="uid://24ncf3ybr3hc" path="res://scenes/maps/procedural.tscn" id="3_ks7w8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3ls1w"]
+shader = ExtResource("2_rbptj")
+shader_parameter/random_phase = 0.0
+shader_parameter/speed = 0.10000000149012
+shader_parameter/height = 0.0
+shader_parameter/squash_amount = 0.024
+shader_parameter/sprite_height = 12.0
+shader_parameter/threshold = 0.1
+shader_parameter/edge_distance = 0.4
+shader_parameter/use_active_state = false
+shader_parameter/default_border_color = Color(0, 0, 0, 1)
+shader_parameter/active_border_color = Color(1, 0, 0, 1)
+shader_parameter/default_border_width = 0.5
+shader_parameter/active_border_width = 0.25
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ve26b"]
+atlas = ExtResource("3_5amgp")
+region = Rect2(66, 222, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e71x3"]
+atlas = ExtResource("3_5amgp")
+region = Rect2(1, 300, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nk7qa"]
+atlas = ExtResource("3_5amgp")
+region = Rect2(196, 443, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m0ooe"]
+atlas = ExtResource("3_5amgp")
+region = Rect2(105, 599, 12, 12)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t5sjj"]
 bg_color = Color(0, 0, 0, 1)
@@ -33,10 +66,62 @@ script = ExtResource("1_3wwfn")
 [node name="UI" type="CanvasLayer" parent="."]
 layer = 3
 
-[node name="Label" type="Label" parent="UI"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI"]
 offset_right = 40.0
-offset_bottom = 14.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="UI/VBoxContainer"]
+layout_mode = 2
 theme_override_font_sizes/font_size = 32
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="UI/VBoxContainer/HBoxContainer"]
+material = SubResource("ShaderMaterial_3ls1w")
+layout_mode = 2
+texture = SubResource("AtlasTexture_ve26b")
+expand_mode = 2
+
+[node name="food" type="Label" parent="UI/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "99"
+
+[node name="TextureRect2" type="TextureRect" parent="UI/VBoxContainer/HBoxContainer"]
+material = SubResource("ShaderMaterial_3ls1w")
+layout_mode = 2
+texture = SubResource("AtlasTexture_e71x3")
+expand_mode = 2
+
+[node name="wood" type="Label" parent="UI/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "99"
+
+[node name="TextureRect3" type="TextureRect" parent="UI/VBoxContainer/HBoxContainer"]
+material = SubResource("ShaderMaterial_3ls1w")
+layout_mode = 2
+texture = SubResource("AtlasTexture_nk7qa")
+expand_mode = 2
+
+[node name="stone" type="Label" parent="UI/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "99"
+
+[node name="TextureRect4" type="TextureRect" parent="UI/VBoxContainer/HBoxContainer"]
+material = SubResource("ShaderMaterial_3ls1w")
+layout_mode = 2
+texture = SubResource("AtlasTexture_m0ooe")
+expand_mode = 2
+
+[node name="gold" type="Label" parent="UI/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "99"
 
 [node name="TabContainer" type="TabContainer" parent="UI"]
 anchors_preset = 12
