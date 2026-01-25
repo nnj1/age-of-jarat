@@ -86,6 +86,13 @@ func set_move_target(new_target: Vector2):
 func _physics_process(_delta):
 	if not is_multiplayer_authority(): return
 	
+	if get_node_or_null('UnitController'):
+		if $UnitController.is_selected:
+			$Sprite.material.set_shader_parameter('use_active_color', true)
+		else:
+			$Sprite.material.set_shader_parameter('use_active_color', false)
+
+	
 	if not is_moving:
 		return
 	

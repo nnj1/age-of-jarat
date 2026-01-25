@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://chsfrelryq2go" path="res://src/warrior.gd" id="1_tcob5"]
 [ext_resource type="PackedScene" uid="uid://cldxrxi6cj4ln" path="res://scenes/components/HealthComponent.tscn" id="2_lhq1v"]
 [ext_resource type="PackedScene" uid="uid://e2608e4n3uw5" path="res://scenes/components/UnitController.tscn" id="3_p81cl"]
-[ext_resource type="Shader" uid="uid://d21b4b7xrre2h" path="res://shaders/black2trans.gdshader" id="4_8ddc1"]
+[ext_resource type="Shader" uid="uid://d21b4b7xrre2h" path="res://shaders/unit.gdshader" id="4_8ddc1"]
 [ext_resource type="TileSet" uid="uid://cgig36v2tr1w3" path="res://resources/urizen.tres" id="5_atvym"]
 [ext_resource type="PackedScene" uid="uid://gngxsuir4syw" path="res://scenes/components/SoundComponent.tscn" id="6_siou7"]
 [ext_resource type="PackedScene" uid="uid://tyw1x20ujt2x" path="res://scenes/components/RangeAttackComponent.tscn" id="7_lhq1v"]

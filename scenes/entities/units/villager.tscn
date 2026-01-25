@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://sjnwhxik4yas" path="res://src/villager.gd" id="1_t12mu"]
 [ext_resource type="PackedScene" uid="uid://cldxrxi6cj4ln" path="res://scenes/components/HealthComponent.tscn" id="2_vrepr"]
-[ext_resource type="Shader" uid="uid://d21b4b7xrre2h" path="res://shaders/black2trans.gdshader" id="4_aqvaj"]
+[ext_resource type="Shader" uid="uid://d21b4b7xrre2h" path="res://shaders/unit.gdshader" id="4_aqvaj"]
 [ext_resource type="TileSet" uid="uid://cgig36v2tr1w3" path="res://resources/urizen.tres" id="4_eg14d"]
 [ext_resource type="PackedScene" uid="uid://e2608e4n3uw5" path="res://scenes/components/UnitController.tscn" id="4_q8lqd"]
 [ext_resource type="PackedScene" uid="uid://gngxsuir4syw" path="res://scenes/components/SoundComponent.tscn" id="6_aqvaj"]
@@ -20,6 +20,10 @@ shader_parameter/squash_amount = 0.02400000114
 shader_parameter/sprite_height = 12.0
 shader_parameter/threshold = 0.1
 shader_parameter/edge_distance = 0.0550000026125
+shader_parameter/use_active_color = false
+shader_parameter/default_border_color = Color(0, 0, 0, 1)
+shader_parameter/active_border_color = Color(1, 1, 1, 1)
+shader_parameter/border_width = 0.50000002375
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_aqvaj"]
 properties/0/path = NodePath(".:position")
