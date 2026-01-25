@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://byu0g7vffd20f"]
+
+[ext_resource type="Script" uid="uid://nqvvwqf0bnfv" path="res://src/selection_manager.gd" id="1_0klso"]
+
+[node name="SelectionManager" type="Node2D"]
+script = ExtResource("1_0klso")

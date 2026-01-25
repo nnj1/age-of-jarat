@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://buyp0q85talqg"
+path="res://.godot/imported/21 Lets Do This.ogg-17bcc4e7e6b790006aa4781c54a5c3e2.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/oggs sonatina.itch.io:fortunata/21 Lets Do This.ogg"
+dest_files=["res://.godot/imported/21 Lets Do This.ogg-17bcc4e7e6b790006aa4781c54a5c3e2.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

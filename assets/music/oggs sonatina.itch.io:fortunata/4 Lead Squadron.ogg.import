@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://b05apl4ibmsnp"
+path="res://.godot/imported/4 Lead Squadron.ogg-76f7f5dbd71ed8a06a5608cefb616e97.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/oggs sonatina.itch.io:fortunata/4 Lead Squadron.ogg"
+dest_files=["res://.godot/imported/4 Lead Squadron.ogg-76f7f5dbd71ed8a06a5608cefb616e97.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

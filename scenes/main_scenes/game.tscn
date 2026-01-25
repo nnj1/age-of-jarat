@@ -1,0 +1,139 @@
+[gd_scene load_steps=9 format=3 uid="uid://66pne335f347"]
+
+[ext_resource type="Script" uid="uid://chlhpappba5gk" path="res://src/game.gd" id="1_3wwfn"]
+[ext_resource type="PackedScene" uid="uid://byu0g7vffd20f" path="res://scenes/components/SelectionManager.tscn" id="1_fqmia"]
+[ext_resource type="PackedScene" uid="uid://fix3rwufx5qv" path="res://scenes/entities/units/villager.tscn" id="2_ifh15"]
+[ext_resource type="Script" uid="uid://c5x4xpsy8a7b1" path="res://src/minimap_camera.gd" id="2_t5sjj"]
+[ext_resource type="Script" uid="uid://cn6q5tu3cq7yb" path="res://src/camera_2d.gd" id="3_ifh15"]
+[ext_resource type="PackedScene" uid="uid://24ncf3ybr3hc" path="res://scenes/maps/procedural.tscn" id="3_ks7w8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t5sjj"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+expand_margin_left = 4.0
+expand_margin_top = 4.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
+anti_aliasing = false
+
+[sub_resource type="Environment" id="Environment_fqmia"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_3wwfn")
+
+[node name="UI" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="Label" type="Label" parent="UI"]
+offset_right = 40.0
+offset_bottom = 14.0
+theme_override_font_sizes/font_size = 32
+
+[node name="TabContainer" type="TabContainer" parent="UI"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -178.0
+offset_right = -683.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 32
+current_tab = 0
+
+[node name="Game" type="Panel" parent="UI/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Options" type="Panel" parent="UI/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Panel2" type="Panel" parent="UI"]
+custom_minimum_size = Vector2(200, 50)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -212.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = 159.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_t5sjj")
+
+[node name="Minimap" type="SubViewportContainer" parent="UI/Panel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+stretch_shrink = 4
+
+[node name="SubViewport" type="SubViewport" parent="UI/Panel2/Minimap"]
+handle_input_locally = false
+size = Vector2i(52, 38)
+render_target_update_mode = 4
+
+[node name="Camera2D" type="Camera2D" parent="UI/Panel2/Minimap/SubViewport" node_paths=PackedStringArray("main_camera")]
+script = ExtResource("2_t5sjj")
+main_camera = NodePath("../../../../../Camera2D")
+
+[node name="SelectionManager" parent="." groups=["manager"] instance=ExtResource("1_fqmia")]
+z_index = 1
+
+[node name="map" type="Node2D" parent="."]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="map"]
+_spawnable_scenes = PackedStringArray("uid://24ncf3ybr3hc")
+spawn_path = NodePath("..")
+
+[node name="procedural" parent="map" instance=ExtResource("3_ks7w8")]
+
+[node name="CanvasModulate" type="CanvasModulate" parent="map"]
+color = Color(0.45840502, 0.45840508, 0.45840502, 1)
+
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="map"]
+
+[node name="entities" type="Node2D" parent="."]
+
+[node name="units" type="Node2D" parent="entities"]
+
+[node name="Villager" parent="entities/units" instance=ExtResource("2_ifh15")]
+position = Vector2(51, 131)
+
+[node name="Villager2" parent="entities/units" instance=ExtResource("2_ifh15")]
+position = Vector2(289, -11)
+
+[node name="Villager3" parent="entities/units" instance=ExtResource("2_ifh15")]
+position = Vector2(-150, 27)
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="entities/units"]
+_spawnable_scenes = PackedStringArray("uid://fix3rwufx5qv")
+spawn_path = NodePath("..")
+
+[node name="objects" type="Node2D" parent="entities"]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="entities/objects"]
+spawn_path = NodePath("..")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(4, 4)
+position_smoothing_enabled = true
+script = ExtResource("3_ifh15")
+
+[node name="AudioListener2D" type="AudioListener2D" parent="Camera2D"]
+current = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_fqmia")

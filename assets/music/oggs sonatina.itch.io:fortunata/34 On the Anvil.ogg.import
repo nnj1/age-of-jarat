@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://cpr802216fuqg"
+path="res://.godot/imported/34 On the Anvil.ogg-f139003bd6babde6675d4002cd333fb4.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/oggs sonatina.itch.io:fortunata/34 On the Anvil.ogg"
+dest_files=["res://.godot/imported/34 On the Anvil.ogg-f139003bd6babde6675d4002cd333fb4.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=3 uid="uid://24ncf3ybr3hc"]
+
+[ext_resource type="Script" uid="uid://dq6a3ori1r0vs" path="res://src/procedural.gd" id="1_e5la6"]
+[ext_resource type="TileSet" uid="uid://cgig36v2tr1w3" path="res://resources/urizen.tres" id="1_guuwn"]
+[ext_resource type="Shader" uid="uid://bj38y3864bn3d" path="res://shaders/water.gdshader" id="2_ug44p"]
+[ext_resource type="Shader" uid="uid://cpd2r44c444mj" path="res://shaders/sway.gdshader" id="3_kc3lw"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ug44p"]
+noise_type = 3
+frequency = 0.0159
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cxnnp"]
+shader = ExtResource("2_ug44p")
+shader_parameter/speed = 1.0
+shader_parameter/wave_intensity = 0.01
+shader_parameter/wave_frequency = 0.05
+shader_parameter/distortion_strength = 0.01
+shader_parameter/water_color = Color(0.35925403, 0.612757, 0.962974, 1)
+shader_parameter/water_opacity = 0.9010000427975
+shader_parameter/black_threshold = 0.1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ug44p"]
+shader = ExtResource("3_kc3lw")
+shader_parameter/speed = 2.0
+shader_parameter/distortion = 0.002000000095
+shader_parameter/detail = 4.27600020311
+shader_parameter/vertical_variation = 5.0
+shader_parameter/wind_direction = 1.0
+shader_parameter/black_threshold = 0.1
+
+[node name="procedural" type="Node2D"]
+script = ExtResource("1_e5la6")
+noise = SubResource("FastNoiseLite_ug44p")
+
+[node name="seabed" type="TileMapLayer" parent="."]
+tile_set = ExtResource("1_guuwn")
+
+[node name="water" type="TileMapLayer" parent="."]
+material = SubResource("ShaderMaterial_cxnnp")
+tile_set = ExtResource("1_guuwn")
+
+[node name="ground" type="TileMapLayer" parent="."]
+tile_set = ExtResource("1_guuwn")
+
+[node name="decorators" type="TileMapLayer" parent="."]
+material = SubResource("ShaderMaterial_ug44p")
+tile_set = ExtResource("1_guuwn")
+
+[node name="fow" type="TileMapLayer" parent="."]
+tile_set = ExtResource("1_guuwn")

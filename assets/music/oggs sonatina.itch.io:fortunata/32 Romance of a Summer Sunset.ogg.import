@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://qr02vmd3iqj4"
+path="res://.godot/imported/32 Romance of a Summer Sunset.ogg-b5663311659355e4c37b159b3f9f191e.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/oggs sonatina.itch.io:fortunata/32 Romance of a Summer Sunset.ogg"
+dest_files=["res://.godot/imported/32 Romance of a Summer Sunset.ogg-b5663311659355e4c37b159b3f9f191e.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

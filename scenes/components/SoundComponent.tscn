@@ -1,0 +1,36 @@
+[gd_scene load_steps=4 format=3 uid="uid://gngxsuir4syw"]
+
+[ext_resource type="Script" uid="uid://d0vmdl45f0ohh" path="res://src/sound_component.gd" id="1_kxhy0"]
+[ext_resource type="AudioStream" uid="uid://cke2i1i74n6la" path="res://assets/sfx/Minifantasy_Dungeon_SFX/11_human_damage_1.wav" id="2_u4jf0"]
+[ext_resource type="AudioStream" uid="uid://vaea0hof8fdy" path="res://assets/sfx/Minifantasy_Dungeon_SFX/13_human_jump_land_1.wav" id="3_8e2uj"]
+
+[node name="SoundComponent" type="Node2D"]
+script = ExtResource("1_kxhy0")
+
+[node name="hitSound" type="AudioStreamPlayer2D" parent="."]
+bus = &"Sfx"
+
+[node name="hurtSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_u4jf0")
+bus = &"Sfx"
+
+[node name="spawnSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_8e2uj")
+volume_db = -2.0
+bus = &"Sfx"
+
+[node name="walkingSound" type="AudioStreamPlayer2D" parent="."]
+bus = &"Sfx"
+
+[node name="idleSound" type="AudioStreamPlayer2D" parent="."]
+volume_db = -2.0
+max_distance = 1000.0
+bus = &"Sfx"
+
+[node name="Timer" type="Timer" parent="idleSound"]
+
+[node name="deathSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_u4jf0")
+bus = &"Sfx"
+
+[connection signal="timeout" from="idleSound/Timer" to="." method="_on_timer_timeout"]

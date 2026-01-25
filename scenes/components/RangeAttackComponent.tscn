@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://tyw1x20ujt2x"]
+
+[ext_resource type="Script" uid="uid://cr57bieenbmyn" path="res://src/range_attack_component.gd" id="1_yv6e8"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yv6e8"]
+radius = 100.0
+
+[node name="RangeAttackComponent" type="Node2D"]
+script = ExtResource("1_yv6e8")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("CircleShape2D_yv6e8")
+
+[node name="AttackTimer" type="Timer" parent="."]
+one_shot = true

@@ -1,0 +1,42 @@
+[gd_scene load_steps=4 format=3 uid="uid://vxm8bgstp783"]
+
+[ext_resource type="Script" uid="uid://drf0d5mwixpgh" path="res://src/post_processor.gd" id="1_p3q12"]
+[ext_resource type="Shader" uid="uid://bfmcy3w38h173" path="res://shaders/crt.gdshader" id="2_16njo"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1c6gl"]
+shader = ExtResource("2_16njo")
+shader_parameter/overlay = true
+shader_parameter/scanlines_opacity = 0.4
+shader_parameter/scanlines_width = 0.25
+shader_parameter/grille_opacity = 0.3
+shader_parameter/resolution = Vector2(1152, 648)
+shader_parameter/pixelate = true
+shader_parameter/roll = false
+shader_parameter/roll_speed = 8.0
+shader_parameter/roll_size = 0.0
+shader_parameter/roll_variation = 1.8
+shader_parameter/distort_intensity = 0.05
+shader_parameter/noise_opacity = 0.4
+shader_parameter/noise_speed = 5.0
+shader_parameter/static_noise_intensity = 0.06
+shader_parameter/aberration = 0.0010000475475000492
+shader_parameter/brightness = 1.4
+shader_parameter/discolor = true
+shader_parameter/warp_amount = 0.0
+shader_parameter/clip_warp = false
+shader_parameter/vignette_intensity = 0.4
+shader_parameter/vignette_opacity = 0.10000000475
+
+[node name="PostProcessor" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1_p3q12")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_1c6gl")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)

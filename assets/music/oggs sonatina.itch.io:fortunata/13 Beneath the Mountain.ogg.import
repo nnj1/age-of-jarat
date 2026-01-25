@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bsobbarcalqbj"
+path="res://.godot/imported/13 Beneath the Mountain.ogg-dcd5a1f1f182d6c10cd4dcdab0cd628b.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/oggs sonatina.itch.io:fortunata/13 Beneath the Mountain.ogg"
+dest_files=["res://.godot/imported/13 Beneath the Mountain.ogg-dcd5a1f1f182d6c10cd4dcdab0cd628b.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

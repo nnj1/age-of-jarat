@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dst52ii3idaq5"
+path="res://.godot/imported/damage_5_sean.wav-fc9f53cc0d387a0e7682ca84dc553d36.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Super Dialogue Audio Pack v1/Step 2 - Audio Files/7 - Damage/Male/Sean Lenhart/damage_5_sean.wav"
+dest_files=["res://.godot/imported/damage_5_sean.wav-fc9f53cc0d387a0e7682ca84dc553d36.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

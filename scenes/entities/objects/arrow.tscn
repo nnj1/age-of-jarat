@@ -1,0 +1,41 @@
+[gd_scene load_steps=8 format=3 uid="uid://bfu1iccj67rot"]
+
+[ext_resource type="Script" uid="uid://dk26clul6uf2m" path="res://src/arrow.gd" id="1_3sgs4"]
+[ext_resource type="Shader" uid="uid://dkuolre4wrkc2" path="res://shaders/transparentback.gdshader" id="2_24gab"]
+[ext_resource type="Texture2D" uid="uid://fik2xyspevag" path="res://assets/tilesets/urizen_onebit_tileset__v2d0.png" id="3_f8n3w"]
+[ext_resource type="AudioStream" uid="uid://c7krfqadttu4b" path="res://assets/sfx/Minifantasy_Dungeon_SFX/20_orc_special_atk.wav" id="4_f8n3w"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gxj1c"]
+shader = ExtResource("2_24gab")
+shader_parameter/threshold = 0.1
+shader_parameter/edge_distance = 0.4
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g0f7c"]
+atlas = ExtResource("3_f8n3w")
+region = Rect2(430, 131, 12, 12)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_24gab"]
+radius = 2.828427
+
+[node name="Arrow" type="Area2D"]
+collision_layer = 0
+collision_mask = 3
+monitorable = false
+script = ExtResource("1_3sgs4")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_gxj1c")
+rotation = 0.7853982
+scale = Vector2(0.99999994, 0.99999994)
+texture = SubResource("AtlasTexture_g0f7c")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(5, 0)
+shape = SubResource("CircleShape2D_24gab")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_f8n3w")
+autoplay = true
+bus = &"Sfx"
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

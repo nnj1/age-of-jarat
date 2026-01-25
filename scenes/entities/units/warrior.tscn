@@ -1,0 +1,76 @@
+[gd_scene load_steps=11 format=3 uid="uid://chyttskvx63th"]
+
+[ext_resource type="Script" uid="uid://chsfrelryq2go" path="res://src/warrior.gd" id="1_tcob5"]
+[ext_resource type="PackedScene" uid="uid://cldxrxi6cj4ln" path="res://scenes/components/HealthComponent.tscn" id="2_lhq1v"]
+[ext_resource type="PackedScene" uid="uid://e2608e4n3uw5" path="res://scenes/components/UnitController.tscn" id="3_p81cl"]
+[ext_resource type="Shader" uid="uid://d21b4b7xrre2h" path="res://shaders/black2trans.gdshader" id="4_8ddc1"]
+[ext_resource type="TileSet" uid="uid://cgig36v2tr1w3" path="res://resources/urizen.tres" id="5_atvym"]
+[ext_resource type="PackedScene" uid="uid://gngxsuir4syw" path="res://scenes/components/SoundComponent.tscn" id="6_siou7"]
+[ext_resource type="PackedScene" uid="uid://tyw1x20ujt2x" path="res://scenes/components/RangeAttackComponent.tscn" id="7_lhq1v"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vrepr"]
+radius = 6.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eg14d"]
+resource_local_to_scene = true
+shader = ExtResource("4_8ddc1")
+shader_parameter/random_phase = 0.0
+shader_parameter/speed = 5.00000023424012
+shader_parameter/height = 0.0
+shader_parameter/squash_amount = 0.02400000114
+shader_parameter/sprite_height = 12.0
+shader_parameter/threshold = 0.1
+shader_parameter/edge_distance = 0.4
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_aqvaj"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("Sprite:position")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("Sprite:scale")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[node name="Warrior" type="CharacterBody2D" groups=["units"]]
+collision_layer = 2
+collision_mask = 3
+input_pickable = true
+motion_mode = 1
+script = ExtResource("1_tcob5")
+
+[node name="HealthComponent" parent="." instance=ExtResource("2_lhq1v")]
+position = Vector2(0, -7.9999995)
+scale = Vector2(0.05, 0.04)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 9.536743e-07)
+shape = SubResource("CircleShape2D_vrepr")
+
+[node name="UnitController" parent="." instance=ExtResource("3_p81cl")]
+position = Vector2(-6, -5.999999)
+
+[node name="SelectionCircle" type="Sprite2D" parent="."]
+position = Vector2(-6, -5.999999)
+
+[node name="ColorRect" type="ColorRect" parent="SelectionCircle"]
+z_index = -1
+offset_right = 12.0
+offset_bottom = 12.0
+metadata/_edit_use_anchors_ = true
+
+[node name="Sprite" type="TileMapLayer" parent="."]
+material = SubResource("ShaderMaterial_eg14d")
+position = Vector2(-6, -6)
+tile_set = ExtResource("5_atvym")
+
+[node name="SoundComponent" parent="." instance=ExtResource("6_siou7")]
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_aqvaj")
+
+[node name="RangeAttackComponent" parent="." instance=ExtResource("7_lhq1v")]
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

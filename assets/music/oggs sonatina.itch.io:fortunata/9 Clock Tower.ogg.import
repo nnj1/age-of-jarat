@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://battii86vbsnf"
+path="res://.godot/imported/9 Clock Tower.ogg-82095f9fc903bd60731328a7f1dc895c.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/oggs sonatina.itch.io:fortunata/9 Clock Tower.ogg"
+dest_files=["res://.godot/imported/9 Clock Tower.ogg-82095f9fc903bd60731328a7f1dc895c.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

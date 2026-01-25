@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bk8wqvwer2js1"
+path="res://.godot/imported/28 Gold and Blue.ogg-1be501631486e2181ce891c10405c198.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/oggs sonatina.itch.io:fortunata/28 Gold and Blue.ogg"
+dest_files=["res://.godot/imported/28 Gold and Blue.ogg-1be501631486e2181ce891c10405c198.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

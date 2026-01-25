@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dji8hyr7rip6w"
+path="res://.godot/imported/completion_4_meghan.wav-a5f1a770dfd7d59b6de20e3e2bd17724.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Super Dialogue Audio Pack v1/Step 2 - Audio Files/1 - Completion/Female/Meghan Christian/completion_4_meghan.wav"
+dest_files=["res://.godot/imported/completion_4_meghan.wav-a5f1a770dfd7d59b6de20e3e2bd17724.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

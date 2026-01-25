@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://csy0i4wwglw6u"
+path="res://.godot/imported/12 Fortunata Main Theme.ogg-2ae935dc0a5fb9d93d1dcb597a0e66c0.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/oggs sonatina.itch.io:fortunata/12 Fortunata Main Theme.ogg"
+dest_files=["res://.godot/imported/12 Fortunata Main Theme.ogg-2ae935dc0a5fb9d93d1dcb597a0e66c0.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

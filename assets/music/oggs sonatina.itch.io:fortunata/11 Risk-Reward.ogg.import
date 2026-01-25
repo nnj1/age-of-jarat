@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://if8vchy73cjh"
+path="res://.godot/imported/11 Risk-Reward.ogg-64f2f7704c16857b3aebdad1eca914c6.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/oggs sonatina.itch.io:fortunata/11 Risk-Reward.ogg"
+dest_files=["res://.godot/imported/11 Risk-Reward.ogg-64f2f7704c16857b3aebdad1eca914c6.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

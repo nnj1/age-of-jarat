@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bs6q8k0ucxtos"
+path="res://.godot/imported/Abstract1.wav-97d1948e255a86b9d70dc78919925d2e.sample"
+
+[deps]
+
+source_file="res://assets/sfx/UI Soundpack/UI Soundpack/WAV/Abstract1.wav"
+dest_files=["res://.godot/imported/Abstract1.wav-97d1948e255a86b9d70dc78919925d2e.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

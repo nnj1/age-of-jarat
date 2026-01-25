@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://cnkw0myd6xwyl"
+path="res://.godot/imported/19 Lammas Festival.ogg-b9248be4505fe111b8612ee0c04848d7.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/oggs sonatina.itch.io:fortunata/19 Lammas Festival.ogg"
+dest_files=["res://.godot/imported/19 Lammas Festival.ogg-b9248be4505fe111b8612ee0c04848d7.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

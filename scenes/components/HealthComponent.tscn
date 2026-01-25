@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://cldxrxi6cj4ln"]
+
+[ext_resource type="Script" uid="uid://ccqlurd53n85p" path="res://src/health_component.gd" id="1_iv1uk"]
+
+[node name="HealthComponent" type="Node2D"]
+script = ExtResource("1_iv1uk")
+
+[node name="BarForeground" type="Polygon2D" parent="."]
+z_index = 1
+position = Vector2(169, 23)
+polygon = PackedVector2Array(-264, -48, -72, -48, -72, 0, -264, 0)
+uv = PackedVector2Array(-264, -48, -72, -48, -72, 0, -264, 0)
+
+[node name="BarBackground" type="Polygon2D" parent="."]
+position = Vector2(169, 23)
+color = Color(0.30323282, 0.30323282, 0.30323282, 1)
+polygon = PackedVector2Array(-264, -48, -72, -48, -72, 0, -264, 0)
+uv = PackedVector2Array(-264, -48, -72, -48, -72, 0, -264, 0)

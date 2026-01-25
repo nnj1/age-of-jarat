@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dscgjo65ky3bj"
+path="res://.godot/imported/20 After All.ogg-63dfc518104822a41d606bcbe311389a.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/oggs sonatina.itch.io:fortunata/20 After All.ogg"
+dest_files=["res://.godot/imported/20 After All.ogg-63dfc518104822a41d606bcbe311389a.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

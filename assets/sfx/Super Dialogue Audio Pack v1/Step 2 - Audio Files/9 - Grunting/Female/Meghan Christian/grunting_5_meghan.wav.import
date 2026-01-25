@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cc0wpn0yusn7o"
+path="res://.godot/imported/grunting_5_meghan.wav-0a7e4995a0d1ed284901a19da980951a.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Super Dialogue Audio Pack v1/Step 2 - Audio Files/9 - Grunting/Female/Meghan Christian/grunting_5_meghan.wav"
+dest_files=["res://.godot/imported/grunting_5_meghan.wav-0a7e4995a0d1ed284901a19da980951a.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

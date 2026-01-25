@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bjj7ns0t5guhn"
+path="res://.godot/imported/26 Boating.ogg-de753389d1c869b24f78a78ddf6de5c0.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/oggs sonatina.itch.io:fortunata/26 Boating.ogg"
+dest_files=["res://.godot/imported/26 Boating.ogg-de753389d1c869b24f78a78ddf6de5c0.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
