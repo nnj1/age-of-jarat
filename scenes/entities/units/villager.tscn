@@ -19,7 +19,7 @@ shader_parameter/height = 0.0
 shader_parameter/squash_amount = 0.02400000114
 shader_parameter/sprite_height = 12.0
 shader_parameter/threshold = 0.1
-shader_parameter/edge_distance = 0.4
+shader_parameter/edge_distance = 0.0550000026125
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_aqvaj"]
 properties/0/path = NodePath(".:position")

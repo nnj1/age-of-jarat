@@ -97,8 +97,8 @@ func center_camera_on_selection():
 func _draw():
 	if dragging:
 		var rect = Rect2(drag_start, drag_end - drag_start)
-		# Green for standard, Blue for Shift-selection
-		var color = Color(0, 1, 0, 0.2) if not Input.is_key_pressed(KEY_SHIFT) else Color(0, 0.6, 1, 0.2)
+		# Green for standard, Red for Shift-selection
+		var color = Color(0, 1, 0, 0.2) if not Input.is_key_pressed(KEY_SHIFT) else Color(1, 0, 1, 0.2)
 		draw_rect(rect, color, true)
 		draw_rect(rect, color.lightened(0.4), false, 2.0)
 

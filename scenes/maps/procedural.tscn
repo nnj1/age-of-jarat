@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://24ncf3ybr3hc"]
+[gd_scene load_steps=9 format=3 uid="uid://24ncf3ybr3hc"]
 
 [ext_resource type="Script" uid="uid://dq6a3ori1r0vs" path="res://src/procedural.gd" id="1_e5la6"]
 [ext_resource type="TileSet" uid="uid://cgig36v2tr1w3" path="res://resources/urizen.tres" id="1_guuwn"]
 [ext_resource type="Shader" uid="uid://bj38y3864bn3d" path="res://shaders/water.gdshader" id="2_ug44p"]
 [ext_resource type="Shader" uid="uid://cpd2r44c444mj" path="res://shaders/sway.gdshader" id="3_kc3lw"]
+[ext_resource type="PackedScene" uid="uid://biv4fm7r5qtt5" path="res://scenes/components/MapInteractionComponent.tscn" id="5_cxnnp"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_ug44p"]
 noise_type = 3
@@ -48,3 +49,5 @@ tile_set = ExtResource("1_guuwn")
 
 [node name="fow" type="TileMapLayer" parent="."]
 tile_set = ExtResource("1_guuwn")
+
+[node name="MapInteractionComponent" parent="." instance=ExtResource("5_cxnnp")]

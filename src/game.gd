@@ -3,6 +3,8 @@ extends Node2D
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$UI/Panel2/Minimap/SubViewport.world_2d = get_tree().root.get_viewport().world_2d
+	
+	$map/procedural/MapInteractionComponent.tile_pressed.connect(update_object_menu)
 
 func _process(_delta: float) -> void:
 	# Get the FPS
@@ -37,3 +39,18 @@ func spawn_warrior(spawn_pos: Vector2):
 	warrior.prepare(1)
 	warrior.position = spawn_pos
 	$entities/units.add_child(warrior, true)
+
+@warning_ignore("unused_parameter")
+func update_object_menu(layer_node, map_coords, atlas_coords):
+	for child in $UI/TabContainer/Object.get_children():
+		child.queue_free()
+		
+	# 2. Create the Label
+	var label = Label.new()
+	label.text = "Atlas: " + str(atlas_coords)
+	
+	# Center the label inside the panel
+	label.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	
+	# 3. Add Label to Panel, and Panel to the Scene
+	$UI/TabContainer/Object.add_child(label)

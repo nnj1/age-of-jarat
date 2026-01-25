@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://biv4fm7r5qtt5"]
+
+[ext_resource type="Script" uid="uid://b7p5oo0yqomr6" path="res://src/map_interaction_component.gd" id="1_xqqyq"]
+
+[node name="MapInteractionComponent" type="Node2D"]
+script = ExtResource("1_xqqyq")

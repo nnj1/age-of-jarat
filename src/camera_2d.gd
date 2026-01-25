@@ -7,7 +7,7 @@ extends Camera2D
 @export_group("Edge Panning")
 @export var edge_pan_enabled: bool = true
 @export var edge_pan_speed: float = 200.0 
-@export var edge_margin: float = 80.0
+@export var edge_margin: float = 40.0
 
 @export_group("Zoom")
 @export var zoom_speed: float = 0.1
