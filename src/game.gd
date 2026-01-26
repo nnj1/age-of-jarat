@@ -7,6 +7,8 @@ var materials = {
 	'gold': 0
 }
 
+var alt_held: bool = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$UI/Panel2/Minimap/SubViewport.world_2d = get_tree().root.get_viewport().world_2d
@@ -17,6 +19,10 @@ func _ready() -> void:
 	set_tab_hidden_by_name($UI/TabContainer, 'Unit', true)
 
 func _process(_delta: float) -> void:
+	
+	# determine if alt is being pressed
+	alt_held = true if Input.is_key_pressed(KEY_ALT) else false
+		
 	# Get the FPS
 	var fps = Engine.get_frames_per_second()
 	
@@ -51,25 +57,25 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func spawn_villager(spawn_pos: Vector2):
 	var villager = preload("res://scenes/entities/units/villager.tscn").instantiate()
-	villager.prepare(1)
+	villager.prepare(1, 0 if not alt_held else 1)
 	villager.position = spawn_pos
 	$entities/units.add_child(villager, true)
 	
 func spawn_warrior(spawn_pos: Vector2):
 	var warrior = preload("res://scenes/entities/units/warrior.tscn").instantiate()
-	warrior.prepare(1)
+	warrior.prepare(1, 0 if not alt_held else 1)
 	warrior.position = spawn_pos
 	$entities/units.add_child(warrior, true)
 
 func spawn_archer(spawn_pos: Vector2):
 	var archer = preload("res://scenes/entities/units/archer.tscn").instantiate()
-	archer.prepare(1)
+	archer.prepare(1, 0 if not alt_held else 1)
 	archer.position = spawn_pos
 	$entities/units.add_child(archer, true)
 	
 func spawn_wizard(spawn_pos: Vector2):
 	var wizard = preload("res://scenes/entities/units/wizard.tscn").instantiate()
-	wizard.prepare(1)
+	wizard.prepare(1, 0 if not alt_held else 1)
 	wizard.position = spawn_pos
 	$entities/units.add_child(wizard, true)
 
