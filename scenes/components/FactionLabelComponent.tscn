@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://dv0isi7bv1viu"]
+
+[ext_resource type="Script" uid="uid://c43tmkahyr12v" path="res://src/faction_label_component.gd" id="1_7gk1v"]
+
+[node name="FactionLabelComponent" type="Node2D"]
+script = ExtResource("1_7gk1v")
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -22.0
+offset_top = -7.0
+offset_right = 22.0
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 16
+text = "FACTION"
+horizontal_alignment = 1

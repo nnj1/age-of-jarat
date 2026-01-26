@@ -4,6 +4,7 @@ class_name Unit
 
 @onready var main_game_node = get_tree().get_root().get_node('Game')
 
+# SHOULD ONLY CONTAIN VILLAGER SPRITES
 var sprite_atlas_coords_corners = [
 	Vector2i(104,0),
 	Vector2i(200,32)
@@ -18,12 +19,17 @@ var knockback_velocity: Vector2 = Vector2.ZERO
 
 var random_atlas_coords: Vector2i
 
+var faction: int
+var allies: Array[int]
+
 @onready var selection_visual = $SelectionCircle # A Sprite2D child used for feedback
 
-func prepare(spawning_player_id: int = 1):
+# sets the authority and faction of the unit
+func prepare(spawning_player_id: int = 1, given_faction:int = randi_range(0, 1)):
 	set_multiplayer_authority(spawning_player_id)
+	faction = given_faction
+	allies.append(faction)
 	
-
 func _ready():
 	if not is_multiplayer_authority(): return
 	
@@ -37,7 +43,6 @@ func _ready():
 	target_position = global_position
 	if selection_visual:
 		selection_visual.visible = false
-	
 	
 	# pick a random player sprite
 	random_atlas_coords = GlobalVars.get_vectors_in_range(sprite_atlas_coords_corners[0], sprite_atlas_coords_corners[1]).pick_random()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c6v2fmujemnrj"]
+[gd_scene load_steps=12 format=3 uid="uid://c6v2fmujemnrj"]
 
 [ext_resource type="Script" uid="uid://c1vop7s50174s" path="res://src/archer.gd" id="1_diujg"]
 [ext_resource type="PackedScene" uid="uid://e2608e4n3uw5" path="res://scenes/components/UnitController.tscn" id="2_x4den"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cldxrxi6cj4ln" path="res://scenes/components/HealthComponent.tscn" id="5_4x1qp"]
 [ext_resource type="PackedScene" uid="uid://gngxsuir4syw" path="res://scenes/components/SoundComponent.tscn" id="6_1jrlb"]
 [ext_resource type="PackedScene" uid="uid://tyw1x20ujt2x" path="res://scenes/components/RangeAttackComponent.tscn" id="7_mm1lw"]
+[ext_resource type="PackedScene" uid="uid://dv0isi7bv1viu" path="res://scenes/components/FactionLabelComponent.tscn" id="8_x4den"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vrepr"]
 radius = 6.0
@@ -40,7 +41,7 @@ properties/2/replication_mode = 1
 
 [node name="Archer" type="CharacterBody2D" groups=["units"]]
 collision_layer = 2
-collision_mask = 3
+collision_mask = 7
 input_pickable = true
 motion_mode = 1
 script = ExtResource("1_diujg")
@@ -76,6 +77,10 @@ scale = Vector2(0.05, 0.04)
 replication_config = SubResource("SceneReplicationConfig_aqvaj")
 
 [node name="RangeAttackComponent" parent="." instance=ExtResource("7_mm1lw")]
+
+[node name="FactionLabelComponent" parent="." instance=ExtResource("8_x4den")]
+position = Vector2(0, 8)
+scale = Vector2(0.25, 0.25)
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

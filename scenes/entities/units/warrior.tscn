@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://chyttskvx63th"]
+[gd_scene load_steps=12 format=3 uid="uid://chyttskvx63th"]
 
 [ext_resource type="Script" uid="uid://chsfrelryq2go" path="res://src/warrior.gd" id="1_tcob5"]
 [ext_resource type="PackedScene" uid="uid://cldxrxi6cj4ln" path="res://scenes/components/HealthComponent.tscn" id="2_lhq1v"]
@@ -7,6 +7,7 @@
 [ext_resource type="TileSet" uid="uid://cgig36v2tr1w3" path="res://resources/urizen.tres" id="5_atvym"]
 [ext_resource type="PackedScene" uid="uid://gngxsuir4syw" path="res://scenes/components/SoundComponent.tscn" id="6_siou7"]
 [ext_resource type="PackedScene" uid="uid://e8adp3fu350m" path="res://scenes/components/MeleeAttackComponent.tscn" id="7_lhq1v"]
+[ext_resource type="PackedScene" uid="uid://dv0isi7bv1viu" path="res://scenes/components/FactionLabelComponent.tscn" id="8_p81cl"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vrepr"]
 radius = 6.0
@@ -40,7 +41,7 @@ properties/2/replication_mode = 1
 
 [node name="Warrior" type="CharacterBody2D" groups=["units"]]
 collision_layer = 2
-collision_mask = 3
+collision_mask = 7
 input_pickable = true
 motion_mode = 1
 script = ExtResource("1_tcob5")
@@ -76,6 +77,10 @@ scale = Vector2(0.05, 0.04)
 replication_config = SubResource("SceneReplicationConfig_aqvaj")
 
 [node name="MeleeAttackComponent" parent="." instance=ExtResource("7_lhq1v")]
+
+[node name="FactionLabelComponent" parent="." instance=ExtResource("8_p81cl")]
+position = Vector2(0, 8)
+scale = Vector2(0.25, 0.25)
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

@@ -64,7 +64,7 @@ func attack() -> void:
 	attack_timer.start()
 
 func _on_body_entered(body: Node2D) -> void:
-	if body is CharacterBody2D and body != self.get_parent():
+	if body is CharacterBody2D and body != self.get_parent() and not (body.faction in self.get_parent().allies):
 		# TODO: check if the person is a enemy
 		targets_in_range.append(body)
 

@@ -55,6 +55,7 @@ toggle_post_process={
 
 2d_physics/layer_1="objects"
 2d_physics/layer_2="units"
+2d_physics/layer_3="water"
 
 [rendering]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bpaubt37se7ph"]
+[gd_scene load_steps=13 format=3 uid="uid://bpaubt37se7ph"]
 
 [ext_resource type="Script" uid="uid://dajbdq8amc8ui" path="res://src/wizard.gd" id="1_ndbdr"]
 [ext_resource type="PackedScene" uid="uid://e2608e4n3uw5" path="res://scenes/components/UnitController.tscn" id="2_ndbdr"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://gngxsuir4syw" path="res://scenes/components/SoundComponent.tscn" id="6_s267n"]
 [ext_resource type="PackedScene" uid="uid://tyw1x20ujt2x" path="res://scenes/components/RangeAttackComponent.tscn" id="7_2i0vj"]
 [ext_resource type="PackedScene" uid="uid://kx24nn30dqql" path="res://scenes/entities/objects/fireball.tscn" id="8_ndbdr"]
+[ext_resource type="PackedScene" uid="uid://dv0isi7bv1viu" path="res://scenes/components/FactionLabelComponent.tscn" id="9_43iac"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vrepr"]
 radius = 6.0
@@ -41,7 +42,7 @@ properties/2/replication_mode = 1
 
 [node name="Wizard" type="CharacterBody2D" groups=["units"]]
 collision_layer = 2
-collision_mask = 3
+collision_mask = 7
 input_pickable = true
 motion_mode = 1
 script = ExtResource("1_ndbdr")
@@ -78,6 +79,10 @@ replication_config = SubResource("SceneReplicationConfig_aqvaj")
 
 [node name="RangeAttackComponent" parent="." instance=ExtResource("7_2i0vj")]
 projectile_scene = ExtResource("8_ndbdr")
+
+[node name="FactionLabelComponent" parent="." instance=ExtResource("9_43iac")]
+position = Vector2(0, 8)
+scale = Vector2(0.25, 0.25)
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
