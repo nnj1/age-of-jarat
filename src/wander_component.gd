@@ -175,7 +175,7 @@ func _on_body_entered(body):
 	if body == parent_unit: return
 	if body.is_in_group("Resources"):
 		nearby_resources.append(body)
-	elif body is Unit and not body.faction in parent_unit.allies and not body.faction == -1:
+	elif ((body is Unit) or (body is Structure)) and not body.faction in parent_unit.allies and not body.faction == -1:
 		threat = body
 		_evaluate_threat_by_stance()
 

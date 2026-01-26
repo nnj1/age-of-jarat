@@ -22,6 +22,11 @@ func _ready() -> void:
 	# HIDE UNIT TAB BY DEFAULT
 	set_tab_hidden_by_name($UI/TabContainer, 'Unit', true)
 	
+	# Spawn the first four villagers!
+	spawn_villager(Vector2(0,0))
+	spawn_villager(Vector2(20,0))
+	spawn_villager(Vector2(0,20))
+	spawn_villager(Vector2(20,20))
 	
 
 func _process(_delta: float) -> void:
@@ -97,7 +102,7 @@ func spawn_animal(spawn_pos: Vector2):
 	
 func spawn_house(spawn_pos: Vector2):
 	var house = preload("res://scenes/entities/objects/house.tscn").instantiate()
-	house.prepare()
+	house.prepare(1, 0 if not alt_held else 1)
 	house.position = spawn_pos
 	$entities/objects.add_child(house, true)
 

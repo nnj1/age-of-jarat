@@ -13,12 +13,23 @@ func prepare(spawning_player_id: int = 1, given_faction:int = randi_range(0, 1))
 	faction = given_faction
 	allies.append(faction)
 	
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
+func _ready():
+	if not is_multiplayer_authority(): return
+	
+	# connect important signals
+	if get_node_or_null('HealthComponent'):
+		$HealthComponent.died.connect(on_death)
+		$HealthComponent.just_took_damage.connect(play_damage_modulate_animation)
+		if get_node_or_null('SoundComponent'):
+			$HealthComponent.died.connect($SoundComponent.play_death_sound)
+			$HealthComponent.just_took_damage.connect($SoundComponent.play_hurt_sound)
+	
 	if selection_visual:
 		selection_visual.visible = false
 
-
+func on_death():
+	queue_free()
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	pass

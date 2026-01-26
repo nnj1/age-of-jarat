@@ -12,7 +12,7 @@ func prepare(given_attacker: CharacterBody2D):
 	attacker = given_attacker
 	attackers_allies = attacker.allies.duplicate()
 	
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	# Move the arrow in the set direction
 	global_position += direction * speed * delta
 	
@@ -30,6 +30,7 @@ func launch(target_direction: Vector2, incoming_damage: float) -> void:
 	rotation = direction.angle()
 
 func _on_body_entered(body: Node2D) -> void:
+	print(body)
 	if body != attacker:
 		# FRIENDLY FIRE CHECK, TODO: MAKE THIS TOGGLEABLE
 		if not (body.faction in attackers_allies):

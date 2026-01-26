@@ -1,8 +1,7 @@
-[gd_scene load_steps=17 format=3 uid="uid://66pne335f347"]
+[gd_scene load_steps=16 format=3 uid="uid://66pne335f347"]
 
 [ext_resource type="Script" uid="uid://chlhpappba5gk" path="res://src/game.gd" id="1_3wwfn"]
 [ext_resource type="PackedScene" uid="uid://byu0g7vffd20f" path="res://scenes/components/SelectionManager.tscn" id="1_fqmia"]
-[ext_resource type="PackedScene" uid="uid://fix3rwufx5qv" path="res://scenes/entities/units/villager.tscn" id="2_ifh15"]
 [ext_resource type="Script" uid="uid://dnh1musdqbcs1" path="res://src/tab_container.gd" id="2_leqql"]
 [ext_resource type="Shader" uid="uid://d21b4b7xrre2h" path="res://shaders/unit.gdshader" id="2_rbptj"]
 [ext_resource type="Script" uid="uid://c5x4xpsy8a7b1" path="res://src/minimap_camera.gd" id="2_t5sjj"]
@@ -327,14 +326,6 @@ _spawnable_scenes = PackedStringArray("uid://7rp6akuho1t")
 spawn_path = NodePath("..")
 
 [node name="units" type="Node2D" parent="entities"]
-
-[node name="Villager" parent="entities/units" instance=ExtResource("2_ifh15")]
-
-[node name="Villager2" parent="entities/units" instance=ExtResource("2_ifh15")]
-position = Vector2(0, 10)
-
-[node name="Villager3" parent="entities/units" instance=ExtResource("2_ifh15")]
-position = Vector2(10, 0)
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="entities/units"]
 _spawnable_scenes = PackedStringArray("uid://fix3rwufx5qv")

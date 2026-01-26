@@ -28,8 +28,8 @@ var weapon_texture
 @onready var detection_area: Area2D = $DetectionArea
 @onready var attack_timer: Timer = $AttackTimer
 
-var targets_in_range: Array[CharacterBody2D] = []
-var current_target: CharacterBody2D = null
+var targets_in_range = [] # Will have both CharacterBody2Ds and StaticBody2Ds in it
+var current_target = null # CharacterBody2D or StaticBody2D
 var active_weapon: Node2D = null # Track the current weapon instance
 
 signal just_melee_attacked
@@ -116,8 +116,9 @@ func attack() -> void:
 	attack_timer.start()
 
 func _on_body_entered(body: Node2D) -> void:
-	if body is CharacterBody2D and body != self.get_parent() and not (body.faction in self.get_parent().allies):
+	if ((body is CharacterBody2D) or (body is StaticBody2D)) and body != self.get_parent() and not (body.faction in self.get_parent().allies):
 		targets_in_range.append(body)
+		print(body)
 
 func _on_body_exited(body: Node2D) -> void:
 	targets_in_range.erase(body)
