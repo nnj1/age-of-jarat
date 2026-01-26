@@ -20,7 +20,7 @@ var trees_atlas_coords = [Vector2i(0,34), Vector2i(1,34), Vector2i(2,34), Vector
 var rock_atlas_coords = [Vector2i(10,5), Vector2i(11,5), Vector2i(12,5)]
 
 # 3. Generation Settings
-@export var map_size: Vector2i = Vector2i(100, 100)
+@export var map_size: Vector2i = Vector2i(200, 200)
 @export var noise_frequency: float = 0.04  # Lower = larger islands, Higher = noisier/smaller patches
 @export var noise: FastNoiseLite = FastNoiseLite.new()
 
@@ -134,3 +134,17 @@ func reveal_area(center: Vector2i) -> void:
 			if center.distance_to(target) < vision_radius:
 				# erase_cell is permanent "Exploration"
 				fow_layer.erase_cell(target)
+
+## Returns the world-space boundaries of the generated map
+func get_map_bounds() -> Rect2:
+	# 1. Calculate the total size in pixels
+	# We use 12.0 here because your code uses 12.0 for the centering math
+	var tile_size = 12.0 
+	var width_px = map_size.x * tile_size
+	var height_px = map_size.y * tile_size
+	
+	# 2. Get the top-left corner based on your centering logic in _ready()
+	# Since you centered it, the top-left is: self.position
+	var top_left = self.global_position
+	
+	return Rect2(top_left.x, top_left.y, width_px, height_px)

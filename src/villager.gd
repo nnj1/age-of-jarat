@@ -29,6 +29,9 @@ var random_atlas_coords: Vector2i
 var faction: int
 var allies: Array[int]
 
+@export var margin: float = 8.0
+var map_node = null
+
 @onready var selection_visual = $SelectionCircle # A Sprite2D child used for feedback
 
 # sets the authority and faction of the unit
@@ -67,6 +70,9 @@ func _ready():
 	
 	# FOW check
 	_setup_fog_timer()
+	
+	# Find the map node (assuming it's named 'Map' in your scene)
+	map_node = get_tree().get_first_node_in_group("FogSystem")
 
 func _setup_fog_timer():
 	var timer = Timer.new()
@@ -171,6 +177,16 @@ func _physics_process(_delta):
 		
 		# 3. Move and Slide
 		move_and_slide()
+		
+		# 4 PREVENT UNIT FROM GOING OFF MAP
+		if map_node:
+			var bounds = map_node.get_map_bounds()
+			
+			# Clamp X: position must be between (left + margin) and (right - margin)
+			position.x = clamp(position.x, bounds.position.x + margin, bounds.end.x - margin)
+			
+			# Clamp Y: position must be between (top + margin) and (bottom - margin)
+			position.y = clamp(position.y, bounds.position.y + margin, bounds.end.y - margin)
 
 func on_death():
 	queue_free()

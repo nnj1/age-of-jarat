@@ -329,13 +329,12 @@ spawn_path = NodePath("..")
 [node name="units" type="Node2D" parent="entities"]
 
 [node name="Villager" parent="entities/units" instance=ExtResource("2_ifh15")]
-position = Vector2(51, 131)
 
 [node name="Villager2" parent="entities/units" instance=ExtResource("2_ifh15")]
-position = Vector2(289, -11)
+position = Vector2(0, 10)
 
 [node name="Villager3" parent="entities/units" instance=ExtResource("2_ifh15")]
-position = Vector2(-150, 27)
+position = Vector2(10, 0)
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="entities/units"]
 _spawnable_scenes = PackedStringArray("uid://fix3rwufx5qv")
