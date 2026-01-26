@@ -1,5 +1,7 @@
 extends Node2D
 
+@onready var main_game_node = get_tree().get_root().get_node('Game')
+
 # 1. References to your TileMapLayer nodes
 # Ensure these names match your Scene Tree exactly
 @onready var seabed_layer: TileMapLayer = $seabed
@@ -18,7 +20,7 @@ var trees_atlas_coords = [Vector2i(0,34), Vector2i(1,34), Vector2i(2,34), Vector
 var rock_atlas_coords = [Vector2i(10,5), Vector2i(11,5), Vector2i(12,5)]
 
 # 3. Generation Settings
-@export var map_size: Vector2i = Vector2i(1000, 1000)
+@export var map_size: Vector2i = Vector2i(500, 500)
 @export var noise_frequency: float = 0.04  # Lower = larger islands, Higher = noisier/smaller patches
 @export var noise: FastNoiseLite = FastNoiseLite.new()
 
@@ -51,6 +53,7 @@ func generate_world() -> void:
 	ground_layer.clear()
 	decorator_layer.clear()
 	
+	var counter = 0
 	for x in range(map_size.x):
 		for y in range(map_size.y):
 			var pos = Vector2i(x, y)
@@ -58,6 +61,11 @@ func generate_world() -> void:
 			var n = noise.get_noise_2d(float(x), float(y))
 			
 			determine_tiles(pos, n)
+			
+			counter += 1
+			# print occasional progress updates
+			if (x*y % 10000) == 0:
+				print('Generation map...' + str(int(float(counter)/float(map_size.x * map_size.y) * 100.0)) +'%')
 
 func determine_tiles(pos: Vector2i, noise_val: float) -> void:
 	
@@ -81,7 +89,10 @@ func determine_tiles(pos: Vector2i, noise_val: float) -> void:
 			decorator_layer.set_cell(pos, 0, grass_atlas_coords.pick_random())
 			if randf() > 0.50:
 				decorator_layer.set_cell(pos, 0, trees_atlas_coords.pick_random())
-					
+		# if no grass or tree, maybe spawn an animal:
+		elif randf() > 0.99:
+			main_game_node.spawn_animal(to_global(ground_layer.map_to_local(pos)))
+			
 	else:
 		# Rock Biome
 		ground_layer.set_cell(pos, 0, rock_atlas_coords.pick_random())

@@ -5,6 +5,8 @@ extends Node2D
 # Selection variables
 var dragging = false
 var selected_units = []
+signal selected_units_changed
+signal unit_just_added
 var drag_start = Vector2.ZERO
 var drag_end = Vector2.ZERO
 
@@ -57,7 +59,6 @@ func _unhandled_input(event):
 					spawn_walk_indicator(get_global_mouse_position())
 
 	# --- KEYBOARD: CONTROL GROUPS ---
-	
 	if event is InputEventKey and event.pressed:
 		# Deselect all on Escape
 		if event.keycode == KEY_ESCAPE:
@@ -132,24 +133,27 @@ func select_units_in_box(_shift: bool):
 func add_to_selection(unit):
 	
 	# This was the last unit added to the selection, show it's details in the UI
-	main_game_node.show_unit_details(unit)
+	unit_just_added.emit(unit)
 	
 	if not selected_units.has(unit):
 		selected_units.append(unit)
 		unit.set_selected(true)
+	
+	selected_units_changed.emit(selected_units)
 
 func remove_from_selection(unit):
 	selected_units.erase(unit)
 	unit.set_selected(false)
+	selected_units_changed.emit(selected_units)
 
 func deselect_all():
 	for unit in selected_units:
 		if is_instance_valid(unit):
 			unit.set_selected(false)
 	selected_units.clear()
-
+	selected_units_changed.emit(selected_units)
+	
 # --- CONTROL GROUP LOGIC ---
-
 func save_control_group(key):
 	control_groups[key] = selected_units.duplicate()
 	# Optional: Feedback log (e.g., "Group 1 Saved")

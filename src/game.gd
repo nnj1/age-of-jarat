@@ -11,12 +11,18 @@ var alt_held: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	# get the minimap to share the world
 	$UI/Panel2/Minimap/SubViewport.world_2d = get_tree().root.get_viewport().world_2d
 	
+	# connect important signals that update UI
 	$map/procedural/MapInteractionComponent.tile_pressed.connect(update_object_menu)
+	$SelectionManager.unit_just_added.connect(update_unit_menu)
+	$SelectionManager.selected_units_changed.connect(update_selection_menu)
 	
 	# HIDE UNIT TAB BY DEFAULT
 	set_tab_hidden_by_name($UI/TabContainer, 'Unit', true)
+	
+	
 
 func _process(_delta: float) -> void:
 	
@@ -54,7 +60,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			spawn_wizard(get_global_mouse_position())
 		if event.pressed and event.keycode == KEY_A:
 			spawn_archer(get_global_mouse_position())
-
+		if event.pressed and event.keycode == KEY_B:
+			spawn_animal(get_global_mouse_position())
+			
 func spawn_villager(spawn_pos: Vector2):
 	var villager = preload("res://scenes/entities/units/villager.tscn").instantiate()
 	villager.prepare(1, 0 if not alt_held else 1)
@@ -79,6 +87,12 @@ func spawn_wizard(spawn_pos: Vector2):
 	wizard.position = spawn_pos
 	$entities/units.add_child(wizard, true)
 
+func spawn_animal(spawn_pos: Vector2):
+	var animal = preload("res://scenes/entities/npcs/animal.tscn").instantiate()
+	animal.prepare()
+	animal.position = spawn_pos
+	$entities/npcs.add_child(animal, true)
+
 @warning_ignore("unused_parameter")
 func update_object_menu(layer_node, map_coords, atlas_coords):
 	for child in $UI/TabContainer/Object.get_children():
@@ -94,10 +108,31 @@ func update_object_menu(layer_node, map_coords, atlas_coords):
 	# 3. Add Label to Panel, and Panel to the Scene
 	$UI/TabContainer/Object.add_child(label)
 
-func show_unit_details(unit):
+func update_selection_menu(selected_units):
+	for child in $UI/TabContainer/Selection/HBoxContainer/ScrollContainer/GridContainer.get_children():
+		child.queue_free()
+	for unit in selected_units:
+		# 1. Create the TextureRect instance
+		var new_tex_rect = TextureRect.new()
+		# 2. Load and assign the texture
+		new_tex_rect.texture = get_cropped_tile_texture(unit.random_atlas_coords)
+		
+		# 3. Configure sizing (Crucial for GridContainers)
+		# This ensures the texture actually fills the grid cell
+		new_tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		new_tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		
+		# Set a minimum size so the GridContainer knows how to layout
+		new_tex_rect.custom_minimum_size = Vector2(40, 40)
+		new_tex_rect.tooltip_text = str(unit.name)
+		
+		# 4. Add it to the GridContainer (self)
+		$UI/TabContainer/Selection/HBoxContainer/ScrollContainer/GridContainer.add_child(new_tex_rect)
+
+func update_unit_menu(unit):
 	# SHOW THE TAB
 	set_tab_hidden_by_name($UI/TabContainer, 'Unit', false)
-	$UI/TabContainer/Unit.show()
+	#$UI/TabContainer/Unit.show()
 	
 	# set up some references for easy access later
 	var delete_button = $UI/TabContainer/Unit/HBoxContainer/VBoxContainer2/Button4

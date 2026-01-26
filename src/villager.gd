@@ -34,12 +34,14 @@ func _ready():
 	if not is_multiplayer_authority(): return
 	
 	# connect important signals
-	$HealthComponent.died.connect($SoundComponent.play_death_sound)
-	$HealthComponent.died.connect(on_death)
-	
-	$HealthComponent.just_took_damage.connect($SoundComponent.play_hurt_sound)
-	$HealthComponent.just_took_damage.connect(play_damage_modulate_animation)
-	
+	if get_node_or_null('HealthComponent'):
+		$HealthComponent.died.connect(on_death)
+		$HealthComponent.just_took_damage.connect(play_damage_modulate_animation)
+		if get_node_or_null('SoundComponent'):
+			$HealthComponent.died.connect($SoundComponent.play_death_sound)
+			$HealthComponent.just_took_damage.connect($SoundComponent.play_hurt_sound)
+
+		
 	target_position = global_position
 	if selection_visual:
 		selection_visual.visible = false
@@ -50,7 +52,6 @@ func _ready():
 	# make sure it's nonblack otherwise pick again
 	while not is_atlas_tile_non_black(random_atlas_coords):
 		random_atlas_coords = GlobalVars.get_vectors_in_range(sprite_atlas_coords_corners[0], sprite_atlas_coords_corners[1]).pick_random()
-
 	# TODO: make this an rpc call
 	set_unit_texture.rpc(random_atlas_coords)
 	
@@ -63,7 +64,8 @@ func set_unit_texture(given_random_atlas_coords: Vector2i):
 
 func set_selected(value: bool):
 	is_moving = is_moving # Keeps current state
-	$UnitController.is_selected = value
+	if get_node_or_null('UnitController'):
+		$UnitController.is_selected = value
 	if selection_visual:
 		selection_visual.visible = value
 	# 3. Update the health bar visibility via the component

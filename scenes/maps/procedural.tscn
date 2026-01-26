@@ -48,6 +48,7 @@ material = SubResource("ShaderMaterial_ug44p")
 tile_set = ExtResource("1_guuwn")
 
 [node name="fow" type="TileMapLayer" parent="."]
+z_index = 1
 tile_set = ExtResource("1_guuwn")
 
 [node name="MapInteractionComponent" parent="." instance=ExtResource("5_cxnnp")]
