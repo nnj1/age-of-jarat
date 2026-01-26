@@ -1,9 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://7rp6akuho1t"]
+[gd_scene load_steps=10 format=3 uid="uid://7rp6akuho1t"]
 
 [ext_resource type="Script" uid="uid://d2s4uy0keb182" path="res://src/animal.gd" id="1_4rqly"]
 [ext_resource type="Shader" uid="uid://d21b4b7xrre2h" path="res://shaders/unit.gdshader" id="3_13oh8"]
 [ext_resource type="TileSet" uid="uid://cgig36v2tr1w3" path="res://resources/urizen.tres" id="4_o0dpa"]
+[ext_resource type="PackedScene" uid="uid://dn6gry3n4rvt8" path="res://scenes/components/WanderComponent.tscn" id="5_4rqly"]
 [ext_resource type="PackedScene" uid="uid://cldxrxi6cj4ln" path="res://scenes/components/HealthComponent.tscn" id="5_aatct"]
+[ext_resource type="PackedScene" uid="uid://gngxsuir4syw" path="res://scenes/components/SoundComponent.tscn" id="6_kjgex"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4rqly"]
 radius = 6.0
@@ -41,6 +43,7 @@ collision_mask = 7
 input_pickable = true
 motion_mode = 1
 script = ExtResource("1_4rqly")
+speed = 15.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 9.536743e-07)
@@ -66,6 +69,13 @@ scale = Vector2(0.05, 0.04)
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_aqvaj")
+
+[node name="WanderComponent" parent="." instance=ExtResource("5_4rqly")]
+current_stance = 0
+can_gather = false
+
+[node name="SoundComponent" parent="." instance=ExtResource("6_kjgex")]
+is_human = false
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

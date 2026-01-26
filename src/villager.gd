@@ -17,6 +17,13 @@ var looking_right = false
 
 var knockback_velocity: Vector2 = Vector2.ZERO
 
+@export var autonomous_mode: bool = true : set = set_autonomous_mode
+
+func set_autonomous_mode(value: bool):
+	autonomous_mode = value
+	if has_node("WanderComponent"):
+		$WanderComponent.set_enabled(value)
+		
 var random_atlas_coords: Vector2i
 
 var faction: int
@@ -63,6 +70,9 @@ func set_unit_texture(given_random_atlas_coords: Vector2i):
 	$Sprite.set_cell(Vector2i(0,0), 0, given_random_atlas_coords)
 
 func set_selected(value: bool):
+	# Disable autonomy when selected so the player has full control
+	set_autonomous_mode(!value)
+	
 	is_moving = is_moving # Keeps current state
 	if get_node_or_null('UnitController'):
 		$UnitController.is_selected = value

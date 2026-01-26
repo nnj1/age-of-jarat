@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://fix3rwufx5qv"]
+[gd_scene load_steps=12 format=3 uid="uid://fix3rwufx5qv"]
 
 [ext_resource type="Script" uid="uid://sjnwhxik4yas" path="res://src/villager.gd" id="1_t12mu"]
 [ext_resource type="PackedScene" uid="uid://cldxrxi6cj4ln" path="res://scenes/components/HealthComponent.tscn" id="2_vrepr"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://e2608e4n3uw5" path="res://scenes/components/UnitController.tscn" id="4_q8lqd"]
 [ext_resource type="PackedScene" uid="uid://gngxsuir4syw" path="res://scenes/components/SoundComponent.tscn" id="6_aqvaj"]
 [ext_resource type="PackedScene" uid="uid://dv0isi7bv1viu" path="res://scenes/components/FactionLabelComponent.tscn" id="7_iy4rk"]
+[ext_resource type="PackedScene" uid="uid://dn6gry3n4rvt8" path="res://scenes/components/WanderComponent.tscn" id="8_ojcu5"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vrepr"]
 radius = 6.0
@@ -78,6 +79,9 @@ replication_config = SubResource("SceneReplicationConfig_aqvaj")
 [node name="FactionLabelComponent" parent="." instance=ExtResource("7_iy4rk")]
 position = Vector2(0, 8)
 scale = Vector2(0.25, 0.25)
+
+[node name="WanderComponent" parent="." instance=ExtResource("8_ojcu5")]
+current_stance = 0
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

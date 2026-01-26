@@ -71,8 +71,9 @@ func _unhandled_input(event):
 			else:
 				load_control_group(event.keycode)
 	
+func _process(_delta: float) -> void:
 	# spacebar camera centering
-	if event.is_action_pressed("ui_select"): # "ui_select" is Spacebar by default
+	if Input.is_action_pressed("ui_select"): # "ui_select" is Spacebar by default
 		center_camera_on_selection()
 
 func center_camera_on_selection():
