@@ -41,6 +41,12 @@ func play_damage_modulate_animation():
 	# Transition back to White (Normal)
 	tween.tween_property($Sprite, "modulate", Color.WHITE, 0.1).set_trans(Tween.TRANS_SINE)
 
+func toggle_blue_tint(given_status: bool):
+	if given_status:
+		$Sprite.modulate = Color(0, 0, 1, 0.9)
+	else:
+		$Sprite.modulate = Color(1, 1, 1, 1)
+		
 func is_atlas_tile_non_black(atlas_coords: Vector2i, tileset_path: String = 'res://resources/urizen.tres', source_id: int = 0) -> bool:
 	# 1. Load the TileSet resource
 	var tile_set = load(tileset_path) as TileSet

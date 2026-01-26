@@ -9,6 +9,8 @@ var materials = {
 
 var alt_held: bool = false
 
+var prespawned_object = null
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# get the minimap to share the world
@@ -51,6 +53,10 @@ func _process(_delta: float) -> void:
 	# Update the materials UI
 	update_material_display()
 	
+	# handle any object prespawning
+	if prespawned_object:
+		prespawned_object.position = get_global_mouse_position()
+	
 func update_material_display():
 	for mat_name in materials.keys():
 		get_node('UI/VBoxContainer/HBoxContainer/' + mat_name).text = str(materials[mat_name])
@@ -69,6 +75,14 @@ func _unhandled_input(event: InputEvent) -> void:
 			spawn_animal(get_global_mouse_position())
 		if event.pressed and event.keycode == KEY_H:
 			spawn_house(get_global_mouse_position())
+		if event.pressed and event.keycode == KEY_ESCAPE:
+			if prespawned_object:
+				prespawned_object.queue_free()
+				prespawned_object = null
+			
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if prespawned_object:
+			actually_spawn_object()
 			
 func spawn_villager(spawn_pos: Vector2):
 	var villager = preload("res://scenes/entities/units/villager.tscn").instantiate()
@@ -189,3 +203,30 @@ func exit_game_to_menu():
 func exit_game_to_desktop():
 	#TODO: close any connections if server or host
 	get_tree().quit()
+
+
+# TO TEST THE DRAG AND DROP SYSTENM
+func _on_button_pressed() -> void:
+	if not prespawned_object:
+		prespawn_object("res://scenes/entities/objects/house.tscn")
+	
+func prespawn_object(object_path: String):
+	var object = load(object_path).instantiate()
+	object.prepare(1, 0 if not alt_held else 1)
+	if object.has_method('toggle_blue_tint'):
+		object.toggle_blue_tint(true)
+	object.position = get_global_mouse_position()
+	# Disable collisions
+	object.collision_layer = 0
+	prespawned_object = object
+	$entities/objects.add_child(object, true)
+
+func actually_spawn_object():
+	if prespawned_object:
+		if prespawned_object.has_method('toggle_blue_tint'):
+			prespawned_object.toggle_blue_tint(false)
+		# TODO: actually validate that object can be placed at that position
+		prespawned_object.position = get_global_mouse_position()
+		# Enable collisions
+		prespawned_object.collision_layer = 1
+		prespawned_object = null
