@@ -62,6 +62,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			spawn_archer(get_global_mouse_position())
 		if event.pressed and event.keycode == KEY_B:
 			spawn_animal(get_global_mouse_position())
+		if event.pressed and event.keycode == KEY_H:
+			spawn_house(get_global_mouse_position())
 			
 func spawn_villager(spawn_pos: Vector2):
 	var villager = preload("res://scenes/entities/units/villager.tscn").instantiate()
@@ -92,6 +94,12 @@ func spawn_animal(spawn_pos: Vector2):
 	animal.prepare()
 	animal.position = spawn_pos
 	$entities/npcs.add_child(animal, true)
+	
+func spawn_house(spawn_pos: Vector2):
+	var house = preload("res://scenes/entities/objects/house.tscn").instantiate()
+	house.prepare()
+	house.position = spawn_pos
+	$entities/objects.add_child(house, true)
 
 @warning_ignore("unused_parameter")
 func update_object_menu(layer_node, map_coords, atlas_coords):

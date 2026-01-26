@@ -9,6 +9,7 @@ var current_state: State = State.IDLE
 @export var enabled: bool = true
 @export var current_stance: Stance = Stance.DEFENSIVE
 @export var can_gather: bool = true 
+@export var disable_in_fog: bool = true # Toggle for performance
 
 @export_group("Settings")
 @export var think_interval: float = 0.6
@@ -29,11 +30,44 @@ var target_resource: Node2D = null
 var nearby_resources: Array[Node2D] = []
 var current_dropoff_target: Vector2 = Vector2.ZERO
 
+# --- Fog Logic ---
+var is_in_fog: bool = false : set = set_is_in_fog
+
+func set_is_in_fog(value: bool):
+	if is_in_fog == value: return
+	is_in_fog = value
+	
+	if is_in_fog and disable_in_fog:
+		think_timer.stop()
+		state_timer.paused = true
+		if state_label: state_label.visible = false
+	else:
+		if enabled:
+			think_timer.start()
+			state_timer.paused = false
+			if state_label: state_label.visible = true
+			_update_debug_label()
+
+func _pause_brain():
+	think_timer.stop()
+	state_timer.paused = true
+	if state_label: state_label.visible = false
+	# Clean up current movement if they "disappear" for the player
+	# parent_unit.is_moving = false
+
+func _resume_brain():
+	if enabled:
+		think_timer.start()
+		state_timer.paused = false
+		if state_label: state_label.visible = true
+		_update_debug_label()
+
+# --- Core Setup ---
+
 func _ready():
 	parent_unit = get_parent() as Unit
 	home_position = parent_unit.global_position
 	
-	# Connect Timer signals
 	if not state_timer.timeout.is_connected(_on_state_timer_timeout):
 		state_timer.timeout.connect(_on_state_timer_timeout)
 	
@@ -41,11 +75,10 @@ func _ready():
 	if not think_timer.timeout.is_connected(_on_think_tick):
 		think_timer.timeout.connect(_on_think_tick)
 	
-	# Connect Sensor signals
 	sensor_area.body_entered.connect(_on_body_entered)
 	sensor_area.body_exited.connect(_on_body_exited)
 	
-	if enabled:
+	if enabled and not (is_in_fog and disable_in_fog):
 		think_timer.start()
 		_change_state(State.IDLE)
 	else:
@@ -58,18 +91,20 @@ func set_enabled(value: bool):
 		think_timer.stop()
 		if state_label: state_label.text = "MANUAL"
 	else:
-		think_timer.start()
+		if not (is_in_fog and disable_in_fog):
+			think_timer.start()
 		_change_state(State.IDLE)
 
-# --- Brain Logic (The "Thinking" Loop) ---
+# --- Brain Logic ---
 
 func _on_think_tick():
-	if not enabled or not parent_unit.is_multiplayer_authority(): return
+	# Early exit if hidden or disabled
+	if not enabled or (is_in_fog and disable_in_fog): return
+	if not parent_unit.is_multiplayer_authority(): return
 	
 	match current_state:
 		State.FRIGHTENED:
 			if is_instance_valid(threat):
-				# Move exactly away from the enemy
 				var flee_dir = threat.global_position.direction_to(parent_unit.global_position)
 				var flee_point = parent_unit.global_position + (flee_dir * 100.0)
 				parent_unit.set_move_target(flee_point)
@@ -79,7 +114,6 @@ func _on_think_tick():
 		State.AGGRO:
 			if is_instance_valid(threat):
 				parent_unit.set_move_target(threat.global_position)
-				# DEFENSIVE check: don't chase too far from spawn
 				if current_stance == Stance.DEFENSIVE:
 					var dist_sq = parent_unit.global_position.distance_squared_to(home_position)
 					if dist_sq > pow(leash_radius * 2.5, 2):
@@ -91,7 +125,7 @@ func _on_think_tick():
 		State.GATHERING:
 			if is_instance_valid(target_resource):
 				var dist_sq = parent_unit.global_position.distance_squared_to(target_resource.global_position)
-				if dist_sq < 400.0: # Roughly 20 pixels
+				if dist_sq < 400.0:
 					if state_timer.is_stopped(): 
 						_start_collecting()
 			else:
@@ -104,10 +138,9 @@ func _on_think_tick():
 				current_dropoff_target = Vector2.ZERO
 				_change_state(State.IDLE)
 
-# --- State Transitions ---
+# --- Logic & Sensors ---
 
 func _change_state(new_state: State):
-	# Cleanup Speed from Frightened state
 	if current_state == State.FRIGHTENED: 
 		parent_unit.speed /= 1.5 
 	
@@ -119,11 +152,13 @@ func _change_state(new_state: State):
 			state_timer.start(randf_range(idle_time_range.x, idle_time_range.y))
 		State.FRIGHTENED:
 			parent_unit.speed *= 1.5
-			state_timer.start(3.5) # Flee for 3.5 seconds
+			state_timer.start(3.5)
 		State.RETURNING:
 			current_dropoff_target = _find_nearest_dropoff()
 
 func _on_state_timer_timeout():
+	if is_in_fog and disable_in_fog: return # Don't trigger transitions in fog
+	
 	match current_state:
 		State.IDLE:
 			if can_gather:
@@ -136,11 +171,8 @@ func _on_state_timer_timeout():
 		State.GATHERING, State.FRIGHTENED:
 			_change_state(State.RETURNING)
 
-# --- Sensors & Group Logic ---
-
 func _on_body_entered(body):
 	if body == parent_unit: return
-	
 	if body.is_in_group("Resources"):
 		nearby_resources.append(body)
 	elif body is Unit and not body.faction in parent_unit.allies and not body.faction == -1:
@@ -148,29 +180,27 @@ func _on_body_entered(body):
 		_evaluate_threat_by_stance()
 
 func _evaluate_threat_by_stance():
+	# If in fog, we don't react to threats automatically
+	if is_in_fog and disable_in_fog: return
+	
 	match current_stance:
-		Stance.PASSIVE: 
-			_change_state(State.FRIGHTENED)
-		Stance.DEFENSIVE, Stance.AGGRESSIVE: 
-			_change_state(State.AGGRO)
+		Stance.PASSIVE: _change_state(State.FRIGHTENED)
+		Stance.DEFENSIVE, Stance.AGGRESSIVE: _change_state(State.AGGRO)
 
 func _on_body_exited(body):
-	if body in nearby_resources: 
-		nearby_resources.erase(body)
+	if body in nearby_resources: nearby_resources.erase(body)
 	if body == threat:
-		# If aggressive, we might keep chasing. If defensive, we stop.
 		if current_stance != Stance.AGGRESSIVE:
 			threat = null
 			if current_state == State.AGGRO: _change_state(State.RETURNING)
 
-# --- Finding Targets ---
+# --- Utility Functions ---
 
 func _find_nearest_dropoff() -> Vector2:
 	var dropoffs = get_tree().get_nodes_in_group("Dropoffs")
 	if dropoffs.is_empty(): return home_position
-	
 	var closest_node = null
-	var min_dist = 1e10 # Large number
+	var min_dist = 1e10
 	for d in dropoffs:
 		var d_sq = parent_unit.global_position.distance_squared_to(d.global_position)
 		if d_sq < min_dist:
@@ -189,8 +219,6 @@ func _find_best_resource():
 				best = res
 	return best
 
-# --- Actions ---
-
 func _start_collecting():
 	parent_unit.is_moving = false
 	parent_unit.stop_jumping()
@@ -201,7 +229,7 @@ func _do_wander():
 	parent_unit.set_move_target(home_position + offset)
 
 func _update_debug_label():
-	if not state_label: return
+	if not state_label or not state_label.visible: return
 	state_label.text = "[%s]\n%s" % [Stance.keys()[current_stance], State.keys()[current_state]]
 	match current_state:
 		State.AGGRO: state_label.modulate = Color.RED

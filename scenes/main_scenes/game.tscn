@@ -344,6 +344,7 @@ spawn_path = NodePath("..")
 [node name="objects" type="Node2D" parent="entities"]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="entities/objects"]
+_spawnable_scenes = PackedStringArray("uid://cu7nbbhhgay1a", "uid://kx24nn30dqql", "uid://bfu1iccj67rot")
 spawn_path = NodePath("..")
 
 [node name="Camera2D" type="Camera2D" parent="."]

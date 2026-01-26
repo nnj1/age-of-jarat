@@ -1,0 +1,43 @@
+[gd_scene load_steps=7 format=4 uid="uid://cu7nbbhhgay1a"]
+
+[ext_resource type="Script" uid="uid://dkiqbm8snf5u8" path="res://src/house.gd" id="1_0ngk0"]
+[ext_resource type="PackedScene" uid="uid://cldxrxi6cj4ln" path="res://scenes/components/HealthComponent.tscn" id="2_w4i3d"]
+[ext_resource type="PackedScene" uid="uid://gngxsuir4syw" path="res://scenes/components/SoundComponent.tscn" id="3_iirdr"]
+[ext_resource type="PackedScene" uid="uid://dv0isi7bv1viu" path="res://scenes/components/FactionLabelComponent.tscn" id="4_ubhky"]
+[ext_resource type="TileSet" uid="uid://cgig36v2tr1w3" path="res://resources/urizen.tres" id="5_ubhky"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0ngk0"]
+size = Vector2(36, 24)
+
+[node name="House" type="StaticBody2D"]
+collision_mask = 2
+script = ExtResource("1_0ngk0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_0ngk0")
+
+[node name="HealthComponent" parent="." instance=ExtResource("2_w4i3d")]
+position = Vector2(0, -20.999998)
+scale = Vector2(0.1, 0.04)
+max_health = 200.0
+
+[node name="SoundComponent" parent="." instance=ExtResource("3_iirdr")]
+
+[node name="FactionLabelComponent" parent="." instance=ExtResource("4_ubhky")]
+position = Vector2(0, 10)
+scale = Vector2(0.25, 0.25)
+
+[node name="SelectionCircle" type="Sprite2D" parent="."]
+position = Vector2(-6, -5.999999)
+
+[node name="ColorRect" type="ColorRect" parent="SelectionCircle"]
+z_index = -1
+offset_right = 12.0
+offset_bottom = 12.0
+metadata/_edit_use_anchors_ = true
+
+[node name="Sprite" type="TileMapLayer" parent="."]
+position = Vector2(-6, -6)
+tile_map_data = PackedByteArray("AAAAAAAAAAAPAAQAAAD//wAAAAAKAAQAAAABAAAAAAAKAAQAAAD/////AAAKAAQAAAABAP//AAAKAAQAAAAAAP//AAAKAAQAAAA=")
+tile_set = ExtResource("5_ubhky")

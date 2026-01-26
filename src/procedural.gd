@@ -20,7 +20,7 @@ var trees_atlas_coords = [Vector2i(0,34), Vector2i(1,34), Vector2i(2,34), Vector
 var rock_atlas_coords = [Vector2i(10,5), Vector2i(11,5), Vector2i(12,5)]
 
 # 3. Generation Settings
-@export var map_size: Vector2i = Vector2i(500, 500)
+@export var map_size: Vector2i = Vector2i(100, 100)
 @export var noise_frequency: float = 0.04  # Lower = larger islands, Higher = noisier/smaller patches
 @export var noise: FastNoiseLite = FastNoiseLite.new()
 
@@ -37,6 +37,9 @@ func _process(delta: float) -> void:
 
 func _ready() -> void:
 	
+	# ADD THIS: Register this node as the FogSystem
+	add_to_group("FogSystem")
+	
 	# OPTIONAL: center the map
 	self.position -= Vector2(map_size.x * 12.0 / 2, map_size.y * 12.0 / 2)
 	
@@ -47,6 +50,20 @@ func _ready() -> void:
 	#noise.noise_type = FastNoiseLite.TYPE_PERLIN # Organic, smooth transitions
 	
 	generate_world()
+	
+# --- NEW FOG SYSTEM INTERFACE ---
+
+## This is the function the Units/WanderComponent will call
+func is_pos_revealed(world_pos: Vector2) -> bool:
+	# 1. Convert global world position to the tilemap's internal grid coordinates
+	var map_pos = fow_layer.local_to_map(fow_layer.to_local(world_pos))
+	
+	# 2. Check if a tile exists at that spot on the fog layer
+	# get_cell_source_id returns -1 if the cell is empty (erased)
+	var tile_id = fow_layer.get_cell_source_id(map_pos)
+	
+	# 3. If tile_id is -1, the fog has been erased (Revealed)
+	return tile_id == -1
 
 func generate_world() -> void:
 	# Clear existing tiles before generating

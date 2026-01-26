@@ -12,6 +12,5 @@ func prepare(spawning_player_id: int = 1, given_faction:int = -1):
 	super.prepare(spawning_player_id, given_faction)
 	
 func _ready():
-	# other stuff here
 	super._ready()
 	

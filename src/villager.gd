@@ -64,7 +64,27 @@ func _ready():
 	
 	# create random shader offsets
 	$Sprite.material.set_shader_parameter('random_phase', randf_range(0.0, 100.0))
+	
+	# FOW check
+	_setup_fog_timer()
 
+func _setup_fog_timer():
+	var timer = Timer.new()
+	add_child(timer)
+	timer.wait_time = 0.8 # Staggered check to save CPU
+	timer.timeout.connect(_check_visibility)
+	timer.start()
+
+func _check_visibility():
+	var fog_system = get_tree().get_first_node_in_group("FogSystem")
+	if not fog_system: return
+	
+	var is_seen = fog_system.is_pos_revealed(global_position)
+	
+	# Pass the status to the WanderComponent
+	if has_node("WanderComponent"):
+		$WanderComponent.is_in_fog = !is_seen
+		
 @rpc("any_peer","call_local","reliable")
 func set_unit_texture(given_random_atlas_coords: Vector2i):
 	$Sprite.set_cell(Vector2i(0,0), 0, given_random_atlas_coords)
