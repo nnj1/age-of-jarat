@@ -9,7 +9,7 @@ var materials = {
 
 var alt_held: bool = false
 
-var prespawned_object = null
+var prespawned_structure:Structure
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -53,9 +53,9 @@ func _process(_delta: float) -> void:
 	# Update the materials UI
 	update_material_display()
 	
-	# handle any object prespawning
-	if prespawned_object:
-		prespawned_object.position = get_global_mouse_position()
+	# handle any structure prespawning
+	if prespawned_structure:
+		prespawned_structure.position = get_global_mouse_position().snapped(Vector2(12, 12)) + Vector2(6, 6)
 	
 func update_material_display():
 	for mat_name in materials.keys():
@@ -76,13 +76,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event.pressed and event.keycode == KEY_H:
 			spawn_house(get_global_mouse_position())
 		if event.pressed and event.keycode == KEY_ESCAPE:
-			if prespawned_object:
-				prespawned_object.queue_free()
-				prespawned_object = null
+			if prespawned_structure:
+				prespawned_structure.queue_free()
+				prespawned_structure = null
+				CursorManager.reset_cursor()
 			
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if prespawned_object:
-			actually_spawn_object()
+		if prespawned_structure:
+			actually_spawn_structure()
 			
 func spawn_villager(spawn_pos: Vector2):
 	var villager = preload("res://scenes/entities/units/villager.tscn").instantiate()
@@ -115,10 +116,10 @@ func spawn_animal(spawn_pos: Vector2):
 	$entities/npcs.add_child(animal, true)
 	
 func spawn_house(spawn_pos: Vector2):
-	var house = preload("res://scenes/entities/objects/house.tscn").instantiate()
+	var house = preload("res://scenes/entities/structures/house.tscn").instantiate()
 	house.prepare(1, 0 if not alt_held else 1)
 	house.position = spawn_pos
-	$entities/objects.add_child(house, true)
+	$entities/structures.add_child(house, true)
 
 @warning_ignore("unused_parameter")
 func update_object_menu(layer_node, map_coords, atlas_coords):
@@ -136,8 +137,16 @@ func update_object_menu(layer_node, map_coords, atlas_coords):
 	$UI/TabContainer/Object.add_child(label)
 
 func update_selection_menu(selected_units):
+	
+	# clear the rich text label detailing party stats
+	var party_comp_label = $UI/TabContainer/Selection/HBoxContainer/VBoxContainer/RichTextLabel
+	party_comp_label.clear()
+	
+	# clear the textures in the the grid container
 	for child in $UI/TabContainer/Selection/HBoxContainer/ScrollContainer/GridContainer.get_children():
 		child.queue_free()
+		
+	# add them back in, which calculating stats
 	for unit in selected_units:
 		# 1. Create the TextureRect instance
 		var new_tex_rect = TextureRect.new()
@@ -155,7 +164,10 @@ func update_selection_menu(selected_units):
 		
 		# 4. Add it to the GridContainer (self)
 		$UI/TabContainer/Selection/HBoxContainer/ScrollContainer/GridContainer.add_child(new_tex_rect)
-
+		
+	# update the stats label
+	party_comp_label.text = dict_to_bbcode_list(count_group_membership(selected_units))
+	
 func update_unit_menu(unit):
 	# SHOW THE TAB
 	set_tab_hidden_by_name($UI/TabContainer, 'Unit', false)
@@ -207,26 +219,57 @@ func exit_game_to_desktop():
 
 # TO TEST THE DRAG AND DROP SYSTENM
 func _on_button_pressed() -> void:
-	if not prespawned_object:
-		prespawn_object("res://scenes/entities/objects/house.tscn")
+	if not prespawned_structure:
+		prespawn_structure("res://scenes/entities/structures/house.tscn")
 	
-func prespawn_object(object_path: String):
-	var object = load(object_path).instantiate()
-	object.prepare(1, 0 if not alt_held else 1)
-	if object.has_method('toggle_blue_tint'):
-		object.toggle_blue_tint(true)
-	object.position = get_global_mouse_position()
+func prespawn_structure(structure_path: String):
+	var structure = load(structure_path).instantiate()
+	structure.prepare(1, 0 if not alt_held else 1)
+	if structure.has_method('toggle_blue_tint'):
+		structure.toggle_blue_tint(true)
+	structure.position = get_global_mouse_position()
 	# Disable collisions
-	object.collision_layer = 0
-	prespawned_object = object
-	$entities/objects.add_child(object, true)
+	structure.collision_layer = 0
+	prespawned_structure = structure
+	$entities/structures.add_child(structure, true)
+	CursorManager.set_cursor(CursorManager.Type.BUILD)
 
-func actually_spawn_object():
-	if prespawned_object:
-		if prespawned_object.has_method('toggle_blue_tint'):
-			prespawned_object.toggle_blue_tint(false)
-		# TODO: actually validate that object can be placed at that position
-		prespawned_object.position = get_global_mouse_position()
+func actually_spawn_structure():
+	if prespawned_structure:
+		if prespawned_structure.has_method('toggle_blue_tint'):
+			prespawned_structure.toggle_blue_tint(false)
+		# TODO: actually validate that structure can be placed at that position
+		prespawned_structure.position = get_global_mouse_position().snapped(Vector2(12, 12)) + Vector2(6, 6)
 		# Enable collisions
-		prespawned_object.collision_layer = 1
-		prespawned_object = null
+		prespawned_structure.collision_layer = 1
+		prespawned_structure = null
+		CursorManager.reset_cursor()
+
+func update_structure_menu(structure: Structure):
+	pass
+
+## Returns a dictionary where keys are Group Names and values are their frequencies
+func count_group_membership(node_list: Array) -> Dictionary:
+	var group_counts = {}
+	
+	for node in node_list:
+		# get_groups() returns an Array of Strings
+		var groups = node.get_groups()
+		
+		for group_name in groups:
+			if group_counts.has(group_name):
+				group_counts[group_name] += 1
+			else:
+				group_counts[group_name] = 1
+				
+	return group_counts
+
+func dict_to_bbcode_list(data: Dictionary) -> String:
+	var bbcode = ""
+	
+	for key in data.keys():
+		var value = data[key]
+		# Format: [b]Key:[/b] Value followed by a newline
+		bbcode += str(key) + ': ' + str(value) + "\n"
+	
+	return bbcode

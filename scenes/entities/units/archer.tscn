@@ -40,7 +40,7 @@ properties/2/path = NodePath("Sprite:scale")
 properties/2/spawn = true
 properties/2/replication_mode = 1
 
-[node name="Archer" type="CharacterBody2D" groups=["units"]]
+[node name="Archer" type="CharacterBody2D" groups=["archers", "units"]]
 collision_layer = 2
 collision_mask = 7
 input_pickable = true

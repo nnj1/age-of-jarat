@@ -2,6 +2,8 @@ extends StaticBody2D
 
 class_name Structure
 
+@onready var main_game_node = get_tree().get_root().get_node('Game')
+
 var faction: int
 var allies: Array[int]
 
@@ -13,8 +15,15 @@ func prepare(spawning_player_id: int = 1, given_faction:int = randi_range(0, 1))
 	faction = given_faction
 	allies.append(faction)
 	
+	
 func _ready():
 	if not is_multiplayer_authority(): return
+	
+	# show a random sprite
+	var sprites = $Sprites.get_children()
+	for sprite in sprites:
+		sprite.hide()
+	sprites.pick_random().show()
 	
 	# connect important signals
 	if get_node_or_null('HealthComponent'):
@@ -35,17 +44,19 @@ func _process(_delta: float) -> void:
 	pass
 
 func play_damage_modulate_animation():
-	var tween = get_tree().create_tween()
-	# Transition to Red
-	tween.tween_property($Sprite, "modulate", Color.RED, 0.1).set_trans(Tween.TRANS_SINE)
-	# Transition back to White (Normal)
-	tween.tween_property($Sprite, "modulate", Color.WHITE, 0.1).set_trans(Tween.TRANS_SINE)
+	for sprite in $Sprites.get_children(): 
+		var tween = get_tree().create_tween()
+		# Transition to Red
+		tween.tween_property(sprite, "modulate", Color.RED, 0.1).set_trans(Tween.TRANS_SINE)
+		# Transition back to White (Normal)
+		tween.tween_property(sprite, "modulate", Color.WHITE, 0.1).set_trans(Tween.TRANS_SINE)
 
 func toggle_blue_tint(given_status: bool):
-	if given_status:
-		$Sprite.modulate = Color(0, 0, 1, 0.9)
-	else:
-		$Sprite.modulate = Color(1, 1, 1, 1)
+	for sprite in $Sprites.get_children():
+		if given_status:
+			sprite.modulate = Color(0, 0, 1, 0.9)
+		else:
+			sprite.modulate = Color(1, 1, 1, 1)
 		
 func is_atlas_tile_non_black(atlas_coords: Vector2i, tileset_path: String = 'res://resources/urizen.tres', source_id: int = 0) -> bool:
 	# 1. Load the TileSet resource
@@ -79,3 +90,17 @@ func is_atlas_tile_non_black(atlas_coords: Vector2i, tileset_path: String = 'res
 				return true
 				
 	return false
+
+@warning_ignore("unused_parameter")
+func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			print("This structure was clicked!")
+			main_game_node.update_structure_menu(self)
+			
+
+func _on_mouse_entered() -> void:
+	CursorManager.set_cursor(CursorManager.Type.HOVER)
+
+func _on_mouse_exited() -> void:
+	CursorManager.reset_cursor()

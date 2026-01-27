@@ -22,5 +22,5 @@ func _unhandled_input(event: InputEvent) -> void:
 				print("Clicked layer: ", layer.name, " Atlas Coords: ", atlas_coords)
 				
 				# Stop the loop if you only want to click the top-most tile
-				get_viewport().set_input_as_handled()
+				#get_viewport().set_input_as_handled()
 				break

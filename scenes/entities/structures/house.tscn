@@ -11,16 +11,29 @@ size = Vector2(36, 24)
 
 [node name="House" type="StaticBody2D" groups=["structures"]]
 collision_mask = 3
+input_pickable = true
 script = ExtResource("1_0ngk0")
-
-[node name="Sprite" type="TileMapLayer" parent="."]
-position = Vector2(-6, -6)
-tile_map_data = PackedByteArray("AAAAAAAAAAAPAAQAAAD//wAAAAAKAAQAAAABAAAAAAAKAAQAAAD/////AAAKAAQAAAABAP//AAAKAAQAAAAAAP//AAAKAAQAAAA=")
-tile_set = ExtResource("5_ubhky")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -6)
 shape = SubResource("RectangleShape2D_0ngk0")
+
+[node name="Sprites" type="Node2D" parent="."]
+
+[node name="Wood" type="TileMapLayer" parent="Sprites"]
+position = Vector2(-6, -6)
+tile_map_data = PackedByteArray("AAAAAAAAAAAPAAQAAAD//wAAAAAKAAQAAAABAAAAAAAKAAQAAAD/////AAAKAAQAAAABAP//AAAKAAQAAAAAAP//AAAKAAQAAAA=")
+tile_set = ExtResource("5_ubhky")
+
+[node name="Stone" type="TileMapLayer" parent="Sprites"]
+position = Vector2(-6, -6)
+tile_map_data = PackedByteArray("AAAAAAAAAAAUAAIAAAD//wAAAAAUAAMAAAABAAAAAAAUAAMAAAD/////AAAUAAMAAAABAP//AAAUAAMAAAAAAP//AAAUAAMAAAA=")
+tile_set = ExtResource("5_ubhky")
+
+[node name="Brick" type="TileMapLayer" parent="Sprites"]
+position = Vector2(-6, -6)
+tile_map_data = PackedByteArray("AAAAAAAAAAASAAMAAAD//wAAAAAAAAMAAAABAAAAAAAAAAMAAAD/////AAAAAAMAAAABAP//AAAAAAMAAAAAAP//AAAAAAMAAAA=")
+tile_set = ExtResource("5_ubhky")
 
 [node name="HealthComponent" parent="." instance=ExtResource("2_w4i3d")]
 position = Vector2(0, -20.999998)
@@ -42,3 +55,7 @@ z_index = -1
 offset_right = 12.0
 offset_bottom = 12.0
 metadata/_edit_use_anchors_ = true
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

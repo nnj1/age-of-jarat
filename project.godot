@@ -27,7 +27,7 @@ UiSoundsManager="*res://scenes/autoloads/UISoundsManager.tscn"
 
 [display]
 
-window/stretch/mode="canvas_items"
+window/stretch/mode="viewport"
 
 [editor_plugins]
 
