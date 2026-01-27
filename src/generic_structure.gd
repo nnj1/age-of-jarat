@@ -3,8 +3,6 @@ extends StaticBody2D
 class_name Structure
 
 @onready var main_game_node = get_tree().get_root().get_node('Game')
-@onready var collision_shape: CollisionShape2D = $CollisionShape2D
-var tile_layer: TileMapLayer
 
 var lore_data
 var faction: int
@@ -26,11 +24,7 @@ func _ready():
 	var potential_sprite = load('res://scenes/entities/structures/structure_sprites/' + lore_data.name.to_lower() + '.tscn')
 	if potential_sprite:
 		$Sprites.queue_free()
-		self.add_child(potential_sprite.instantiate())
-	
-	# create a collision layer based on tier 1 sprite
-	tile_layer = $'Sprites/1'
-	update_collision_to_layer()
+		self.add_child(potential_sprite.instantiate()) # AUTOMATICALLY MODIFIES THE COLISION SHAPE 
 	
 	# only show the first tier of the structure initially
 	for child in $Sprites.get_children():
@@ -115,30 +109,3 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	CursorManager.reset_cursor()
-
-func update_collision_to_layer() -> void:
-	var used_cells = tile_layer.get_used_cells()
-	
-	if used_cells.is_empty():
-		collision_shape.disabled = true
-		return
-	
-	collision_shape.disabled = false
-	
-	# 1. Find the bounding box of the used cells (in grid coordinates)
-	var rect = tile_layer.get_used_rect()
-	
-	# 2. Convert grid coordinates to local pixel coordinates
-	# get_used_rect() returns position (top-left cell) and size (how many cells)
-	var tile_size = tile_layer.tile_set.tile_size
-	
-	# Calculate the pixel size and center
-	var pixel_size = Vector2(rect.size) * Vector2(tile_size)
-	var pixel_center = (Vector2(rect.position) * Vector2(tile_size)) + (pixel_size / 2.0)
-	
-	# 3. Apply to the CollisionShape2D
-	var shape = RectangleShape2D.new()
-	shape.size = pixel_size
-	
-	collision_shape.shape = shape
-	collision_shape.position = pixel_center

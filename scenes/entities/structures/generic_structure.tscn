@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=4 uid="uid://cu7nbbhhgay1a"]
+[gd_scene load_steps=8 format=4 uid="uid://cu7nbbhhgay1a"]
 
 [ext_resource type="Script" uid="uid://dkiqbm8snf5u8" path="res://src/generic_structure.gd" id="1_2cxae"]
 [ext_resource type="TileSet" uid="uid://cgig36v2tr1w3" path="res://resources/urizen.tres" id="2_a6w3r"]
+[ext_resource type="Script" uid="uid://y1ytrrtf2p30" path="res://src/sprites.gd" id="2_qtg5e"]
 [ext_resource type="PackedScene" uid="uid://cldxrxi6cj4ln" path="res://scenes/components/HealthComponent.tscn" id="3_p1f10"]
 [ext_resource type="PackedScene" uid="uid://gngxsuir4syw" path="res://scenes/components/SoundComponent.tscn" id="4_6jugh"]
 [ext_resource type="PackedScene" uid="uid://dv0isi7bv1viu" path="res://scenes/components/FactionLabelComponent.tscn" id="5_xm2vv"]
@@ -18,6 +19,7 @@ script = ExtResource("1_2cxae")
 shape = SubResource("RectangleShape2D_0ngk0")
 
 [node name="Sprites" type="Node2D" parent="."]
+script = ExtResource("2_qtg5e")
 
 [node name="1" type="TileMapLayer" parent="Sprites"]
 position = Vector2(0, -1.9073486e-06)
