@@ -18,5 +18,9 @@ offset_bottom = 7.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 32
-text = "FACTION"
+text = "P1"
 horizontal_alignment = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(21.000002, 0)
+scale = Vector2(0.75, 0.75)

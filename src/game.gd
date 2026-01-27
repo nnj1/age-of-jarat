@@ -286,13 +286,14 @@ func count_group_membership(node_list: Array) -> Dictionary:
 	
 	for node in node_list:
 		# get_groups() returns an Array of Strings
-		var groups = node.get_groups()
-		
-		for group_name in groups:
-			if group_counts.has(group_name):
-				group_counts[group_name] += 1
-			else:
-				group_counts[group_name] = 1
+		if node:
+			var groups = node.get_groups()
+			
+			for group_name in groups:
+				if group_counts.has(group_name):
+					group_counts[group_name] += 1
+				else:
+					group_counts[group_name] = 1
 				
 	return group_counts
 
