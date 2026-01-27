@@ -21,11 +21,9 @@ monitorable = false
 shape = SubResource("CircleShape2D_loagr")
 
 [node name="StateLabel" type="Label" parent="."]
-visible = false
 offset_left = -5.0
 offset_top = -13.0
 offset_right = 35.0
 offset_bottom = 1.0
 scale = Vector2(0.25, 0.25)
-text = "STATE"
 horizontal_alignment = 1

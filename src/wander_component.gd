@@ -16,6 +16,7 @@ var current_state: State = State.IDLE
 @export var leash_radius: float = 150.0
 @export var idle_time_range: Vector2 = Vector2(1.5, 4.0)
 @export var collection_time: float = 3.0
+@export var DEBUG_MODE: bool = false
 
 # Nodes (Assumes these exist as children in your Scene)
 @onready var state_timer: Timer = $StateTimer
@@ -65,6 +66,9 @@ func _resume_brain():
 # --- Core Setup ---
 
 func _ready():
+	if not DEBUG_MODE:
+		state_label = null
+		
 	parent_unit = get_parent() as Unit
 	home_position = parent_unit.global_position
 	

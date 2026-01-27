@@ -269,7 +269,6 @@ func dict_to_bbcode_list(data: Dictionary) -> String:
 	
 	for key in data.keys():
 		var value = data[key]
-		# Format: [b]Key:[/b] Value followed by a newline
 		bbcode += str(key) + ': ' + str(value) + "\n"
 	
 	return bbcode
