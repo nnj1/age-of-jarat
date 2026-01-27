@@ -134,11 +134,12 @@ grow_horizontal = 2
 grow_vertical = 0
 focus_mode = 2
 theme_override_font_sizes/font_size = 32
-current_tab = 0
+current_tab = 3
 drag_to_rearrange_enabled = true
 script = ExtResource("2_leqql")
 
 [node name="Game" type="Panel" parent="UI/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -181,7 +182,6 @@ layout_mode = 2
 metadata/_tab_index = 2
 
 [node name="Unit" type="Panel" parent="UI/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 3
 
@@ -190,13 +190,15 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 3.0
+offset_right = -3.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/TabContainer/Unit/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.5
+size_flags_stretch_ratio = 0.25
 
 [node name="Label" type="Label" parent="UI/TabContainer/Unit/HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -212,6 +214,26 @@ theme_override_font_sizes/bold_italics_font_size = 20
 theme_override_font_sizes/italics_font_size = 20
 theme_override_font_sizes/mono_font_size = 20
 text = "unit "
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="UI/TabContainer/Unit/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+
+[node name="Label" type="Label" parent="UI/TabContainer/Unit/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Stats"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/TabContainer/Unit/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/bold_font_size = 20
+theme_override_font_sizes/bold_italics_font_size = 20
+theme_override_font_sizes/italics_font_size = 20
+theme_override_font_sizes/mono_font_size = 20
+bbcode_enabled = true
 
 [node name="TextureRect" type="TextureRect" parent="UI/TabContainer/Unit/HBoxContainer"]
 layout_mode = 2

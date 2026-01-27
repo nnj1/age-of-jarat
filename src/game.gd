@@ -205,8 +205,10 @@ func update_unit_menu(unit):
 	# set up some references for easy access later
 	var delete_button = $UI/TabContainer/Unit/HBoxContainer/VBoxContainer2/Button4
 	
-	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer/Label.text = str(unit.name)
-	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer/RichTextLabel.text = str(unit.lore_data)
+	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer/Label.text = unit.lore_data.name
+	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer/RichTextLabel.text = unit.lore_data.desc
+	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer3/Label.text = '(' + unit.lore_data.type + ')'
+	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer3/RichTextLabel.text = dict_to_bbcode_list(unit.lore_data.stats)
 	$UI/TabContainer/Unit/HBoxContainer/TextureRect.texture = get_cropped_tile_texture(unit.random_atlas_coords)
 	
 	var delete_unit = func():
