@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://fik2xyspevag" path="res://assets/tilesets/urizen_onebit_tileset__v2d0.png" id="3_5amgp"]
 [ext_resource type="Script" uid="uid://cn6q5tu3cq7yb" path="res://src/camera_2d.gd" id="3_ifh15"]
 [ext_resource type="PackedScene" uid="uid://24ncf3ybr3hc" path="res://scenes/maps/procedural.tscn" id="3_ks7w8"]
-[ext_resource type="Texture2D" uid="uid://boahk8sn0oa5j" path="res://assets/cursors/kenney_cursor-pack/PNG/Outline/Double/door.png" id="5_rbptj"]
+[ext_resource type="Texture2D" uid="uid://cx52tjc8goit1" path="res://assets/cursors/kenney_cursor-pack/Vector/Outline/tool_hammer.svg" id="5_rbptj"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3ls1w"]
 shader = ExtResource("2_rbptj")
@@ -134,7 +134,7 @@ grow_horizontal = 2
 grow_vertical = 0
 focus_mode = 2
 theme_override_font_sizes/font_size = 32
-current_tab = 3
+current_tab = 5
 drag_to_rearrange_enabled = true
 script = ExtResource("2_leqql")
 
@@ -182,6 +182,7 @@ layout_mode = 2
 metadata/_tab_index = 2
 
 [node name="Unit" type="Panel" parent="UI/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 3
 
@@ -305,11 +306,10 @@ theme_override_font_sizes/mono_font_size = 25
 bbcode_enabled = true
 
 [node name="Build" type="Panel" parent="UI/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 5
 
-[node name="ScrollContainer" type="ScrollContainer" parent="UI/TabContainer/Build"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/TabContainer/Build"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -317,14 +317,31 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="GridContainer" type="GridContainer" parent="UI/TabContainer/Build/ScrollContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/TabContainer/Build/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.75
+
+[node name="GridContainer" type="GridContainer" parent="UI/TabContainer/Build/HBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 columns = 4
 
-[node name="Button" type="Button" parent="UI/TabContainer/Build/ScrollContainer/GridContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/TabContainer/Build/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+
+[node name="OptionButton" type="OptionButton" parent="UI/TabContainer/Build/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+
+[node name="Button" type="Button" parent="UI/TabContainer/Build/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 focus_mode = 0
-text = "Stronghold"
+theme_override_font_sizes/font_size = 25
+text = "Build"
 icon = ExtResource("5_rbptj")
 
 [node name="Options" type="Panel" parent="UI/TabContainer"]
@@ -424,7 +441,6 @@ spawn_path = NodePath("..")
 [node name="structures" type="Node2D" parent="entities"]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="entities/structures"]
-_spawnable_scenes = PackedStringArray("res://scenes/entities/structures/house.tscn")
 spawn_path = NodePath("..")
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -438,6 +454,6 @@ current = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_fqmia")
 
-[connection signal="pressed" from="UI/TabContainer/Build/ScrollContainer/GridContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="UI/TabContainer/Build/HBoxContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="UI/TabContainer/Options/HBoxContainer/VBoxContainer/Button2" to="." method="exit_game_to_menu"]
 [connection signal="pressed" from="UI/TabContainer/Options/HBoxContainer/VBoxContainer/Button" to="." method="exit_game_to_desktop"]

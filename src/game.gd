@@ -13,9 +13,15 @@ var structure_list: Array[Structure]
 var alt_held: bool = false
 
 var prespawned_structure:Structure
+@onready var option_button = $UI/TabContainer/Build/HBoxContainer/VBoxContainer/OptionButton
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	
+	# populate the option button
+	for structure in GlobalVars.lore.structures:
+		option_button.add_item(structure.name)
+		
 	# get the minimap to share the world
 	$UI/Panel2/Minimap/SubViewport.world_2d = get_tree().root.get_viewport().world_2d
 	
@@ -65,7 +71,7 @@ func _process(_delta: float) -> void:
 	
 	# handle any structure prespawning
 	if prespawned_structure:
-		prespawned_structure.position = get_global_mouse_position().snapped(Vector2(12, 12)) + Vector2(6, 6)
+		prespawned_structure.position = get_global_mouse_position().snapped(Vector2(12, 12))# + Vector2(6, 6)
 
 # show various game stats
 func update_game_menu():
@@ -251,7 +257,11 @@ func exit_game_to_desktop():
 # TO TEST THE DRAG AND DROP SYSTENM
 func _on_button_pressed() -> void:
 	if not prespawned_structure:
-		prespawn_structure(GlobalVars.filter_json_objects(GlobalVars.lore.structures, 'name', 'Stronghold')[0])
+		# 1. Get the Index (0, 1, 2...)
+		var selected_idx = option_button.selected
+		# 2. Get the Text (The string shown to the user)
+		var selected_text = option_button.get_item_text(selected_idx)
+		prespawn_structure(GlobalVars.filter_json_objects(GlobalVars.lore.structures, 'name', selected_text)[0])
 	
 func prespawn_structure(structure_data: Dictionary = GlobalVars.lore.structures.pick_random(), structure_path: String = 'res://scenes/entities/structures/generic_structure.tscn'):
 	var structure = load(structure_path).instantiate()
@@ -270,7 +280,7 @@ func actually_spawn_structure():
 		if prespawned_structure.has_method('toggle_blue_tint'):
 			prespawned_structure.toggle_blue_tint(false)
 		# TODO: actually validate that structure can be placed at that position
-		prespawned_structure.position = get_global_mouse_position().snapped(Vector2(12, 12)) + Vector2(6, 6)
+		prespawned_structure.position = get_global_mouse_position().snapped(Vector2(12, 12)) #+ Vector2(6, 6)
 		# Enable collisions
 		prespawned_structure.collision_layer = 1
 		structure_list.append(prespawned_structure)
