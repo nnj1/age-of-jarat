@@ -142,6 +142,34 @@ script = ExtResource("2_leqql")
 layout_mode = 2
 metadata/_tab_index = 0
 
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/TabContainer/Game"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/TabContainer/Game/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/normal_font_size = 25
+theme_override_font_sizes/bold_font_size = 25
+theme_override_font_sizes/bold_italics_font_size = 25
+theme_override_font_sizes/italics_font_size = 25
+theme_override_font_sizes/mono_font_size = 25
+bbcode_enabled = true
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="UI/TabContainer/Game/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/normal_font_size = 25
+theme_override_font_sizes/bold_font_size = 25
+theme_override_font_sizes/bold_italics_font_size = 25
+theme_override_font_sizes/italics_font_size = 25
+theme_override_font_sizes/mono_font_size = 25
+bbcode_enabled = true
+
 [node name="Structure" type="Panel" parent="UI/TabContainer"]
 visible = false
 layout_mode = 2
@@ -278,7 +306,7 @@ columns = 4
 
 [node name="Button" type="Button" parent="UI/TabContainer/Build/ScrollContainer/GridContainer"]
 layout_mode = 2
-toggle_mode = true
+focus_mode = 0
 text = "House"
 icon = ExtResource("5_rbptj")
 

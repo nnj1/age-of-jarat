@@ -7,6 +7,9 @@ var materials = {
 	'gold': 0
 }
 
+var unit_list: Array[Unit]
+var structure_list: Array[Structure]
+
 var alt_held: bool = false
 
 var prespawned_structure:Structure
@@ -57,9 +60,17 @@ func _process(_delta: float) -> void:
 	# Update the materials UI
 	update_material_display()
 	
+	# Update the game menu tab
+	update_game_menu()
+	
 	# handle any structure prespawning
 	if prespawned_structure:
 		prespawned_structure.position = get_global_mouse_position().snapped(Vector2(12, 12)) + Vector2(6, 6)
+
+# show various game stats
+func update_game_menu():
+	$UI/TabContainer/Game/HBoxContainer/RichTextLabel.text = dict_to_bbcode_list(count_group_membership(unit_list))
+	$UI/TabContainer/Game/HBoxContainer/RichTextLabel2.text = dict_to_bbcode_list(count_group_membership(structure_list))
 	
 func update_material_display():
 	for mat_name in materials.keys():
@@ -94,24 +105,28 @@ func spawn_villager(spawn_pos: Vector2):
 	villager.prepare(1, 0 if not alt_held else 1)
 	villager.position = spawn_pos
 	$entities/units.add_child(villager, true)
+	unit_list.append(villager)
 	
 func spawn_warrior(spawn_pos: Vector2):
 	var warrior = preload("res://scenes/entities/units/warrior.tscn").instantiate()
 	warrior.prepare(1, 0 if not alt_held else 1)
 	warrior.position = spawn_pos
 	$entities/units.add_child(warrior, true)
+	unit_list.append(warrior)
 
 func spawn_archer(spawn_pos: Vector2):
 	var archer = preload("res://scenes/entities/units/archer.tscn").instantiate()
 	archer.prepare(1, 0 if not alt_held else 1)
 	archer.position = spawn_pos
 	$entities/units.add_child(archer, true)
+	unit_list.append(archer)
 	
 func spawn_wizard(spawn_pos: Vector2):
 	var wizard = preload("res://scenes/entities/units/wizard.tscn").instantiate()
 	wizard.prepare(1, 0 if not alt_held else 1)
 	wizard.position = spawn_pos
 	$entities/units.add_child(wizard, true)
+	unit_list.append(wizard)
 
 func spawn_animal(spawn_pos: Vector2):
 	var animal = preload("res://scenes/entities/npcs/animal.tscn").instantiate()
@@ -124,6 +139,7 @@ func spawn_house(spawn_pos: Vector2):
 	house.prepare(1, 0 if not alt_held else 1)
 	house.position = spawn_pos
 	$entities/structures.add_child(house, true)
+	structure_list.append(house)
 
 @warning_ignore("unused_parameter")
 func update_object_menu(layer_node, map_coords, atlas_coords):
@@ -255,6 +271,7 @@ func actually_spawn_structure():
 		prespawned_structure.position = get_global_mouse_position().snapped(Vector2(12, 12)) + Vector2(6, 6)
 		# Enable collisions
 		prespawned_structure.collision_layer = 1
+		structure_list.append(prespawned_structure)
 		prespawned_structure = null
 		CursorManager.reset_cursor()
 

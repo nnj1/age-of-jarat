@@ -1,18 +1,18 @@
 [gd_scene load_steps=7 format=4 uid="uid://cu7nbbhhgay1a"]
 
-[ext_resource type="Script" uid="uid://dkiqbm8snf5u8" path="res://src/house.gd" id="1_0ngk0"]
-[ext_resource type="PackedScene" uid="uid://cldxrxi6cj4ln" path="res://scenes/components/HealthComponent.tscn" id="2_w4i3d"]
-[ext_resource type="PackedScene" uid="uid://gngxsuir4syw" path="res://scenes/components/SoundComponent.tscn" id="3_iirdr"]
-[ext_resource type="PackedScene" uid="uid://dv0isi7bv1viu" path="res://scenes/components/FactionLabelComponent.tscn" id="4_ubhky"]
-[ext_resource type="TileSet" uid="uid://cgig36v2tr1w3" path="res://resources/urizen.tres" id="5_ubhky"]
+[ext_resource type="Script" uid="uid://dkiqbm8snf5u8" path="res://src/house.gd" id="1_2cxae"]
+[ext_resource type="TileSet" uid="uid://cgig36v2tr1w3" path="res://resources/urizen.tres" id="2_a6w3r"]
+[ext_resource type="PackedScene" uid="uid://cldxrxi6cj4ln" path="res://scenes/components/HealthComponent.tscn" id="3_p1f10"]
+[ext_resource type="PackedScene" uid="uid://gngxsuir4syw" path="res://scenes/components/SoundComponent.tscn" id="4_6jugh"]
+[ext_resource type="PackedScene" uid="uid://dv0isi7bv1viu" path="res://scenes/components/FactionLabelComponent.tscn" id="5_xm2vv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0ngk0"]
 size = Vector2(36, 24)
 
-[node name="House" type="StaticBody2D" groups=["structures"]]
+[node name="House" type="StaticBody2D" groups=["houses", "structures"]]
 collision_mask = 3
 input_pickable = true
-script = ExtResource("1_0ngk0")
+script = ExtResource("1_2cxae")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -6)
@@ -23,27 +23,27 @@ shape = SubResource("RectangleShape2D_0ngk0")
 [node name="Wood" type="TileMapLayer" parent="Sprites"]
 position = Vector2(-6, -6)
 tile_map_data = PackedByteArray("AAAAAAAAAAAPAAQAAAD//wAAAAAKAAQAAAABAAAAAAAKAAQAAAD/////AAAKAAQAAAABAP//AAAKAAQAAAAAAP//AAAKAAQAAAA=")
-tile_set = ExtResource("5_ubhky")
+tile_set = ExtResource("2_a6w3r")
 
 [node name="Stone" type="TileMapLayer" parent="Sprites"]
 position = Vector2(-6, -6)
 tile_map_data = PackedByteArray("AAAAAAAAAAAUAAIAAAD//wAAAAAUAAMAAAABAAAAAAAUAAMAAAD/////AAAUAAMAAAABAP//AAAUAAMAAAAAAP//AAAUAAMAAAA=")
-tile_set = ExtResource("5_ubhky")
+tile_set = ExtResource("2_a6w3r")
 
 [node name="Brick" type="TileMapLayer" parent="Sprites"]
 position = Vector2(-6, -6)
 tile_map_data = PackedByteArray("AAAAAAAAAAASAAMAAAD//wAAAAAAAAMAAAABAAAAAAAAAAMAAAD/////AAAAAAMAAAABAP//AAAAAAMAAAAAAP//AAAAAAMAAAA=")
-tile_set = ExtResource("5_ubhky")
+tile_set = ExtResource("2_a6w3r")
 
-[node name="HealthComponent" parent="." instance=ExtResource("2_w4i3d")]
+[node name="HealthComponent" parent="." instance=ExtResource("3_p1f10")]
 position = Vector2(0, -20.999998)
 scale = Vector2(0.1, 0.04)
 max_health = 200.0
 
-[node name="SoundComponent" parent="." instance=ExtResource("3_iirdr")]
+[node name="SoundComponent" parent="." instance=ExtResource("4_6jugh")]
 is_human = false
 
-[node name="FactionLabelComponent" parent="." instance=ExtResource("4_ubhky")]
+[node name="FactionLabelComponent" parent="." instance=ExtResource("5_xm2vv")]
 position = Vector2(0, 10)
 scale = Vector2(0.25, 0.25)
 
