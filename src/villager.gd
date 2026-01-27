@@ -26,6 +26,7 @@ func set_autonomous_mode(value: bool):
 		
 var random_atlas_coords: Vector2i
 
+var lore_data # contains the data that defines this unit
 var faction: int
 var allies: Array[int]
 
@@ -35,10 +36,11 @@ var map_node = null
 @onready var selection_visual = $SelectionCircle # A Sprite2D child used for feedback
 
 # sets the authority and faction of the unit
-func prepare(spawning_player_id: int = 1, given_faction:int = randi_range(0, 1)):
+func prepare(spawning_player_id: int = 1, given_faction:int = randi_range(0, 1), given_lore_data = GlobalVars.filter_json_objects(GlobalVars.lore.units, 'type', 'villager').pick_random()):
 	set_multiplayer_authority(spawning_player_id)
 	faction = given_faction
 	allies.append(faction)
+	lore_data = given_lore_data
 	
 func _ready():
 	if not is_multiplayer_authority(): return

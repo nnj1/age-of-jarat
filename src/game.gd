@@ -206,7 +206,7 @@ func update_unit_menu(unit):
 	var delete_button = $UI/TabContainer/Unit/HBoxContainer/VBoxContainer2/Button4
 	
 	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer/Label.text = str(unit.name)
-	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer/RichTextLabel.text = str(unit.random_atlas_coords)
+	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer/RichTextLabel.text = str(unit.lore_data)
 	$UI/TabContainer/Unit/HBoxContainer/TextureRect.texture = get_cropped_tile_texture(unit.random_atlas_coords)
 	
 	var delete_unit = func():
