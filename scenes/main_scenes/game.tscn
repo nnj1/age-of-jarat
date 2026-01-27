@@ -134,12 +134,11 @@ grow_horizontal = 2
 grow_vertical = 0
 focus_mode = 2
 theme_override_font_sizes/font_size = 32
-current_tab = 4
+current_tab = 0
 drag_to_rearrange_enabled = true
 script = ExtResource("2_leqql")
 
 [node name="Game" type="Panel" parent="UI/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -220,6 +219,7 @@ theme_override_font_sizes/font_size = 25
 text = "Delete"
 
 [node name="Selection" type="Panel" parent="UI/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 4
 

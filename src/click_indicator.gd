@@ -2,7 +2,7 @@ extends Sprite2D
 
 
 func _ready():
-	var scale_target = self.scale * 2
+	var scale_target = self.scale * 1
 	# 1. Create the tween
 	var tween = create_tween()
 	

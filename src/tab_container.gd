@@ -11,11 +11,15 @@ func _gui_input(event: InputEvent) -> void:
 		if has_focus():
 			get_viewport().set_input_as_handled()
 			_cycle_tab(1)
+		else:
+			grab_focus()
 	
 	elif event.is_action_pressed("ui_focus_prev"):
 		if has_focus():
 			get_viewport().set_input_as_handled()
 			_cycle_tab(-1)
+		else:
+			grab_focus()
 
 func _cycle_tab(direction: int) -> void:
 	var total_tabs = get_tab_count()

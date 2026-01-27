@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cnxija7jr34iq"]
 
-[ext_resource type="Texture2D" uid="uid://csgtnye0b4gm5" path="res://assets/cursors/kenney_cursor-pack/Vector/Basic/steps.svg" id="1_ddnj8"]
+[ext_resource type="Texture2D" uid="uid://7b8g83wtd0hs" path="res://assets/icons/kenney_game-icons-expansion/PNG/White/1x/flag.png" id="1_ddnj8"]
 [ext_resource type="Script" uid="uid://crg1flmj7j50e" path="res://src/click_indicator.gd" id="1_emn5j"]
 
 [node name="ClickIndicator" type="Sprite2D"]

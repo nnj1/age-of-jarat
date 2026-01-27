@@ -18,12 +18,16 @@ func _ready() -> void:
 	
 	# connect important signals that update UI
 	$map/procedural/MapInteractionComponent.tile_pressed.connect(update_object_menu)
-	$SelectionManager.unit_just_added.connect(update_unit_menu)
+	#$SelectionManager.unit_just_added.connect(update_unit_menu)
 	$SelectionManager.selected_units_changed.connect(update_selection_menu)
 	
 	# HIDE UNIT TAB BY DEFAULT
 	set_tab_hidden_by_name($UI/TabContainer, 'Unit', true)
-	
+	# HIDE THE SELECTION TAB BY DEFAULT
+	set_tab_hidden_by_name($UI/TabContainer, 'Selection', true)
+	# HIDE THE SELECTION STRUCTURE BY DEFAULT
+	set_tab_hidden_by_name($UI/TabContainer, 'Structure', true)
+
 	# Spawn the first four villagers!
 	spawn_villager(Vector2(0,0))
 	spawn_villager(Vector2(20,0))
@@ -168,10 +172,19 @@ func update_selection_menu(selected_units):
 	# update the stats label
 	party_comp_label.text = dict_to_bbcode_list(count_group_membership(selected_units))
 	
+	if selected_units.size() == 1:
+		update_unit_menu(selected_units[0])
+	elif selected_units.size() > 1:
+		set_tab_hidden_by_name($UI/TabContainer, 'Selection', false)
+		$UI/TabContainer/Selection.show()
+	elif selected_units.size() == 0:
+		set_tab_hidden_by_name($UI/TabContainer, 'Selection', true)
+		set_tab_hidden_by_name($UI/TabContainer, 'Unit', true)
+		
 func update_unit_menu(unit):
 	# SHOW THE TAB
 	set_tab_hidden_by_name($UI/TabContainer, 'Unit', false)
-	#$UI/TabContainer/Unit.show()
+	$UI/TabContainer/Unit.show()
 	
 	# set up some references for easy access later
 	var delete_button = $UI/TabContainer/Unit/HBoxContainer/VBoxContainer2/Button4
@@ -246,7 +259,9 @@ func actually_spawn_structure():
 		CursorManager.reset_cursor()
 
 func update_structure_menu(structure: Structure):
-	pass
+	# SHOW THE TAB
+	set_tab_hidden_by_name($UI/TabContainer, 'Structure', false)
+	$UI/TabContainer/Structure.show()
 
 ## Returns a dictionary where keys are Group Names and values are their frequencies
 func count_group_membership(node_list: Array) -> Dictionary:
