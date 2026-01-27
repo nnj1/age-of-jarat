@@ -251,11 +251,6 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 25
 text = "Build"
 
-[node name="Button2" type="Button" parent="UI/TabContainer/Unit/HBoxContainer/VBoxContainer2"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 25
-text = "Upgrade"
-
 [node name="CheckButton" type="CheckButton" parent="UI/TabContainer/Unit/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 25
@@ -329,7 +324,7 @@ columns = 4
 [node name="Button" type="Button" parent="UI/TabContainer/Build/ScrollContainer/GridContainer"]
 layout_mode = 2
 focus_mode = 0
-text = "House"
+text = "Random Structure"
 icon = ExtResource("5_rbptj")
 
 [node name="Options" type="Panel" parent="UI/TabContainer"]
@@ -429,7 +424,7 @@ spawn_path = NodePath("..")
 [node name="structures" type="Node2D" parent="entities"]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="entities/structures"]
-_spawnable_scenes = PackedStringArray("uid://cu7nbbhhgay1a")
+_spawnable_scenes = PackedStringArray("res://scenes/entities/structures/house.tscn")
 spawn_path = NodePath("..")
 
 [node name="Camera2D" type="Camera2D" parent="."]

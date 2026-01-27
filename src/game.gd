@@ -135,7 +135,7 @@ func spawn_animal(spawn_pos: Vector2):
 	$entities/npcs.add_child(animal, true)
 	
 func spawn_house(spawn_pos: Vector2):
-	var house = preload("res://scenes/entities/structures/house.tscn").instantiate()
+	var house = preload("res://scenes/entities/structures/generic_structure.tscn").instantiate()
 	house.prepare(1, 0 if not alt_held else 1)
 	house.position = spawn_pos
 	$entities/structures.add_child(house, true)
@@ -251,7 +251,7 @@ func exit_game_to_desktop():
 # TO TEST THE DRAG AND DROP SYSTENM
 func _on_button_pressed() -> void:
 	if not prespawned_structure:
-		prespawn_structure("res://scenes/entities/structures/house.tscn")
+		prespawn_structure("res://scenes/entities/structures/generic_structure.tscn")
 	
 func prespawn_structure(structure_path: String):
 	var structure = load(structure_path).instantiate()
