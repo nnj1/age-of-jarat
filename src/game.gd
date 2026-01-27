@@ -251,11 +251,11 @@ func exit_game_to_desktop():
 # TO TEST THE DRAG AND DROP SYSTENM
 func _on_button_pressed() -> void:
 	if not prespawned_structure:
-		prespawn_structure("res://scenes/entities/structures/generic_structure.tscn")
+		prespawn_structure(GlobalVars.filter_json_objects(GlobalVars.lore.structures, 'name', 'Stronghold')[0])
 	
-func prespawn_structure(structure_path: String):
+func prespawn_structure(structure_data: Dictionary = GlobalVars.lore.structures.pick_random(), structure_path: String = 'res://scenes/entities/structures/generic_structure.tscn'):
 	var structure = load(structure_path).instantiate()
-	structure.prepare(1, 0 if not alt_held else 1)
+	structure.prepare(1, 0 if not alt_held else 1, structure_data)
 	if structure.has_method('toggle_blue_tint'):
 		structure.toggle_blue_tint(true)
 	structure.position = get_global_mouse_position()

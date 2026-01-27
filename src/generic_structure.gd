@@ -22,6 +22,13 @@ func prepare(spawning_player_id: int = 1, given_faction:int = randi_range(0, 1),
 func _ready():
 	if not is_multiplayer_authority(): return
 	
+	# add in the correct sprites if it exists
+	var potential_sprite = load('res://scenes/entities/structures/structure_sprites/' + lore_data.name.to_lower() + '.tscn')
+	if potential_sprite:
+		$Sprites.queue_free()
+		self.add_child(potential_sprite.instantiate())
+	
+	# create a collision layer based on tier 1 sprite
 	tile_layer = $'Sprites/1'
 	update_collision_to_layer()
 	
@@ -57,11 +64,10 @@ func play_damage_modulate_animation():
 		tween.tween_property(sprite, "modulate", Color.WHITE, 0.1).set_trans(Tween.TRANS_SINE)
 
 func toggle_blue_tint(given_status: bool):
-	for sprite in $Sprites.get_children():
-		if given_status:
-			sprite.modulate = Color(0, 0, 1, 0.9)
-		else:
-			sprite.modulate = Color(1, 1, 1, 1)
+	if given_status:
+		self.modulate = Color(0, 0, 1, 0.9)
+	else:
+		self.modulate = Color(1, 1, 1, 1)
 		
 func is_atlas_tile_non_black(atlas_coords: Vector2i, tileset_path: String = 'res://resources/urizen.tres', source_id: int = 0) -> bool:
 	# 1. Load the TileSet resource

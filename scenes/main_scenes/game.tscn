@@ -324,7 +324,7 @@ columns = 4
 [node name="Button" type="Button" parent="UI/TabContainer/Build/ScrollContainer/GridContainer"]
 layout_mode = 2
 focus_mode = 0
-text = "Random Structure"
+text = "Stronghold"
 icon = ExtResource("5_rbptj")
 
 [node name="Options" type="Panel" parent="UI/TabContainer"]

@@ -9,7 +9,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0ngk0"]
 size = Vector2(36, 24)
 
-[node name="House" type="StaticBody2D" groups=["houses", "structures"]]
+[node name="Generic Structure" type="StaticBody2D" groups=["houses", "structures"]]
 collision_mask = 3
 input_pickable = true
 script = ExtResource("1_2cxae")
