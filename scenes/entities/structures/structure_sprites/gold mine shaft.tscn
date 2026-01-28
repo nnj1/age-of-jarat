@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=4 uid="uid://d05n6wcqp004d"]
+
+[ext_resource type="Script" uid="uid://y1ytrrtf2p30" path="res://src/sprites.gd" id="1_bo64e"]
+[ext_resource type="TileSet" uid="uid://cgig36v2tr1w3" path="res://resources/urizen.tres" id="2_hjl4s"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3tgth"]
+
+[node name="Sprites" type="Node2D" groups=["structure_sprites"]]
+script = ExtResource("1_bo64e")
+
+[node name="1" type="TileMapLayer" parent="."]
+material = SubResource("ShaderMaterial_3tgth")
+tile_map_data = PackedByteArray("AAD+/wEAAAA9AAIAAAD//wEAAAA0AAIAAAAAAAEAAAA0AAIAAAABAAEAAAA6AAIAAAABAAAAAAAFAAQAAAABAP//AAAFAAQAAAABAP7/AAAHAAQAAAAAAP7/AAAFAAQAAAD///7/AAAFAAQAAAD+//7/AAAHAAQAAAD+////AAA8AAIAAAD+/wAAAAA1AAIAAAD//wAAAAACAC4AAAAAAAAAAAACAC4AAAD/////AAA0AAIAAAAAAP//AAACAC4AAAD9////AAAGAAQAAAD9/wAAAAAGAAQAAAD9/wEAAAAGAAQAAAD9//7/AAAIAAQAAAA=")
+tile_set = ExtResource("2_hjl4s")
