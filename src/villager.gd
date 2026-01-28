@@ -15,18 +15,24 @@ var target_position: Vector2 = Vector2.ZERO
 var is_moving: bool = false
 var looking_right = false
 
+var assigned_structure: Structure
+
 var knockback_velocity: Vector2 = Vector2.ZERO
 
 @export var autonomous_mode: bool = true : set = set_autonomous_mode
+@export var build_mode: bool = false : set = set_build_mode
 
 func set_autonomous_mode(value: bool):
 	autonomous_mode = value
 	if has_node("WanderComponent"):
 		$WanderComponent.set_enabled(value)
 		
+func set_build_mode(value: bool):
+	build_mode = value
+		
 var random_atlas_coords: Vector2i
 
-var lore_data # contains the data that defines this unit
+var lore_data # contains the JSON data that defines this unit
 var faction: int
 var allies: Array[int]
 

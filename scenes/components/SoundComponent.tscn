@@ -33,4 +33,10 @@ bus = &"Sfx"
 stream = ExtResource("2_u4jf0")
 bus = &"Sfx"
 
+[node name="buildingSound" type="AudioStreamPlayer2D" parent="."]
+bus = &"Sfx"
+
+[node name="buildCompleteSound" type="AudioStreamPlayer2D" parent="."]
+bus = &"Sfx"
+
 [connection signal="timeout" from="idleSound/Timer" to="." method="_on_timer_timeout"]

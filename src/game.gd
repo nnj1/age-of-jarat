@@ -7,13 +7,18 @@ var materials = {
 	'gold': 0
 }
 
-var unit_list: Array[Unit]
-var structure_list: Array[Structure]
+var unit_list: Array[Unit] # contains all the units in faction
+var structure_list: Array[Structure] # contains all the structures in a faction
 
-var alt_held: bool = false
+var alt_held: bool = false # detects if alt key is held
 
-var prespawned_structure:Structure
-@onready var option_button = $UI/TabContainer/Build/HBoxContainer/VBoxContainer/OptionButton
+var prespawned_structure:Structure # for drag and drop mechanic
+
+## FOR DEBUG MENU
+@onready var option_button = $UI/TabContainer/DEBUG/HBoxContainer/VBoxContainer/OptionButton
+
+var time_passed: float = 0.0
+var material_spawn_interval: float = 15.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -44,7 +49,7 @@ func _ready() -> void:
 	spawn_villager(Vector2(20,20))
 	
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	
 	# determine if alt is being pressed
 	alt_held = true if Input.is_key_pressed(KEY_ALT) else false
@@ -63,6 +68,12 @@ func _process(_delta: float) -> void:
 	# Update the label text
 	$UI/VBoxContainer/Label.text = "FPS: %d | Date: %s | Time: %s" % [fps, date_string, time_string]
 	
+	# update the material quantities
+	time_passed += delta
+	if time_passed >= material_spawn_interval:
+		update_material_quantity()
+		time_passed = 0.0 # Reset the clock
+		
 	# Update the materials UI
 	update_material_display()
 	
@@ -73,6 +84,17 @@ func _process(_delta: float) -> void:
 	if prespawned_structure:
 		prespawned_structure.position = get_global_mouse_position().snapped(Vector2(12, 12))# + Vector2(6, 6)
 
+# increase the mat quantity based on structures
+func update_material_quantity():
+	for mat_type in materials.keys():
+		var initial_amount = materials[mat_type]
+		for structure in structure_list:
+			if structure:
+				if 'generation' in structure.lore_data.tiers[str(int(structure.current_tier))]:
+					if mat_type in structure.lore_data.tiers[str(int(structure.current_tier))].generation:
+						initial_amount += structure.lore_data.tiers[str(int(structure.current_tier))].generation[mat_type]
+		materials[mat_type] = initial_amount
+		
 # show various game stats
 func update_game_menu():
 	$UI/TabContainer/Game/HBoxContainer/RichTextLabel.text = dict_to_bbcode_list(count_group_membership(unit_list))
@@ -80,7 +102,7 @@ func update_game_menu():
 	
 func update_material_display():
 	for mat_name in materials.keys():
-		get_node('UI/VBoxContainer/HBoxContainer/' + mat_name).text = str(materials[mat_name])
+		get_node('UI/VBoxContainer/HBoxContainer/' + mat_name).text = str(int(materials[mat_name]))
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey:
@@ -203,10 +225,11 @@ func update_selection_menu(selected_units):
 		set_tab_hidden_by_name($UI/TabContainer, 'Selection', true)
 		set_tab_hidden_by_name($UI/TabContainer, 'Unit', true)
 		
-func update_unit_menu(unit):
+func update_unit_menu(unit, swap_to_tab:bool = true):
 	# SHOW THE TAB
 	set_tab_hidden_by_name($UI/TabContainer, 'Unit', false)
-	$UI/TabContainer/Unit.show()
+	if swap_to_tab:
+		$UI/TabContainer/Unit.show()
 	
 	# set up some references for easy access later
 	var delete_button = $UI/TabContainer/Unit/HBoxContainer/VBoxContainer2/Button4
@@ -216,6 +239,7 @@ func update_unit_menu(unit):
 	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer3/Label.text = '(' + unit.lore_data.type + ')'
 	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer3/RichTextLabel.text = dict_to_bbcode_list(unit.lore_data.stats)
 	$UI/TabContainer/Unit/HBoxContainer/TextureRect.texture = get_cropped_tile_texture(unit.random_atlas_coords)
+	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer2/RichTextLabel.text = 'Assigned to:\n' + str(unit.assigned_structure) 
 	
 	var delete_unit = func():
 		if unit:
@@ -254,7 +278,7 @@ func exit_game_to_desktop():
 	get_tree().quit()
 
 
-# TO TEST THE DRAG AND DROP SYSTENM
+## DEBUG SHIT: TO TEST THE DRAG AND DROP SYSTEM
 func _on_button_pressed() -> void:
 	if not prespawned_structure:
 		# 1. Get the Index (0, 1, 2...)
@@ -283,15 +307,34 @@ func actually_spawn_structure():
 		prespawned_structure.position = get_global_mouse_position().snapped(Vector2(12, 12)) #+ Vector2(6, 6)
 		# Enable collisions
 		prespawned_structure.collision_layer = 1
+		prespawned_structure.start_building()
 		structure_list.append(prespawned_structure)
 		prespawned_structure = null
 		CursorManager.reset_cursor()
 
-func update_structure_menu(structure: Structure):
+func update_structure_menu(structure: Structure, swap_to_tab:bool = true):
 	# SHOW THE TAB
 	set_tab_hidden_by_name($UI/TabContainer, 'Structure', false)
-	$UI/TabContainer/Structure.show()
-
+	if swap_to_tab:
+		$UI/TabContainer/Structure.show()
+		
+	$UI/TabContainer/Structure/HBoxContainer/VBoxContainer/Label.text = structure.lore_data.name
+	$UI/TabContainer/Structure/HBoxContainer/VBoxContainer/RichTextLabel.text = structure.lore_data.desc
+	$UI/TabContainer/Structure/HBoxContainer/VBoxContainer3/Label.text = 'Tier ' + str(structure.current_tier)
+	
+	# display any mats the structure periodically spawns
+	if 'generation' in structure.lore_data.tiers[str(int(structure.current_tier))]:
+		var amounts = structure.lore_data.tiers[str(int(structure.current_tier))].generation
+		var mat_gui = $UI/TabContainer/Structure/HBoxContainer/VBoxContainer/HBoxContainer
+		for mat_type in materials.keys():
+			if mat_type in amounts:
+				mat_gui.get_node(mat_type).show()
+				mat_gui.get_node(mat_type + 'texture').show()
+				mat_gui.get_node(mat_type).text = '+' + str(int(amounts[mat_type]))
+			else: 
+				mat_gui.get_node(mat_type).hide()
+				mat_gui.get_node(mat_type + 'texture').hide()
+	
 ## Returns a dictionary where keys are Group Names and values are their frequencies
 func count_group_membership(node_list: Array) -> Dictionary:
 	var group_counts = {}

@@ -1,0 +1,85 @@
+[gd_scene load_steps=8 format=3 uid="uid://bpqyb4p7gt8xf"]
+
+[ext_resource type="Shader" uid="uid://d21b4b7xrre2h" path="res://shaders/unit.gdshader" id="1_6tn15"]
+[ext_resource type="Texture2D" uid="uid://fik2xyspevag" path="res://assets/tilesets/urizen_onebit_tileset__v2d0.png" id="2_mjxno"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3ls1w"]
+shader = ExtResource("1_6tn15")
+shader_parameter/random_phase = 0.0
+shader_parameter/speed = 0.10000000149012
+shader_parameter/height = 0.0
+shader_parameter/squash_amount = 0.024
+shader_parameter/sprite_height = 12.0
+shader_parameter/threshold = 0.1
+shader_parameter/edge_distance = 0.4
+shader_parameter/use_active_state = false
+shader_parameter/default_border_color = Color(0, 0, 0, 1)
+shader_parameter/active_border_color = Color(1, 0, 0, 1)
+shader_parameter/default_border_width = 0.5
+shader_parameter/active_border_width = 0.25
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ve26b"]
+atlas = ExtResource("2_mjxno")
+region = Rect2(66, 222, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e71x3"]
+atlas = ExtResource("2_mjxno")
+region = Rect2(1, 300, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nk7qa"]
+atlas = ExtResource("2_mjxno")
+region = Rect2(196, 443, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m0ooe"]
+atlas = ExtResource("2_mjxno")
+region = Rect2(105, 599, 12, 12)
+
+[node name="HBoxContainer" type="HBoxContainer"]
+offset_right = 236.0
+offset_bottom = 28.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="foodtexture" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_3ls1w")
+layout_mode = 2
+texture = SubResource("AtlasTexture_ve26b")
+expand_mode = 2
+
+[node name="food" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "99"
+
+[node name="woodtexture" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_3ls1w")
+layout_mode = 2
+texture = SubResource("AtlasTexture_e71x3")
+expand_mode = 2
+
+[node name="wood" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "99"
+
+[node name="stonetexture" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_3ls1w")
+layout_mode = 2
+texture = SubResource("AtlasTexture_nk7qa")
+expand_mode = 2
+
+[node name="stone" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "99"
+
+[node name="goldtexture" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_3ls1w")
+layout_mode = 2
+texture = SubResource("AtlasTexture_m0ooe")
+expand_mode = 2
+
+[node name="gold" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "99"

@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://8tdvfsk0tdwt"]
+
+[ext_resource type="Script" uid="uid://c2qije2ssy1dn" path="res://src/build_component.gd" id="1_ek3an"]
+[ext_resource type="Shader" uid="uid://clce2ikvgfo2w" path="res://shaders/roundedrect.gdshader" id="2_jmo3g"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kx8gu"]
+shader = ExtResource("2_jmo3g")
+shader_parameter/size = Vector2(192, 48)
+shader_parameter/offset = Vector2(0, 0)
+shader_parameter/radius = 10.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_prnqr"]
+shader = ExtResource("2_jmo3g")
+shader_parameter/size = Vector2(192, 48)
+shader_parameter/offset = Vector2(0, 0)
+shader_parameter/radius = 10.0
+
+[node name="BuildComponent" type="Node2D"]
+z_index = 3
+script = ExtResource("1_ek3an")
+
+[node name="BarBackground" type="Polygon2D" parent="."]
+material = SubResource("ShaderMaterial_kx8gu")
+position = Vector2(-96, -24)
+color = Color(0.3019608, 0.3019608, 0.3019608, 1)
+polygon = PackedVector2Array(0, 0, 192, 0, 192, 48, 0, 48)
+uv = PackedVector2Array(0, 0, 192, 0, 192, 48, 0, 48)
+
+[node name="BarForeground" type="Polygon2D" parent="."]
+material = SubResource("ShaderMaterial_prnqr")
+position = Vector2(-96, -24)
+polygon = PackedVector2Array(0, 0, 192, 0, 192, 48, 0, 48)
+uv = PackedVector2Array(0, 0, 192, 0, 192, 48, 0, 48)

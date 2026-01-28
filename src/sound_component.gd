@@ -7,6 +7,8 @@ extends Node2D
 @export var walking_sound_stream: AudioStream
 @export var idle_sound_stream: AudioStream
 @export var death_sound_stream: AudioStream
+@export var building_sound_stream: AudioStream
+@export var build_complete_sound_stream: AudioStream
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -18,6 +20,8 @@ func _ready() -> void:
 	$walkingSound.stream = walking_sound_stream
 	$idleSound.stream = idle_sound_stream
 	$deathSound.stream = death_sound_stream
+	$buildCompleteSound.stream = build_complete_sound_stream
+	$buildingSound.stream = building_sound_stream
 	
 	if is_human:
 		$spawnSound.stream = MusicManager.spawn_streams.pick_random()

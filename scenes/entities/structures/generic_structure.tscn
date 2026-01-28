@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=4 uid="uid://cu7nbbhhgay1a"]
+[gd_scene load_steps=11 format=4 uid="uid://cu7nbbhhgay1a"]
 
 [ext_resource type="Script" uid="uid://dkiqbm8snf5u8" path="res://src/generic_structure.gd" id="1_2cxae"]
 [ext_resource type="TileSet" uid="uid://cgig36v2tr1w3" path="res://resources/urizen.tres" id="2_a6w3r"]
@@ -6,6 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://cldxrxi6cj4ln" path="res://scenes/components/HealthComponent.tscn" id="3_p1f10"]
 [ext_resource type="PackedScene" uid="uid://gngxsuir4syw" path="res://scenes/components/SoundComponent.tscn" id="4_6jugh"]
 [ext_resource type="PackedScene" uid="uid://dv0isi7bv1viu" path="res://scenes/components/FactionLabelComponent.tscn" id="5_xm2vv"]
+[ext_resource type="AudioStream" uid="uid://bnp5vp6bfo08g" path="res://assets/sfx/UI Soundpack/UI Soundpack/MP3/African4.mp3" id="6_7g64f"]
+[ext_resource type="AudioStream" uid="uid://h8soi5r2pu7u" path="res://assets/sfx/UI Soundpack/UI Soundpack/MP3/African2.mp3" id="6_inf5r"]
+[ext_resource type="PackedScene" uid="uid://8tdvfsk0tdwt" path="res://scenes/components/BuildComponent.tscn" id="9_3hh83"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0ngk0"]
 size = Vector2(36, 24)
@@ -18,7 +21,7 @@ script = ExtResource("1_2cxae")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_0ngk0")
 
-[node name="Sprites" type="Node2D" parent="."]
+[node name="Sprites" type="Node2D" parent="." groups=["structure_sprites"]]
 script = ExtResource("2_qtg5e")
 
 [node name="1" type="TileMapLayer" parent="Sprites"]
@@ -43,10 +46,16 @@ max_health = 200.0
 
 [node name="SoundComponent" parent="." instance=ExtResource("4_6jugh")]
 is_human = false
+building_sound_stream = ExtResource("6_inf5r")
+build_complete_sound_stream = ExtResource("6_7g64f")
 
 [node name="FactionLabelComponent" parent="." instance=ExtResource("5_xm2vv")]
 position = Vector2(6, 15.999998)
 scale = Vector2(0.25, 0.25)
+
+[node name="BuildComponent" parent="." instance=ExtResource("9_3hh83")]
+position = Vector2(4.7683716e-07, -5.684342e-14)
+scale = Vector2(0.1, 0.04)
 
 [node name="SelectionCircle" type="Sprite2D" parent="."]
 position = Vector2(-6, -5.999999)

@@ -48,12 +48,15 @@ func _process(delta: float):
 	var input_dir = Vector2.ZERO
 	var current_speed = speed 
 	
+	# Check if the mouse is over any Control node (UI)
+	var is_over_gui = get_viewport().gui_get_hovered_control() != null
+	
 	# --- KEYBOARD INPUT ---
 	input_dir.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 	input_dir.y = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
 	
 	# --- EDGE PANNING & CURSOR LOGIC ---
-	if edge_pan_enabled and not _is_dragging:
+	if edge_pan_enabled and not _is_dragging and not is_over_gui:
 		var mouse_pos = get_viewport().get_mouse_position()
 		var screen_size = get_viewport().get_visible_rect().size
 		var edge_dir = Vector2.ZERO

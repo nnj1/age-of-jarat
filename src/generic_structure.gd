@@ -8,6 +8,15 @@ var lore_data
 var faction: int
 var allies: Array[int]
 
+@onready var current_tier: int = 1
+
+# Variables governing building
+var building_status:bool = true # keeps track of if the unit is still being build
+var cooldown = 10.0 # base cooldown time
+var time_passed = 0.0
+var speed_multiplier = 1.0 # Change this to 2.0, 5.0, etc. Will be modified by builders
+var assigned_builders = []  # contains the Units that can build the structure
+
 @onready var selection_visual = $SelectionCircle # A Sprite2D child used for feedback
 
 # sets the authority and faction of the unit
@@ -16,6 +25,25 @@ func prepare(spawning_player_id: int = 1, given_faction:int = randi_range(0, 1),
 	faction = given_faction
 	allies.append(faction)
 	lore_data = given_lore_data
+	cooldown = lore_data.spawn_speed
+	
+func start_building():
+	building_status = true
+	self.modulate = Color(1, 1, 1, 0.5)
+	$BuildComponent.modulate = Color(1, 1, 1, 1)
+	$SoundComponent/buildingSound.play()
+	
+func stop_building():
+	self.modulate = Color(1, 1, 1, 1)
+	building_status = false
+	# free all the builders
+	for builder in assigned_builders:
+		builder.assigned_structure = null
+		builder.build_mode = false	
+		# update UI without swapping to it
+		main_game_node.update_unit_menu(builder, false)
+		
+	$SoundComponent/buildCompleteSound.play()
 	
 func _ready():
 	if not is_multiplayer_authority(): return
@@ -24,12 +52,13 @@ func _ready():
 	var potential_sprite = load('res://scenes/entities/structures/structure_sprites/' + lore_data.name.to_lower() + '.tscn')
 	if potential_sprite:
 		$Sprites.queue_free()
-		self.add_child(potential_sprite.instantiate()) # AUTOMATICALLY MODIFIES THE COLISION SHAPE 
-	
-	# only show the first tier of the structure initially
-	for child in $Sprites.get_children():
-		child.hide()
-	$"Sprites/1".show()
+		var potential_sprite_instance = potential_sprite.instantiate()
+		# only show the first tier of the structure initially
+		for child in potential_sprite_instance.get_children():
+			child.hide()
+		potential_sprite_instance.get_node('1').show()
+		
+		self.add_child(potential_sprite_instance) # AUTOMATICALLY MODIFIES THE COLISION SHAPE 
 	
 	# connect important signals
 	if get_node_or_null('HealthComponent'):
@@ -45,12 +74,33 @@ func _ready():
 func on_death():
 	queue_free()
 	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
+func get_timer_percentage() -> float:
+	# Returns a value between 0.0 and 1.0
+	return time_passed / cooldown
+
+func _process(delta):
+	# adjust the speed multiplier based on units assigned to build the structure
+	speed_multiplier = 1.0
+	for builder in assigned_builders:
+		if builder:
+			speed_multiplier += builder.lore_data.stats.building_speed
+		
+	if time_passed < cooldown:
+		# We multiply delta to "trick" the math into thinking more time passed
+		time_passed += delta * speed_multiplier
+		if time_passed >= cooldown:
+			stop_building()
+	
+	# handle building progress bar
+	if building_status:
+		$BuildComponent.show()
+		var progress = get_timer_percentage()
+		$BuildComponent.set_progress(progress * 100)
+	else:
+		$BuildComponent.hide()
 
 func play_damage_modulate_animation():
-	for sprite in $Sprites.get_children(): 
+	for sprite in get_child_in_group('structure_sprites').get_children():
 		var tween = get_tree().create_tween()
 		# Transition to Red
 		tween.tween_property(sprite, "modulate", Color.RED, 0.1).set_trans(Tween.TRANS_SINE)
@@ -100,12 +150,40 @@ func is_atlas_tile_non_black(atlas_coords: Vector2i, tileset_path: String = 'res
 func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			print("This structure was clicked!")
-			main_game_node.update_structure_menu(self)
+			print("This structure was clicked! This will show menu details")
+			main_game_node.update_structure_menu(self, true)
+		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+			if building_status:
+				print("This structure was right clicked. Assigning units to build!")
+				self.assign_units(main_game_node.get_node('SelectionManager').selected_units)
+			else:
+				# Do some other shit that requires assignment, like repairing the structure
+				print("This structure was right clicked. Assigning units to do some other shit!")
+				
+## This function assigns units to help build the structure
+func assign_units(given_unit_list: Array):
+	for unit in given_unit_list:
+		# Check if the unit can actually build
+		if 'building_speed' in unit.lore_data.stats:
+			# Turn off autonomous mode and turn on build mode and assign the structure to the unit
+			unit.autonomous_mode = false
+			unit.build_mode = true
+			unit.assigned_structure = self
+			# update the game menu to reflect the new assignment, but don't swap to tab
+			main_game_node.update_unit_menu(unit, false)
 			
+			# add the unit if it wasn't already in the list
+			if not unit in assigned_builders:
+				assigned_builders.append(unit)
 
 func _on_mouse_entered() -> void:
 	CursorManager.set_cursor(CursorManager.Type.HOVER)
 
 func _on_mouse_exited() -> void:
 	CursorManager.reset_cursor()
+
+func get_child_in_group(group_name: String) -> Node:
+	for child in get_children():
+		if child.is_in_group(group_name):
+			return child
+	return null # Returns null if nobody matches

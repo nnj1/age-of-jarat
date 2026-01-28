@@ -5,7 +5,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3tgth"]
 
-[node name="Sprites" type="Node2D"]
+[node name="Sprites" type="Node2D" groups=["structure_sprites"]]
 script = ExtResource("1_ui2t2")
 
 [node name="1" type="TileMapLayer" parent="."]

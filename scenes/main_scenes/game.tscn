@@ -1,45 +1,13 @@
-[gd_scene load_steps=17 format=3 uid="uid://66pne335f347"]
+[gd_scene load_steps=11 format=3 uid="uid://66pne335f347"]
 
 [ext_resource type="Script" uid="uid://chlhpappba5gk" path="res://src/game.gd" id="1_3wwfn"]
 [ext_resource type="PackedScene" uid="uid://byu0g7vffd20f" path="res://scenes/components/SelectionManager.tscn" id="1_fqmia"]
+[ext_resource type="PackedScene" uid="uid://bpqyb4p7gt8xf" path="res://scenes/gui_components/gui_mat_display.tscn" id="2_cfqos"]
 [ext_resource type="Script" uid="uid://dnh1musdqbcs1" path="res://src/tab_container.gd" id="2_leqql"]
-[ext_resource type="Shader" uid="uid://d21b4b7xrre2h" path="res://shaders/unit.gdshader" id="2_rbptj"]
 [ext_resource type="Script" uid="uid://c5x4xpsy8a7b1" path="res://src/minimap_camera.gd" id="2_t5sjj"]
-[ext_resource type="Texture2D" uid="uid://fik2xyspevag" path="res://assets/tilesets/urizen_onebit_tileset__v2d0.png" id="3_5amgp"]
 [ext_resource type="Script" uid="uid://cn6q5tu3cq7yb" path="res://src/camera_2d.gd" id="3_ifh15"]
 [ext_resource type="PackedScene" uid="uid://24ncf3ybr3hc" path="res://scenes/maps/procedural.tscn" id="3_ks7w8"]
 [ext_resource type="Texture2D" uid="uid://cx52tjc8goit1" path="res://assets/cursors/kenney_cursor-pack/Vector/Outline/tool_hammer.svg" id="5_rbptj"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3ls1w"]
-shader = ExtResource("2_rbptj")
-shader_parameter/random_phase = 0.0
-shader_parameter/speed = 0.10000000149012
-shader_parameter/height = 0.0
-shader_parameter/squash_amount = 0.024
-shader_parameter/sprite_height = 12.0
-shader_parameter/threshold = 0.1
-shader_parameter/edge_distance = 0.4
-shader_parameter/use_active_state = false
-shader_parameter/default_border_color = Color(0, 0, 0, 1)
-shader_parameter/active_border_color = Color(1, 0, 0, 1)
-shader_parameter/default_border_width = 0.5
-shader_parameter/active_border_width = 0.25
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ve26b"]
-atlas = ExtResource("3_5amgp")
-region = Rect2(66, 222, 12, 12)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_e71x3"]
-atlas = ExtResource("3_5amgp")
-region = Rect2(1, 300, 12, 12)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nk7qa"]
-atlas = ExtResource("3_5amgp")
-region = Rect2(196, 443, 12, 12)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_m0ooe"]
-atlas = ExtResource("3_5amgp")
-region = Rect2(105, 599, 12, 12)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t5sjj"]
 bg_color = Color(0, 0, 0, 1)
@@ -76,52 +44,8 @@ size_flags_vertical = 3
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer"]
+[node name="HBoxContainer" parent="UI/VBoxContainer" instance=ExtResource("2_cfqos")]
 layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="UI/VBoxContainer/HBoxContainer"]
-material = SubResource("ShaderMaterial_3ls1w")
-layout_mode = 2
-texture = SubResource("AtlasTexture_ve26b")
-expand_mode = 2
-
-[node name="food" type="Label" parent="UI/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "99"
-
-[node name="TextureRect2" type="TextureRect" parent="UI/VBoxContainer/HBoxContainer"]
-material = SubResource("ShaderMaterial_3ls1w")
-layout_mode = 2
-texture = SubResource("AtlasTexture_e71x3")
-expand_mode = 2
-
-[node name="wood" type="Label" parent="UI/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "99"
-
-[node name="TextureRect3" type="TextureRect" parent="UI/VBoxContainer/HBoxContainer"]
-material = SubResource("ShaderMaterial_3ls1w")
-layout_mode = 2
-texture = SubResource("AtlasTexture_nk7qa")
-expand_mode = 2
-
-[node name="stone" type="Label" parent="UI/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "99"
-
-[node name="TextureRect4" type="TextureRect" parent="UI/VBoxContainer/HBoxContainer"]
-material = SubResource("ShaderMaterial_3ls1w")
-layout_mode = 2
-texture = SubResource("AtlasTexture_m0ooe")
-expand_mode = 2
-
-[node name="gold" type="Label" parent="UI/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "99"
 
 [node name="TabContainer" type="TabContainer" parent="UI"]
 anchors_preset = 12
@@ -134,7 +58,7 @@ grow_horizontal = 2
 grow_vertical = 0
 focus_mode = 2
 theme_override_font_sizes/font_size = 32
-current_tab = 5
+current_tab = 1
 drag_to_rearrange_enabled = true
 script = ExtResource("2_leqql")
 
@@ -172,9 +96,94 @@ theme_override_font_sizes/mono_font_size = 25
 bbcode_enabled = true
 
 [node name="Structure" type="Panel" parent="UI/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/TabContainer/Structure"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_right = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/TabContainer/Structure/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+
+[node name="Label" type="Label" parent="UI/TabContainer/Structure/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "structure_name"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/TabContainer/Structure/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/bold_font_size = 20
+theme_override_font_sizes/bold_italics_font_size = 20
+theme_override_font_sizes/italics_font_size = 20
+theme_override_font_sizes/mono_font_size = 20
+text = "structure desc"
+
+[node name="HBoxContainer" parent="UI/TabContainer/Structure/HBoxContainer/VBoxContainer" instance=ExtResource("2_cfqos")]
+layout_mode = 2
+size_flags_stretch_ratio = 0.0
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="UI/TabContainer/Structure/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+
+[node name="Label" type="Label" parent="UI/TabContainer/Structure/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Tier"
+horizontal_alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/TabContainer/Structure/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/bold_font_size = 20
+theme_override_font_sizes/bold_italics_font_size = 20
+theme_override_font_sizes/italics_font_size = 20
+theme_override_font_sizes/mono_font_size = 20
+bbcode_enabled = true
+
+[node name="TextureRect" type="TextureRect" parent="UI/TabContainer/Structure/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="UI/TabContainer/Structure/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/TabContainer/Structure/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="GridContainer" type="GridContainer" parent="UI/TabContainer/Structure/HBoxContainer/VBoxContainer2/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 5
+
+[node name="Button" type="Button" parent="UI/TabContainer/Structure/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Upgrade"
+
+[node name="Button4" type="Button" parent="UI/TabContainer/Structure/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Delete"
 
 [node name="Object" type="Panel" parent="UI/TabContainer"]
 visible = false
@@ -247,10 +256,16 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.25
 
-[node name="Button" type="Button" parent="UI/TabContainer/Unit/HBoxContainer/VBoxContainer2"]
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/TabContainer/Unit/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 25
-text = "Build"
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/bold_font_size = 20
+theme_override_font_sizes/bold_italics_font_size = 20
+theme_override_font_sizes/italics_font_size = 20
+theme_override_font_sizes/mono_font_size = 20
+bbcode_enabled = true
+text = "Assigned to:"
 
 [node name="CheckButton" type="CheckButton" parent="UI/TabContainer/Unit/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
@@ -305,11 +320,12 @@ theme_override_font_sizes/italics_font_size = 25
 theme_override_font_sizes/mono_font_size = 25
 bbcode_enabled = true
 
-[node name="Build" type="Panel" parent="UI/TabContainer"]
+[node name="DEBUG" type="Panel" parent="UI/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/TabContainer/Build"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/TabContainer/DEBUG"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -317,27 +333,27 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="UI/TabContainer/Build/HBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/TabContainer/DEBUG/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.75
 
-[node name="GridContainer" type="GridContainer" parent="UI/TabContainer/Build/HBoxContainer/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="UI/TabContainer/DEBUG/HBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/TabContainer/Build/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/TabContainer/DEBUG/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.25
 
-[node name="OptionButton" type="OptionButton" parent="UI/TabContainer/Build/HBoxContainer/VBoxContainer"]
+[node name="OptionButton" type="OptionButton" parent="UI/TabContainer/DEBUG/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 25
 
-[node name="Button" type="Button" parent="UI/TabContainer/Build/HBoxContainer/VBoxContainer"]
+[node name="Button" type="Button" parent="UI/TabContainer/DEBUG/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 25
@@ -454,6 +470,6 @@ current = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_fqmia")
 
-[connection signal="pressed" from="UI/TabContainer/Build/HBoxContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="UI/TabContainer/DEBUG/HBoxContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="UI/TabContainer/Options/HBoxContainer/VBoxContainer/Button2" to="." method="exit_game_to_menu"]
 [connection signal="pressed" from="UI/TabContainer/Options/HBoxContainer/VBoxContainer/Button" to="." method="exit_game_to_desktop"]

@@ -33,6 +33,10 @@ window/stretch/mode="viewport"
 
 enabled=PackedStringArray()
 
+[global_group]
+
+structure_sprites=""
+
 [gui]
 
 theme/custom="uid://3b6jfloh1m1l"
