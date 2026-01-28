@@ -21,7 +21,7 @@ script = ExtResource("1_2cxae")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_0ngk0")
 
-[node name="Sprites" type="Node2D" parent="." groups=["structure_sprites"]]
+[node name="Sprites" type="Node2D" parent="."]
 script = ExtResource("2_qtg5e")
 
 [node name="1" type="TileMapLayer" parent="Sprites"]
@@ -54,11 +54,15 @@ position = Vector2(6, 15.999998)
 scale = Vector2(0.25, 0.25)
 
 [node name="BuildComponent" parent="." instance=ExtResource("9_3hh83")]
-position = Vector2(4.7683716e-07, -5.684342e-14)
+top_level = true
 scale = Vector2(0.1, 0.04)
 
 [node name="SelectionCircle" type="Sprite2D" parent="."]
 position = Vector2(-6, -5.999999)
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
+remote_path = NodePath("../BuildComponent")
+update_scale = false
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
