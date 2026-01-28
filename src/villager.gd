@@ -70,6 +70,11 @@ func _ready():
 	# make sure it's nonblack otherwise pick again
 	while not is_atlas_tile_non_black(random_atlas_coords):
 		random_atlas_coords = GlobalVars.get_vectors_in_range(sprite_atlas_coords_corners[0], sprite_atlas_coords_corners[1]).pick_random()
+	
+	# if the lore data specifies a sprite, actually use that
+	#if lore_data.sprite:
+	#	random_atlas_coords = str_to_var("Vector2i" + lore_data.sprite)
+	
 	# TODO: make this an rpc call
 	set_unit_texture.rpc(random_atlas_coords)
 	
@@ -197,7 +202,13 @@ func _physics_process(_delta):
 			position.y = clamp(position.y, bounds.position.y + margin, bounds.end.y - margin)
 
 func on_death():
+	unassign_from_structure()
 	queue_free()
+	
+func unassign_from_structure():
+	if self.assigned_structure:
+			self.assigned_structure.assigned_builders.erase(self)
+			self.assigned_structure = null
 
 func play_damage_modulate_animation():
 	var tween = get_tree().create_tween()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=4 uid="uid://cu7nbbhhgay1a"]
+[gd_scene load_steps=12 format=4 uid="uid://cu7nbbhhgay1a"]
 
 [ext_resource type="Script" uid="uid://dkiqbm8snf5u8" path="res://src/generic_structure.gd" id="1_2cxae"]
 [ext_resource type="TileSet" uid="uid://cgig36v2tr1w3" path="res://resources/urizen.tres" id="2_a6w3r"]
@@ -9,6 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://bnp5vp6bfo08g" path="res://assets/sfx/UI Soundpack/UI Soundpack/MP3/African4.mp3" id="6_7g64f"]
 [ext_resource type="AudioStream" uid="uid://h8soi5r2pu7u" path="res://assets/sfx/UI Soundpack/UI Soundpack/MP3/African2.mp3" id="6_inf5r"]
 [ext_resource type="PackedScene" uid="uid://8tdvfsk0tdwt" path="res://scenes/components/BuildComponent.tscn" id="9_3hh83"]
+[ext_resource type="PackedScene" uid="uid://divcaqul4bspc" path="res://scenes/components/material_gen_component.tscn" id="10_v58eu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0ngk0"]
 size = Vector2(36, 24)
@@ -63,6 +64,8 @@ position = Vector2(-6, -5.999999)
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
 remote_path = NodePath("../BuildComponent")
 update_scale = false
+
+[node name="MaterialGenComponent" parent="." instance=ExtResource("10_v58eu")]
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

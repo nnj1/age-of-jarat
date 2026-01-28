@@ -48,7 +48,17 @@ func _ready() -> void:
 	spawn_villager(Vector2(0,20))
 	spawn_villager(Vector2(20,20))
 	
+# material incrementation functions
+func add_wood(amount: int = 1):
+	materials.wood += amount
+func add_stone(amount: int = 1):
+	materials.stone += amount
+func add_gold(amount: int = 1):
+	materials.gold += amount
+func add_food(amount: int = 1):
+	materials.food += amount
 
+@warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
 	
 	# determine if alt is being pressed
@@ -68,12 +78,6 @@ func _process(delta: float) -> void:
 	# Update the label text
 	$UI/VBoxContainer/Label.text = "FPS: %d | Date: %s | Time: %s" % [fps, date_string, time_string]
 	
-	# update the material quantities
-	time_passed += delta
-	if time_passed >= material_spawn_interval:
-		update_material_quantity()
-		time_passed = 0.0 # Reset the clock
-		
 	# Update the materials UI
 	update_material_display()
 	
@@ -83,17 +87,6 @@ func _process(delta: float) -> void:
 	# handle any structure prespawning
 	if prespawned_structure:
 		prespawned_structure.position = get_global_mouse_position().snapped(Vector2(12, 12))# + Vector2(6, 6)
-
-# increase the mat quantity based on structures
-func update_material_quantity():
-	for mat_type in materials.keys():
-		var initial_amount = materials[mat_type]
-		for structure in structure_list:
-			if structure:
-				if 'generation' in structure.lore_data.tiers[str(int(structure.current_tier))]:
-					if mat_type in structure.lore_data.tiers[str(int(structure.current_tier))].generation:
-						initial_amount += structure.lore_data.tiers[str(int(structure.current_tier))].generation[mat_type]
-		materials[mat_type] = initial_amount
 		
 # show various game stats
 func update_game_menu():
@@ -257,11 +250,9 @@ func update_unit_menu(unit, swap_to_tab:bool = true):
 	
 	var unassign_unit = func():
 		if unit:
-			if unit.assigned_structure:
-				unit.assigned_structure.assigned_builders.erase(unit)
-				unit.assigned_structure = null
-				# update the unit menu
-				update_unit_menu(unit, false)
+			unit.unassign_from_structure()
+			# update the unit menu
+			update_unit_menu(unit, false)
 	
 	# Connect signal to button after clearing prior signals
 	for connection in delete_button.get_signal_connection_list("pressed"):
@@ -327,6 +318,7 @@ func actually_spawn_structure():
 		# Enable collisions
 		prespawned_structure.collision_layer = 1
 		prespawned_structure.start_building()
+		prespawned_structure.actually_spawned = true
 		structure_list.append(prespawned_structure)
 		prespawned_structure = null
 		CursorManager.reset_cursor()
@@ -342,9 +334,12 @@ func update_structure_menu(structure: Structure, swap_to_tab:bool = true):
 	$UI/TabContainer/Structure/HBoxContainer/VBoxContainer3/Label.text = 'Tier ' + str(structure.current_tier)
 	
 	# display any mats the structure periodically spawns
+	var mat_gui = $UI/TabContainer/Structure/HBoxContainer/VBoxContainer/HBoxContainer
+	# hide all initially
+	for child in mat_gui.get_children():
+		child.hide()
 	if 'generation' in structure.lore_data.tiers[str(int(structure.current_tier))]:
 		var amounts = structure.lore_data.tiers[str(int(structure.current_tier))].generation
-		var mat_gui = $UI/TabContainer/Structure/HBoxContainer/VBoxContainer/HBoxContainer
 		for mat_type in materials.keys():
 			if mat_type in amounts:
 				mat_gui.get_node(mat_type).show()
@@ -353,6 +348,21 @@ func update_structure_menu(structure: Structure, swap_to_tab:bool = true):
 			else: 
 				mat_gui.get_node(mat_type).hide()
 				mat_gui.get_node(mat_type + 'texture').hide()
+	
+		# configure delete button
+		var delete_button = $UI/TabContainer/Structure/HBoxContainer/VBoxContainer2/Button4
+		
+		var delete_structure = func():
+			if structure:
+				if 'on_death' in structure:
+					structure.on_death()
+					# HIDE THE TAB if structure is deleted
+					set_tab_hidden_by_name($UI/TabContainer, 'Structure', true)
+		
+		# Connect signal to button after clearing prior signals
+		for connection in delete_button.get_signal_connection_list("pressed"):
+			connection.signal.disconnect(connection.callable)
+		delete_button.pressed.connect(delete_structure)
 	
 ## Returns a dictionary where keys are Group Names and values are their frequencies
 func count_group_membership(node_list: Array) -> Dictionary:

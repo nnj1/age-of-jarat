@@ -12,12 +12,14 @@ var allies: Array[int]
 
 # Variables governing building
 var building_status:bool = true # keeps track of if the unit is still being build
+var done_building:bool = false
+var actually_spawned: bool = false
+
 var cooldown = 10.0 # base cooldown time
 var time_passed = 0.0
 var speed_multiplier = 1.0 # Change this to 2.0, 5.0, etc. Will be modified by builders
 var assigned_builders = []  # contains the Units that can build the structure
 var assigned_units = []  # contains the Units that are assigned to the structure for some other reason
-
 
 @onready var selection_visual = $SelectionCircle # A Sprite2D child used for feedback
 
@@ -38,15 +40,19 @@ func start_building():
 func stop_building():
 	self.modulate = Color(1, 1, 1, 1)
 	building_status = false
-	# free all the builders
-	for builder in assigned_builders:
-		builder.assigned_structure = null
-		builder.build_mode = false	
-		# update UI without swapping to it
-		main_game_node.update_unit_menu(builder, false)
+	unassign_all_builders()
 		
 	$SoundComponent/buildCompleteSound.play()
 	
+func unassign_all_builders():
+	# free all the builders
+	for builder in assigned_builders:
+		if builder:
+			builder.assigned_structure = null
+			builder.build_mode = false	
+			# update UI without swapping to it
+			main_game_node.update_unit_menu(builder, false)
+		
 func _ready():
 	if not is_multiplayer_authority(): return
 	
@@ -74,6 +80,7 @@ func _ready():
 		selection_visual.visible = false
 
 func on_death():
+	unassign_all_builders()
 	queue_free()
 	
 func get_timer_percentage() -> float:
@@ -81,17 +88,19 @@ func get_timer_percentage() -> float:
 	return time_passed / cooldown
 
 func _process(delta):
-	# adjust the speed multiplier based on units assigned to build the structure
-	speed_multiplier = 1.0
-	for builder in assigned_builders:
-		if builder:
-			speed_multiplier += builder.lore_data.stats.building_speed
-		
-	if time_passed < cooldown:
-		# We multiply delta to "trick" the math into thinking more time passed
-		time_passed += delta * speed_multiplier
-		if time_passed >= cooldown:
-			stop_building()
+	if actually_spawned:
+		# adjust the speed multiplier based on units assigned to build the structure
+		speed_multiplier = 1.0
+		for builder in assigned_builders:
+			if builder:
+				speed_multiplier += builder.lore_data.stats.building_speed
+			
+		if time_passed < cooldown:
+			# We multiply delta to "trick" the math into thinking more time passed
+			time_passed += delta * speed_multiplier
+			if time_passed >= cooldown:
+				stop_building()
+				done_building = true
 	
 	# handle building progress bar
 	if building_status:
