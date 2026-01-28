@@ -233,7 +233,14 @@ func update_unit_menu(unit, swap_to_tab:bool = true):
 	
 	# set up some references for easy access later
 	var delete_button = $UI/TabContainer/Unit/HBoxContainer/VBoxContainer2/Button4
+	var unassign_button = $UI/TabContainer/Unit/HBoxContainer/VBoxContainer2/Button5
 	
+	# disable the button if the unit is not assigned to anything
+	if not unit.assigned_structure:
+		unassign_button.disabled = true
+	else:
+		unassign_button.disabled = false
+
 	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer/Label.text = unit.lore_data.name
 	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer/RichTextLabel.text = unit.lore_data.desc
 	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer3/Label.text = '(' + unit.lore_data.type + ')'
@@ -248,10 +255,22 @@ func update_unit_menu(unit, swap_to_tab:bool = true):
 				# HIDE THE TAB if unit is deleted
 				set_tab_hidden_by_name($UI/TabContainer, 'Unit', true)
 	
+	var unassign_unit = func():
+		if unit:
+			if unit.assigned_structure:
+				unit.assigned_structure.assigned_builders.erase(unit)
+				unit.assigned_structure = null
+				# update the unit menu
+				update_unit_menu(unit, false)
+	
 	# Connect signal to button after clearing prior signals
 	for connection in delete_button.get_signal_connection_list("pressed"):
 		connection.signal.disconnect(connection.callable)
 	delete_button.pressed.connect(delete_unit)
+	
+	for connection in unassign_button.get_signal_connection_list("pressed"):
+		connection.signal.disconnect(connection.callable)
+	unassign_button.pressed.connect(unassign_unit)
 	
 func get_cropped_tile_texture(atlas_coords: Vector2i) -> AtlasTexture:
 	var source = preload('res://resources/urizen.tres').get_source(0) as TileSetAtlasSource

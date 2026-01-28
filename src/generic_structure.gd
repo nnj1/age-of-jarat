@@ -16,6 +16,8 @@ var cooldown = 10.0 # base cooldown time
 var time_passed = 0.0
 var speed_multiplier = 1.0 # Change this to 2.0, 5.0, etc. Will be modified by builders
 var assigned_builders = []  # contains the Units that can build the structure
+var assigned_units = []  # contains the Units that are assigned to the structure for some other reason
+
 
 @onready var selection_visual = $SelectionCircle # A Sprite2D child used for feedback
 
