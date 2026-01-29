@@ -403,7 +403,8 @@ func _on_option_button_item_selected(index: int) -> void:
 	# Create a list of the existing structure names
 	var existing_structure_names = []
 	for structure in structure_list:
-		existing_structure_names.append(structure.lore_data.name)
+		if structure:
+			existing_structure_names.append(structure.lore_data.name)
 	print('Required: ' + str(required_structure_names))
 	print('Have: ' + str(existing_structure_names))
 	
