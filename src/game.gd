@@ -26,6 +26,10 @@ func _ready() -> void:
 	# populate the option button
 	for structure in GlobalVars.lore.structures:
 		option_button.add_item(structure.name)
+	# 1. Get the internal PopupMenu
+	var popup = option_button.get_popup()
+	# 2. Set the font size for the items in the dropdown
+	popup.add_theme_font_size_override("font_size", 25)
 		
 	# get the minimap to share the world
 	$UI/Panel2/Minimap/SubViewport.world_2d = get_tree().root.get_viewport().world_2d
