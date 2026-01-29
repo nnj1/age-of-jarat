@@ -15,7 +15,7 @@ var alt_held: bool = false # detects if alt key is held
 var prespawned_structure:Structure # for drag and drop mechanic
 
 ## FOR DEBUG MENU
-@onready var option_button = $UI/TabContainer/DEBUG/HBoxContainer/VBoxContainer/OptionButton
+@onready var option_button = $UI/TabContainer/Build/HBoxContainer/VBoxContainer/OptionButton
 
 var time_passed: float = 0.0
 var material_spawn_interval: float = 15.0
@@ -363,7 +363,7 @@ func update_structure_menu(structure: Structure, swap_to_tab:bool = true):
 		for connection in delete_button.get_signal_connection_list("pressed"):
 			connection.signal.disconnect(connection.callable)
 		delete_button.pressed.connect(delete_structure)
-	
+		
 ## Returns a dictionary where keys are Group Names and values are their frequencies
 func count_group_membership(node_list: Array) -> Dictionary:
 	var group_counts = {}
@@ -389,3 +389,40 @@ func dict_to_bbcode_list(data: Dictionary) -> String:
 		bbcode += str(key) + ': ' + str(value) + "\n"
 	
 	return bbcode
+
+func _on_option_button_item_selected(index: int) -> void:
+	
+	# get the structure requirements
+	var selected_structure_name = option_button.get_item_text(index)
+	var selected_structure = GlobalVars.filter_json_objects(GlobalVars.lore.structures, 'name', selected_structure_name)[0]
+	var required_structure_names = selected_structure.required_structures
+	# Create a list of the existing structure names
+	var existing_structure_names = []
+	for structure in structure_list:
+		existing_structure_names.append(structure.lore_data.name)
+	print('Required: ' + str(required_structure_names))
+	print('Have: ' + str(existing_structure_names))
+	
+	# show the structure requirements
+	var label = $UI/TabContainer/Build/HBoxContainer/RichTextLabel
+	var label_string = 'Structure Requirements:\n'
+	for thing in required_structure_names:
+		label_string += thing
+		if thing in existing_structure_names:
+			label_string += ' [img]res://assets/icons/kenney_game-icons-expansion/Game icons (base)/PNG/White/1x/checkmark.png[/img]'
+		else:
+			label_string += ' [img]res://assets/icons/kenney_game-icons-expansion/Game icons (base)/PNG/White/1x/cross.png[/img]'
+
+		label_string += '\n'
+	
+	label.text = label_string
+
+	# TODO: get the material requirements
+	
+	# TODO: show the material requirements
+
+	# Finally enable or disable the button
+	if GlobalVars.array_contains_all(required_structure_names, existing_structure_names):
+		$UI/TabContainer/Build/HBoxContainer/VBoxContainer/Button.disabled = false
+	else:
+		$UI/TabContainer/Build/HBoxContainer/VBoxContainer/Button.disabled = true

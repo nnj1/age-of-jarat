@@ -41,3 +41,9 @@ func get_vectors_in_range(p1: Vector2i, p2: Vector2i) -> Array[Vector2i]:
 			points.append(Vector2i(x, y))
 			
 	return points
+
+
+## Returns true if all strings in 'needles' are in 'haystack'.
+## Also returns true if both arrays are empty.
+func array_contains_all(needles: Array, haystack: Array) -> bool:
+	return needles.all(func(item): return item in haystack)
