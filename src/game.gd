@@ -127,28 +127,28 @@ func _unhandled_input(event: InputEvent) -> void:
 			
 func spawn_villager(spawn_pos: Vector2):
 	var villager = preload("res://scenes/entities/units/villager.tscn").instantiate()
-	villager.prepare(1, 0 if not alt_held else 1)
+	villager.prepare(1, 0 if not alt_held else 1, null, 'villager')
 	villager.position = spawn_pos
 	$entities/units.add_child(villager, true)
 	unit_list.append(villager)
 	
 func spawn_warrior(spawn_pos: Vector2):
 	var warrior = preload("res://scenes/entities/units/warrior.tscn").instantiate()
-	warrior.prepare(1, 0 if not alt_held else 1)
+	warrior.prepare(1, 0 if not alt_held else 1, null, 'warrior')
 	warrior.position = spawn_pos
 	$entities/units.add_child(warrior, true)
 	unit_list.append(warrior)
 
 func spawn_archer(spawn_pos: Vector2):
 	var archer = preload("res://scenes/entities/units/archer.tscn").instantiate()
-	archer.prepare(1, 0 if not alt_held else 1)
+	archer.prepare(1, 0 if not alt_held else 1, null, 'archer')
 	archer.position = spawn_pos
 	$entities/units.add_child(archer, true)
 	unit_list.append(archer)
 	
 func spawn_wizard(spawn_pos: Vector2):
 	var wizard = preload("res://scenes/entities/units/wizard.tscn").instantiate()
-	wizard.prepare(1, 0 if not alt_held else 1)
+	wizard.prepare(1, 0 if not alt_held else 1, null, 'wizard')
 	wizard.position = spawn_pos
 	$entities/units.add_child(wizard, true)
 	unit_list.append(wizard)

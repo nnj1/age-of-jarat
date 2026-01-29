@@ -7,6 +7,9 @@ signal just_took_damage
 @export var max_health: float = 100.0
 var current_health: float = max_health
 
+# TODO: incorporate this somehow
+@export var armor: int = 0
+
 # Reference the Sprite/Polygon instead of a ProgressBar
 @onready var foreground = $BarForeground 
 

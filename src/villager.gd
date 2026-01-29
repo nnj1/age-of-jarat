@@ -42,14 +42,71 @@ var map_node = null
 @onready var selection_visual = $SelectionCircle # A Sprite2D child used for feedback
 
 # sets the authority and faction of the unit
-func prepare(spawning_player_id: int = 1, given_faction:int = randi_range(0, 1), given_lore_data = GlobalVars.filter_json_objects(GlobalVars.lore.units, 'type', 'villager').pick_random()):
+# Change the signature to default to null
+func prepare(spawning_player_id: int = 1, given_faction: int = -1, given_lore_data = null, given_unit_type = null):
 	set_multiplayer_authority(spawning_player_id)
-	faction = given_faction
+	
+	# Handle faction default
+	if given_faction == -1:
+		faction = randi_range(0, 1)
+	else:
+		faction = given_faction
 	allies.append(faction)
-	lore_data = given_lore_data
+	
+	var unit_type: String
+	if given_unit_type == null:
+		unit_type = 'villager'
+	else:
+		unit_type = given_unit_type
+	
+	# Handle lore_data default INSIDE the body
+	if given_lore_data == null:
+		lore_data = GlobalVars.filter_json_objects(GlobalVars.lore.units, 'type', unit_type).pick_random()
+	else:
+		lore_data = given_lore_data
+		
+	if unit_type == 'archer':
+		# change to archer sprites
+		sprite_atlas_coords_corners = [
+			Vector2i(179,16),
+			Vector2i(185,19)
+		]
+	if unit_type == 'warrior':
+		# change to warrior sprites
+		sprite_atlas_coords_corners = [
+			Vector2i(179,16),
+			Vector2i(185,19)
+		]
+	if unit_type == 'wizard':
+		# change to wizard sprites
+		sprite_atlas_coords_corners = [
+			Vector2i(179,16),
+			Vector2i(185,19)
+		]
 	
 func _ready():
 	if not is_multiplayer_authority(): return
+	
+	# use the lore data to set up the unit
+	$HealthComponent.max_health = int(lore_data.stats.hp)
+	
+	if 'armor' in lore_data.stats:
+		$HealthComponent.armor = int(lore_data.stats.armor)
+	
+	speed = float(lore_data.stats.speed)
+	
+	if get_node_or_null('MeleeAttackComponent'):
+		$MeleeAttackComponent.attack_speed = lore_data.stats.attack_speed
+		$MeleeAttackComponent.damage = lore_data.stats.damage
+	
+	if get_node_or_null('RangeAttackComponent'):
+		$RangeAttackComponent.attack_speed = lore_data.stats.attack_speed
+		if 'damage' in lore_data.stats:
+			$RangeAttackComponent.damage = lore_data.stats.damage
+		if 'spell_damage' in lore_data.stats:
+			$RangeAttackComponent.damage = lore_data.stats.spell_damage
+		if 'range' in lore_data.stats:
+			$RangeAttackComponent.detection_range = lore_data.stats.range
 	
 	# connect important signals
 	if get_node_or_null('HealthComponent'):
@@ -59,7 +116,6 @@ func _ready():
 			$HealthComponent.died.connect($SoundComponent.play_death_sound)
 			$HealthComponent.just_took_damage.connect($SoundComponent.play_hurt_sound)
 
-		
 	target_position = global_position
 	if selection_visual:
 		selection_visual.visible = false

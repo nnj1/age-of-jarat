@@ -6,6 +6,7 @@ extends Node2D
 @export var damage: float = 10.0
 @export var attack_speed: float = 1.0 # Attacks per second
 @export var projectile_scene: PackedScene = preload('res://scenes/entities/objects/arrow.tscn') # Reference to your Bullet/Arrow
+@export var detection_range: float = 100.0 # how big the detetion area is
 
 @onready var detection_area: Area2D = $DetectionArea
 @onready var attack_timer: Timer = $AttackTimer
@@ -16,6 +17,9 @@ var current_target = null # could be characterbody2d or staticbody2d
 signal just_range_attacked
 
 func _ready() -> void:
+	
+	$DetectionArea/CollisionShape2D.shape.radius = detection_range
+	
 	attack_timer.wait_time = 1.0 / attack_speed
 	# Connect signals to track targets entering/exiting range
 	detection_area.body_entered.connect(_on_body_entered)
