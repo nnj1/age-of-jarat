@@ -128,8 +128,8 @@ func _ready():
 		random_atlas_coords = GlobalVars.get_vectors_in_range(sprite_atlas_coords_corners[0], sprite_atlas_coords_corners[1]).pick_random()
 	
 	# if the lore data specifies a sprite, actually use that
-	#if lore_data.sprite:
-	#	random_atlas_coords = str_to_var("Vector2i" + lore_data.sprite)
+	if lore_data.sprite:
+		random_atlas_coords = str_to_var("Vector2i" + str(lore_data.sprite.pick_random()))
 	
 	# TODO: make this an rpc call
 	set_unit_texture.rpc(random_atlas_coords)

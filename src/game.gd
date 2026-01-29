@@ -333,9 +333,39 @@ func update_structure_menu(structure: Structure, swap_to_tab:bool = true):
 	if swap_to_tab:
 		$UI/TabContainer/Structure.show()
 		
+	# display basic structure info
 	$UI/TabContainer/Structure/HBoxContainer/VBoxContainer/Label.text = structure.lore_data.name
 	$UI/TabContainer/Structure/HBoxContainer/VBoxContainer/RichTextLabel.text = structure.lore_data.desc
 	$UI/TabContainer/Structure/HBoxContainer/VBoxContainer3/Label.text = 'Tier ' + str(structure.current_tier)
+	
+	# display tier upgrade info
+	var tier_upgrade_text:String = 'Needs:\n'
+	var _next_tier = clampi(structure.current_tier + 1, 1, 3) # there are only 3 tiers 
+	
+	# update the spawnable units menu
+	var spawn_button_container = $UI/TabContainer/Structure/HBoxContainer/VBoxContainer2/ScrollContainer/GridContainer
+	for child in spawn_button_container.get_children():
+		child.queue_free()
+		
+	for unit_name in structure.lore_data.tiers[str(structure.current_tier)].spawnable_units:
+		var spawn_button = Button.new()
+		spawn_button.text = unit_name
+		var icon_texture
+		if GlobalVars.filter_json_objects(GlobalVars.lore.units, 'name', unit_name)[0].sprite:
+			var sprite_atlas_coords = GlobalVars.filter_json_objects(GlobalVars.lore.units, 'name', unit_name)[0].sprite.pick_random()
+			icon_texture = get_cropped_tile_texture(str_to_var('Vector2i' + str(sprite_atlas_coords)))
+		else:
+			icon_texture = preload('res://assets/icons/kenney_game-icons-expansion/Game icons (base)/PNG/White/1x/singleplayer.png')
+		spawn_button.icon = icon_texture
+		spawn_button.icon_alignment = HorizontalAlignment.HORIZONTAL_ALIGNMENT_CENTER
+		spawn_button.vertical_icon_alignment = VerticalAlignment.VERTICAL_ALIGNMENT_TOP
+		spawn_button.expand_icon = true
+		spawn_button.custom_minimum_size = Vector2(75, 75)
+		spawn_button_container.add_child(spawn_button)
+		
+	
+	tier_upgrade_text += 'to upgrade.'
+	$UI/TabContainer/Structure/HBoxContainer/VBoxContainer3/RichTextLabel.text = tier_upgrade_text
 	
 	# display any mats the structure periodically spawns
 	var mat_gui = $UI/TabContainer/Structure/HBoxContainer/VBoxContainer/HBoxContainer
