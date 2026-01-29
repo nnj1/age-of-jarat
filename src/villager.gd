@@ -83,12 +83,9 @@ func prepare(spawning_player_id: int = 1, given_faction: int = -1, given_lore_da
 			Vector2i(179,16),
 			Vector2i(185,19)
 		]
-	
-func _ready():
-	if not is_multiplayer_authority(): return
-	
+		
 	# use the lore data to set up the unit
-	$HealthComponent.max_health = int(lore_data.stats.hp)
+	$HealthComponent.max_health = float(lore_data.stats.hp)
 	
 	if 'armor' in lore_data.stats:
 		$HealthComponent.armor = int(lore_data.stats.armor)
@@ -96,17 +93,17 @@ func _ready():
 	speed = float(lore_data.stats.speed)
 	
 	if get_node_or_null('MeleeAttackComponent'):
-		$MeleeAttackComponent.attack_speed = lore_data.stats.attack_speed
-		$MeleeAttackComponent.damage = lore_data.stats.damage
+		$MeleeAttackComponent.attack_speed = float(lore_data.stats.attack_speed)
+		$MeleeAttackComponent.damage = float(lore_data.stats.damage)
 	
 	if get_node_or_null('RangeAttackComponent'):
-		$RangeAttackComponent.attack_speed = lore_data.stats.attack_speed
+		$RangeAttackComponent.attack_speed = float(lore_data.stats.attack_speed)
 		if 'damage' in lore_data.stats:
-			$RangeAttackComponent.damage = lore_data.stats.damage
+			$RangeAttackComponent.damage = float(lore_data.stats.damage)
 		if 'spell_damage' in lore_data.stats:
-			$RangeAttackComponent.damage = lore_data.stats.spell_damage
+			$RangeAttackComponent.damage = float(lore_data.stats.spell_damage)
 		if 'range' in lore_data.stats:
-			$RangeAttackComponent.detection_range = lore_data.stats.range
+			$RangeAttackComponent.detection_range = float(lore_data.stats.range)
 	
 	# connect important signals
 	if get_node_or_null('HealthComponent'):
@@ -115,10 +112,6 @@ func _ready():
 		if get_node_or_null('SoundComponent'):
 			$HealthComponent.died.connect($SoundComponent.play_death_sound)
 			$HealthComponent.just_took_damage.connect($SoundComponent.play_hurt_sound)
-
-	target_position = global_position
-	if selection_visual:
-		selection_visual.visible = false
 	
 	# pick a random player sprite
 	random_atlas_coords = GlobalVars.get_vectors_in_range(sprite_atlas_coords_corners[0], sprite_atlas_coords_corners[1]).pick_random()
@@ -130,6 +123,17 @@ func _ready():
 	# if the lore data specifies a sprite, actually use that
 	if lore_data.sprite:
 		random_atlas_coords = str_to_var("Vector2i" + str(lore_data.sprite.pick_random()))
+		
+	# scale the unit accordingly:
+	if 'scale' in lore_data:
+		self.scale *= float(lore_data.scale)
+	
+func _ready():
+	if not is_multiplayer_authority(): return
+
+	target_position = global_position
+	if selection_visual:
+		selection_visual.visible = false
 	
 	# TODO: make this an rpc call
 	set_unit_texture.rpc(random_atlas_coords)

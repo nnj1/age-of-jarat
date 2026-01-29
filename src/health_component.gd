@@ -14,9 +14,8 @@ var current_health: float = max_health
 @onready var foreground = $BarForeground 
 
 func _ready():
-	current_health = max_health
 	visible = false # Keep hidden by default
-	
+	current_health = max_health
 	_update_bar()
 
 func take_damage(amount: float):
@@ -30,7 +29,7 @@ func take_damage(amount: float):
 
 func _update_bar():
 	# We only change the scale.x, which is extremely cheap for the GPU
-	var health_pct = current_health / max_health
+	var health_pct = float(current_health) / max_health
 	foreground.scale.x = health_pct
 	
 	# Color shifting without theme overhead
