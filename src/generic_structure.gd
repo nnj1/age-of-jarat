@@ -111,12 +111,13 @@ func _process(delta):
 		$BuildComponent.hide()
 
 func play_damage_modulate_animation():
-	for sprite in get_child_in_group('structure_sprites').get_children():
-		var tween = get_tree().create_tween()
-		# Transition to Red
-		tween.tween_property(sprite, "modulate", Color.RED, 0.1).set_trans(Tween.TRANS_SINE)
-		# Transition back to White (Normal)
-		tween.tween_property(sprite, "modulate", Color.WHITE, 0.1).set_trans(Tween.TRANS_SINE)
+	if get_child_in_group('structure_sprites'):
+		for sprite in get_child_in_group('structure_sprites').get_children():
+			var tween = get_tree().create_tween()
+			# Transition to Red
+			tween.tween_property(sprite, "modulate", Color.RED, 0.1).set_trans(Tween.TRANS_SINE)
+			# Transition back to White (Normal)
+			tween.tween_property(sprite, "modulate", Color.WHITE, 0.1).set_trans(Tween.TRANS_SINE)
 
 func toggle_blue_tint(given_status: bool):
 	if given_status:
