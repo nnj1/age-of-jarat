@@ -4,7 +4,7 @@ extends CanvasLayer
 
 func _ready() -> void:
 	# Ensure the effect starts in a specific state
-	color_rect.visible = true
+	color_rect.visible = false
 
 func _input(event: InputEvent) -> void:
 	# Check if the "toggle_post_process" action was just pressed
