@@ -20,6 +20,8 @@ uniform vec4 active_border_color : source_color = vec4(1.0, 0.0, 0.0, 1.0);
 uniform float default_border_width : hint_range(0.0, 10.0) = 0.5;
 uniform float active_border_width : hint_range(0.0, 10.0) = 0.25;
 
+uniform float glow_intensity : hint_range(1.0, 10.0) = 1.0;
+
 float get_shape_alpha(sampler2D tex, vec2 uv, vec2 l_uv) {
     vec4 tex_color = texture(tex, uv);
     float dist = distance(l_uv, vec2(0.5, 0.5));
@@ -72,5 +74,6 @@ void fragment() {
         }
     }
 
-    COLOR = color;
+	// Multiply the RGB channels by glow_intensity, but leave Alpha alone
+    COLOR = vec4(color.rgb * glow_intensity, color.a);
 }

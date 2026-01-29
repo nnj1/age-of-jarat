@@ -113,6 +113,13 @@ func prepare(spawning_player_id: int = 1, given_faction: int = -1, given_lore_da
 			$HealthComponent.died.connect($SoundComponent.play_death_sound)
 			$HealthComponent.just_took_damage.connect($SoundComponent.play_hurt_sound)
 	
+	# scale the unit accordingly:
+	if 'scale' in lore_data:
+		self.scale *= float(lore_data.scale)
+	
+func _ready():
+	if not is_multiplayer_authority(): return
+	
 	# pick a random player sprite
 	random_atlas_coords = GlobalVars.get_vectors_in_range(sprite_atlas_coords_corners[0], sprite_atlas_coords_corners[1]).pick_random()
 	
@@ -124,12 +131,6 @@ func prepare(spawning_player_id: int = 1, given_faction: int = -1, given_lore_da
 	if lore_data.sprite:
 		random_atlas_coords = str_to_var("Vector2i" + str(lore_data.sprite.pick_random()))
 		
-	# scale the unit accordingly:
-	if 'scale' in lore_data:
-		self.scale *= float(lore_data.scale)
-	
-func _ready():
-	if not is_multiplayer_authority(): return
 
 	target_position = global_position
 	if selection_visual:

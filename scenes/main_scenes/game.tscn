@@ -27,6 +27,13 @@ expand_margin_bottom = 4.0
 anti_aliasing = false
 
 [sub_resource type="Environment" id="Environment_fqmia"]
+background_mode = 3
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 2.0
+glow_bloom = 0.2
+glow_blend_mode = 0
+glow_hdr_threshold = 1.5
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_3wwfn")
@@ -456,7 +463,6 @@ spawn_path = NodePath("..")
 [node name="procedural" parent="map" instance=ExtResource("3_ks7w8")]
 
 [node name="CanvasModulate" type="CanvasModulate" parent="map"]
-color = Color(0.45840502, 0.45840508, 0.45840502, 1)
 
 [node name="DirectionalLight2D" type="DirectionalLight2D" parent="map"]
 

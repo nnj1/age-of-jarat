@@ -25,16 +25,16 @@ void vertex() {
 }
 
 void fragment() {
-	// Get the pixel color from the spritesheet
-	vec4 tex_color = texture(TEXTURE, UV);
-	
-	// Calculate brightness (average of RGB)
-	float brightness = (tex_color.r + tex_color.g + tex_color.b) / 3.0;
-	
-	// If the pixel is darker than the threshold, delete it (discard)
-	if (brightness < black_threshold) {
-		discard;
-	}
-	
-	COLOR = tex_color;
+    // Get the pixel color AND multiply it by the Modulate/Self-Modulate color
+    vec4 tex_color = texture(TEXTURE, UV) * COLOR;
+    
+    // Calculate brightness (average of RGB)
+    float brightness = (tex_color.r + tex_color.g + tex_color.b) / 3.0;
+    
+    // If the pixel is darker than the threshold, delete it
+    if (brightness < black_threshold) {
+        discard;
+    }
+    
+    COLOR = tex_color;
 }
