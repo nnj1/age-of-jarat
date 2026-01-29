@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bfu1iccj67rot"]
+[gd_scene load_steps=9 format=3 uid="uid://bfu1iccj67rot"]
 
 [ext_resource type="Script" uid="uid://dk26clul6uf2m" path="res://src/arrow.gd" id="1_3sgs4"]
 [ext_resource type="Texture2D" uid="uid://fik2xyspevag" path="res://assets/tilesets/urizen_onebit_tileset__v2d0.png" id="3_f8n3w"]
@@ -104,6 +104,14 @@ region = Rect2(430, 131, 12, 12)
 [sub_resource type="CircleShape2D" id="CircleShape2D_24gab"]
 radius = 2.828427
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_24gab"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 5.0
+direction = Vector3(-1, 0, 0)
+spread = 5.0
+gravity = Vector3(0, 0, 0)
+
 [node name="Arrow" type="Area2D"]
 collision_layer = 0
 collision_mask = 3
@@ -123,5 +131,13 @@ shape = SubResource("CircleShape2D_24gab")
 stream = ExtResource("4_f8n3w")
 autoplay = true
 bus = &"Sfx"
+
+[node name="PoisonGPUParticles2D" type="GPUParticles2D" parent="."]
+modulate = Color(0.5897365, 0.00025441914, 0.5897323, 1)
+position = Vector2(-4, 1)
+amount = 100
+lifetime = 0.5
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_24gab")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

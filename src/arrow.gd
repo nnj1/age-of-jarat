@@ -8,9 +8,18 @@ var damage: float = 0.0
 var attacker: CharacterBody2D = null
 var attackers_allies = []
 
-func prepare(given_attacker: CharacterBody2D):
+
+func prepare(given_attacker: CharacterBody2D, given_poison= false):
 	attacker = given_attacker
 	attackers_allies = attacker.allies.duplicate()
+	
+	if get_node_or_null('$PoisonGPUParticles2D'):
+		if given_poison:
+			$PoisonGPUParticles2D.visible = true
+			$PoisonGPUParticles2D.emitting = true
+		else:
+			$PoisonGPUParticles2D.visible = false
+			$PoisonGPUParticles2D.emitting = false
 	
 func _physics_process(delta: float) -> void:
 	# Move the arrow in the set direction

@@ -52,7 +52,12 @@ func attack() -> void:
 		
 	# Spawn the projectile
 	var projectile = projectile_scene.instantiate()
-	projectile.prepare(self.get_parent())
+	# see if you need to add poison
+	var poison_status = false
+	if get_parent().lore_data.name in ['Poison Saboteur']:
+		poison_status = true
+		
+	projectile.prepare(self.get_parent(), poison_status)
 	main_game_node.get_node('entities/objects').add_child(projectile, true) # Or add to a specific projectiles folder
 	
 	# Set projectile position and direction
