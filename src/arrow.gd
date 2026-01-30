@@ -7,14 +7,16 @@ var direction: Vector2 = Vector2.ZERO
 var damage: float = 0.0
 var attacker: CharacterBody2D = null
 var attackers_allies = []
+var poison_status: bool
 
-
-func prepare(given_attacker: CharacterBody2D, given_poison= false):
+func prepare(given_attacker: CharacterBody2D, given_poison = false):
 	attacker = given_attacker
 	attackers_allies = attacker.allies.duplicate()
+	poison_status = given_poison
 	
-	if get_node_or_null('$PoisonGPUParticles2D'):
-		if given_poison:
+func _ready() -> void:
+	if get_node_or_null('PoisonGPUParticles2D'):
+		if poison_status:
 			$PoisonGPUParticles2D.visible = true
 			$PoisonGPUParticles2D.emitting = true
 		else:

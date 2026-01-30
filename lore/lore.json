@@ -59,5 +59,47 @@
 	{ "name": "Stone Boulder", "resource_type": "stone", "amount": 600, "difficulty": 2.5, "sprite": null },
 	{ "name": "Berry Bush", "resource_type": "food", "amount": 150, "difficulty": 0.8, "sprite": null },
 	{ "name": "Gold Vein", "resource_type": "gold", "amount": 1200, "difficulty": 4.5, "sprite": null }
+  ],
+	"animals": [
+	{ 
+	  "name": "Deer", 
+	  "type": "wildlife", 
+	  "sprite": null, 
+	  "desc": "Graceful and skittish. They are the silent ghosts of the forest, providing lean meat for those quick enough to catch them.", 
+	  "stats": { "hp": 40, "speed": 38, "food_yield": 120 }, 
+	  "behavior": "flee_on_sight" 
+	},
+	{ 
+	  "name": "Wild Boar", 
+	  "type": "wildlife", 
+	  "sprite": null, 
+	  "desc": "A stubborn mound of muscle and coarse fur. They generally mind their own business, but they don't take kindly to being poked.", 
+	  "stats": { "hp": 120, "speed": 22, "food_yield": 200 }, 
+	  "behavior": "neutral_defensive" 
+	},
+	{ 
+	  "name": "Sheep", 
+	  "type": "domestic", 
+	  "sprite": null, 
+	  "desc": "Fluffy, dim-witted, and utterly defenseless. A walking cloud of wool and mutton.", 
+	  "stats": { "hp": 30, "speed": 12, "food_yield": 80 }, 
+	  "behavior": "wander" 
+	},
+	{ 
+	  "name": "Great Elk", 
+	  "type": "wildlife", 
+	  "sprite": null, 
+	  "desc": "The majestic king of the woods. Its antlers are like a crown of oak, and its meat can feed a small village for a week.", 
+	  "stats": { "hp": 250, "speed": 34, "food_yield": 450 }, 
+	  "behavior": "flee_on_hit" 
+	},
+	{ 
+	  "name": "Hare", 
+	  "type": "wildlife", 
+	  "sprite": null, 
+	  "desc": "A nervous blur of ears and luck. Hard to hit, but a welcome snack for a hungry scout.", 
+	  "stats": { "hp": 10, "speed": 45, "food_yield": 25 }, 
+	  "behavior": "flee_on_sight" 
+	}
   ]
 }

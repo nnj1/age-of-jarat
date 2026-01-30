@@ -43,11 +43,11 @@ var map_node = null
 
 # sets the authority and faction of the unit
 # Change the signature to default to null
-func prepare(spawning_player_id: int = 1, given_faction: int = -1, given_lore_data = null, given_unit_type = null):
+func prepare(spawning_player_id: int = 1, given_faction: int = -2, given_lore_data = null, given_unit_type = null):
 	set_multiplayer_authority(spawning_player_id)
 	
 	# Handle faction default
-	if given_faction == -1:
+	if given_faction == -2:
 		faction = randi_range(0, 1)
 	else:
 		faction = given_faction
@@ -61,7 +61,10 @@ func prepare(spawning_player_id: int = 1, given_faction: int = -1, given_lore_da
 	
 	# Handle lore_data default INSIDE the body
 	if given_lore_data == null:
-		lore_data = GlobalVars.filter_json_objects(GlobalVars.lore.units, 'type', unit_type).pick_random()
+		if unit_type != 'animal':
+			lore_data = GlobalVars.filter_json_objects(GlobalVars.lore.units, 'type', unit_type).pick_random()
+		elif unit_type == 'animal':
+			lore_data = GlobalVars.lore.animals.pick_random()
 	else:
 		lore_data = given_lore_data
 		
@@ -82,6 +85,13 @@ func prepare(spawning_player_id: int = 1, given_faction: int = -1, given_lore_da
 		sprite_atlas_coords_corners = [
 			Vector2i(179,16),
 			Vector2i(185,19)
+		]
+		
+	if unit_type == 'animal':
+		# change to animal sprites
+		sprite_atlas_coords_corners = [
+			Vector2i(1,14),
+			Vector2i(10,16)
 		]
 		
 	# use the lore data to set up the unit
@@ -131,7 +141,6 @@ func _ready():
 	if lore_data.sprite:
 		random_atlas_coords = str_to_var("Vector2i" + str(lore_data.sprite.pick_random()))
 		
-
 	target_position = global_position
 	if selection_visual:
 		selection_visual.visible = false

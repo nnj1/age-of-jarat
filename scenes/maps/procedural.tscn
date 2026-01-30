@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://24ncf3ybr3hc"]
+[gd_scene load_steps=11 format=3 uid="uid://24ncf3ybr3hc"]
 
 [ext_resource type="Script" uid="uid://dq6a3ori1r0vs" path="res://src/procedural.gd" id="1_e5la6"]
 [ext_resource type="TileSet" uid="uid://cgig36v2tr1w3" path="res://resources/urizen.tres" id="1_guuwn"]
@@ -9,6 +9,14 @@
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_ug44p"]
 noise_type = 3
 frequency = 0.0159
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_cxnnp"]
+noise_type = 3
+frequency = 0.08
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_fs631"]
+noise_type = 2
+frequency = 0.1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cxnnp"]
 shader = ExtResource("2_ug44p")
@@ -32,6 +40,8 @@ shader_parameter/black_threshold = 0.1
 [node name="procedural" type="Node2D"]
 script = ExtResource("1_e5la6")
 noise = SubResource("FastNoiseLite_ug44p")
+vegetation_noise = SubResource("FastNoiseLite_cxnnp")
+stone_noise = SubResource("FastNoiseLite_fs631")
 
 [node name="seabed" type="TileMapLayer" parent="."]
 tile_set = ExtResource("1_guuwn")
@@ -44,7 +54,12 @@ tile_set = ExtResource("1_guuwn")
 modulate = Color(0.29586652, 0.2958665, 0.2958665, 1)
 tile_set = ExtResource("1_guuwn")
 
+[node name="roads" type="TileMapLayer" parent="."]
+material = SubResource("ShaderMaterial_ug44p")
+tile_set = ExtResource("1_guuwn")
+
 [node name="decorators" type="TileMapLayer" parent="."]
+modulate = Color(0.4006977, 0.40069774, 0.40069756, 1)
 material = SubResource("ShaderMaterial_ug44p")
 tile_set = ExtResource("1_guuwn")
 

@@ -155,7 +155,7 @@ func spawn_wizard(spawn_pos: Vector2):
 
 func spawn_animal(spawn_pos: Vector2):
 	var animal = preload("res://scenes/entities/npcs/animal.tscn").instantiate()
-	animal.prepare()
+	animal.prepare(1, -1, null, "animal")
 	animal.position = spawn_pos
 	$entities/npcs.add_child(animal, true)
 	

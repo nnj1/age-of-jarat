@@ -11,12 +11,16 @@ extends Node2D
 @onready var detection_area: Area2D = $DetectionArea
 @onready var attack_timer: Timer = $AttackTimer
 
+@export var poison_status: bool = false
+
 var targets_in_range = [] # Will have both CharacterBody2Ds and StaticBody2Ds in it
 var current_target = null # could be characterbody2d or staticbody2d
 
 signal just_range_attacked
 
 func _ready() -> void:
+	
+	poison_status = str(get_parent().lore_data.name) in ['Poison Saboteur']
 	
 	$DetectionArea/CollisionShape2D.shape.radius = detection_range
 	
@@ -52,10 +56,6 @@ func attack() -> void:
 		
 	# Spawn the projectile
 	var projectile = projectile_scene.instantiate()
-	# see if you need to add poison
-	var poison_status = false
-	if get_parent().lore_data.name in ['Poison Saboteur']:
-		poison_status = true
 		
 	projectile.prepare(self.get_parent(), poison_status)
 	main_game_node.get_node('entities/objects').add_child(projectile, true) # Or add to a specific projectiles folder

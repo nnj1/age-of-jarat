@@ -25,16 +25,17 @@ void vertex() {
 }
 
 void fragment() {
-    // Get the pixel color AND multiply it by the Modulate/Self-Modulate color
-    vec4 tex_color = texture(TEXTURE, UV) * COLOR;
+    // 1. Get the raw texture color FIRST
+    vec4 raw_tex = texture(TEXTURE, UV);
     
-    // Calculate brightness (average of RGB)
-    float brightness = (tex_color.r + tex_color.g + tex_color.b) / 3.0;
+    // 2. Check brightness of the RAW texture (ignoring modulation)
+    float brightness = (raw_tex.r + raw_tex.g + raw_tex.b) / 3.0;
     
-    // If the pixel is darker than the threshold, delete it
+    // 3. If the RAW pixel is dark, discard it
     if (brightness < black_threshold) {
         discard;
     }
     
-    COLOR = tex_color;
+    // 4. NOW apply the modulation (COLOR) to the result
+    COLOR = raw_tex * COLOR;
 }
