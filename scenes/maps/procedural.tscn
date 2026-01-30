@@ -59,7 +59,7 @@ material = SubResource("ShaderMaterial_ug44p")
 tile_set = ExtResource("1_guuwn")
 
 [node name="decorators" type="TileMapLayer" parent="."]
-modulate = Color(0.4006977, 0.40069774, 0.40069756, 1)
+modulate = Color(0.6337567, 0.6337568, 0.6337567, 1)
 material = SubResource("ShaderMaterial_ug44p")
 tile_set = ExtResource("1_guuwn")
 
