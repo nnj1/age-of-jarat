@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dv0isi7bv1viu"]
+[gd_scene load_steps=3 format=3 uid="uid://dv0isi7bv1viu"]
 
 [ext_resource type="Script" uid="uid://c43tmkahyr12v" path="res://src/faction_label_component.gd" id="1_7gk1v"]
+[ext_resource type="Texture2D" uid="uid://bp0bmgcmq21k2" path="res://assets/icons/kenney_game-icons-expansion/PNG/White/1x/cpu.png" id="2_rmt3k"]
 
 [node name="FactionLabelComponent" type="Node2D"]
 script = ExtResource("1_7gk1v")
@@ -18,9 +19,14 @@ offset_bottom = 7.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 32
-text = "P1"
+text = "P?"
 horizontal_alignment = 1
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(21.000002, 0)
 scale = Vector2(0.75, 0.75)
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(-26, -1)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_rmt3k")

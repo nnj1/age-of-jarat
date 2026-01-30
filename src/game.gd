@@ -213,6 +213,28 @@ func update_selection_menu(selected_units):
 	# update the stats label
 	party_comp_label.text = dict_to_bbcode_list(count_group_membership(selected_units))
 	
+	# update the buttons so they toggle AI for the selections
+	var ai_on_button = $UI/TabContainer/Selection/HBoxContainer/VBoxContainer2/Button
+	var ai_off_button = $UI/TabContainer/Selection/HBoxContainer/VBoxContainer2/Button2
+	
+	var turn_ai_off_for_units = func():
+		for unit in selected_units:
+			unit.set_autonomous_mode(false)
+		
+	var turn_ai_on_for_units = func():
+		for unit in selected_units:
+			unit.set_autonomous_mode(true)
+			
+	# Connect signal to button after clearing prior signals
+	for connection in ai_on_button.get_signal_connection_list("pressed"):
+		connection.signal.disconnect(connection.callable)
+	ai_on_button.pressed.connect(turn_ai_on_for_units)
+	
+	for connection in ai_off_button.get_signal_connection_list("pressed"):
+		connection.signal.disconnect(connection.callable)
+	ai_off_button.pressed.connect(turn_ai_off_for_units)
+	
+	
 	if selected_units.size() == 1:
 		update_unit_menu(selected_units[0])
 	elif selected_units.size() > 1:
@@ -231,6 +253,13 @@ func update_unit_menu(unit, swap_to_tab:bool = true):
 	# set up some references for easy access later
 	var delete_button = $UI/TabContainer/Unit/HBoxContainer/VBoxContainer2/Button4
 	var unassign_button = $UI/TabContainer/Unit/HBoxContainer/VBoxContainer2/Button5
+	var ai_toggle = $UI/TabContainer/Unit/HBoxContainer/VBoxContainer2/CheckButton
+	
+	# set the ai toggle_button properly
+	if unit.autonomous_mode:
+		ai_toggle.button_pressed = true
+	else:
+		ai_toggle.button_pressed = false
 	
 	# disable the button if the unit is not assigned to anything
 	if not unit.assigned_structure:
@@ -244,6 +273,10 @@ func update_unit_menu(unit, swap_to_tab:bool = true):
 	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer3/RichTextLabel.text = dict_to_bbcode_list(unit.lore_data.stats)
 	$UI/TabContainer/Unit/HBoxContainer/TextureRect.texture = get_cropped_tile_texture(unit.random_atlas_coords)
 	$UI/TabContainer/Unit/HBoxContainer/VBoxContainer2/RichTextLabel.text = 'Assigned to:\n' + str(unit.assigned_structure) 
+	
+	var toggle_ai_unit = func():
+		if unit:
+			unit.set_autonomous_mode(not unit.autonomous_mode)
 	
 	var delete_unit = func():
 		if unit:
@@ -266,6 +299,10 @@ func update_unit_menu(unit, swap_to_tab:bool = true):
 	for connection in unassign_button.get_signal_connection_list("pressed"):
 		connection.signal.disconnect(connection.callable)
 	unassign_button.pressed.connect(unassign_unit)
+	
+	for connection in ai_toggle.get_signal_connection_list("pressed"):
+		connection.signal.disconnect(connection.callable)
+	ai_toggle.pressed.connect(toggle_ai_unit)
 	
 func get_cropped_tile_texture(atlas_coords: Vector2i) -> AtlasTexture:
 	var source = preload('res://resources/urizen.tres').get_source(0) as TileSetAtlasSource

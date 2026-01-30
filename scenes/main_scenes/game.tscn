@@ -66,7 +66,7 @@ grow_horizontal = 2
 grow_vertical = 0
 focus_mode = 2
 theme_override_font_sizes/font_size = 32
-current_tab = 6
+current_tab = 4
 drag_to_rearrange_enabled = true
 script = ExtResource("2_leqql")
 
@@ -285,7 +285,6 @@ text = "Unassign"
 [node name="CheckButton" type="CheckButton" parent="UI/TabContainer/Unit/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 25
-button_pressed = true
 text = "AI on?"
 alignment = 1
 
@@ -295,7 +294,6 @@ theme_override_font_sizes/font_size = 25
 text = "Delete"
 
 [node name="Selection" type="Panel" parent="UI/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 4
 
@@ -310,7 +308,7 @@ grow_vertical = 2
 [node name="ScrollContainer" type="ScrollContainer" parent="UI/TabContainer/Selection/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.75
+size_flags_stretch_ratio = 0.6
 mouse_filter = 0
 horizontal_scroll_mode = 0
 
@@ -323,7 +321,7 @@ columns = 10
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/TabContainer/Selection/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.25
+size_flags_stretch_ratio = 0.2
 
 [node name="RichTextLabel" type="RichTextLabel" parent="UI/TabContainer/Selection/HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -334,6 +332,23 @@ theme_override_font_sizes/bold_italics_font_size = 25
 theme_override_font_sizes/italics_font_size = 25
 theme_override_font_sizes/mono_font_size = 25
 bbcode_enabled = true
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="UI/TabContainer/Selection/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.2
+
+[node name="Button" type="Button" parent="UI/TabContainer/Selection/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 25
+text = "AI on"
+
+[node name="Button2" type="Button" parent="UI/TabContainer/Selection/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 25
+text = "AI off"
 
 [node name="Build" type="Panel" parent="UI/TabContainer"]
 visible = false
@@ -399,6 +414,7 @@ text = "Build"
 icon = ExtResource("4_cfqos")
 
 [node name="Options" type="Panel" parent="UI/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 6
 
