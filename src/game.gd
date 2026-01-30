@@ -283,14 +283,6 @@ func set_tab_hidden_by_name(tab_container: TabContainer, tab_name: String, state
 			tab_container.set_tab_hidden(i, state)
 			return
 
-func exit_game_to_menu():
-	#TODO: close any connections if server or host
-	pass
-
-func exit_game_to_desktop():
-	#TODO: close any connections if server or host
-	get_tree().quit()
-
 
 ## DEBUG SHIT: TO TEST THE DRAG AND DROP SYSTEM
 func _on_button_pressed() -> void:

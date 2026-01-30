@@ -14,7 +14,7 @@ extends Node
 
 @export_group("Settings")
 @export var pool_size: int = 8
-@export var bus_name: String = "UI"
+@export var bus_name: String = "Sfx"
 @export var min_pitch: float = 0.95
 @export var max_pitch: float = 1.05
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://66pne335f347"]
+[gd_scene load_steps=12 format=3 uid="uid://66pne335f347"]
 
 [ext_resource type="Script" uid="uid://chlhpappba5gk" path="res://src/game.gd" id="1_3wwfn"]
 [ext_resource type="PackedScene" uid="uid://byu0g7vffd20f" path="res://scenes/components/SelectionManager.tscn" id="1_fqmia"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://cn6q5tu3cq7yb" path="res://src/camera_2d.gd" id="3_ifh15"]
 [ext_resource type="PackedScene" uid="uid://24ncf3ybr3hc" path="res://scenes/maps/procedural.tscn" id="3_ks7w8"]
 [ext_resource type="Texture2D" uid="uid://b8jtmhy2mcwmk" path="res://assets/cursors/kenney_cursor-pack/PNG/Outline/Double/tool_hammer.png" id="4_cfqos"]
+[ext_resource type="PackedScene" uid="uid://b0w3feq0g7sa" path="res://scenes/gui_components/settings.tscn" id="5_rbptj"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t5sjj"]
 bg_color = Color(0, 0, 0, 1)
@@ -65,7 +66,7 @@ grow_horizontal = 2
 grow_vertical = 0
 focus_mode = 2
 theme_override_font_sizes/font_size = 32
-current_tab = 1
+current_tab = 6
 drag_to_rearrange_enabled = true
 script = ExtResource("2_leqql")
 
@@ -103,6 +104,7 @@ theme_override_font_sizes/mono_font_size = 25
 bbcode_enabled = true
 
 [node name="Structure" type="Panel" parent="UI/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
@@ -397,7 +399,6 @@ text = "Build"
 icon = ExtResource("4_cfqos")
 
 [node name="Options" type="Panel" parent="UI/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 6
 
@@ -409,19 +410,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/TabContainer/Options/HBoxContainer"]
+[node name="MultiplayerSettings" type="Panel" parent="UI/TabContainer/Options/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Button2" type="Button" parent="UI/TabContainer/Options/HBoxContainer/VBoxContainer"]
+[node name="Settings" parent="UI/TabContainer/Options/HBoxContainer" instance=ExtResource("5_rbptj")]
 layout_mode = 2
-theme_override_font_sizes/font_size = 25
-text = "Exit to Menu"
-
-[node name="Button" type="Button" parent="UI/TabContainer/Options/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 25
-text = "Exit to Desktop"
 
 [node name="Panel2" type="Panel" parent="UI"]
 custom_minimum_size = Vector2(200, 50)
@@ -507,5 +501,3 @@ environment = SubResource("Environment_fqmia")
 
 [connection signal="item_selected" from="UI/TabContainer/Build/HBoxContainer/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
 [connection signal="pressed" from="UI/TabContainer/Build/HBoxContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
-[connection signal="pressed" from="UI/TabContainer/Options/HBoxContainer/VBoxContainer/Button2" to="." method="exit_game_to_menu"]
-[connection signal="pressed" from="UI/TabContainer/Options/HBoxContainer/VBoxContainer/Button" to="." method="exit_game_to_desktop"]

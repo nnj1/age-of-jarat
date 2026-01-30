@@ -3,4 +3,5 @@
 [ext_resource type="Script" uid="uid://djoos7okx0swy" path="res://src/music_manager.gd" id="1_5sglc"]
 
 [node name="MusicManager" type="AudioStreamPlayer"]
+bus = &"Music"
 script = ExtResource("1_5sglc")
