@@ -1,7 +1,7 @@
 extends Node
 
 # Define your cursor types
-enum Type { DEFAULT, ATTACK, MOVE, BUILD, HOVER, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, ARROW_DOWN }
+enum Type { DEFAULT, ATTACK, MOVE, BUILD, HOVER, CHOP, MINE, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, ARROW_DOWN }
 
 # Dictionary to map types to their texture files
 # Update these paths to match your project folder!
@@ -11,6 +11,8 @@ var cursor_textures = {
 	Type.MOVE:    preload("res://assets/cursors/kenney_cursor-pack/PNG/Outline/Default/resize_b_cross.png"),
 	Type.BUILD:   preload("res://assets/cursors/kenney_cursor-pack/PNG/Outline/Default/tool_hammer.png"),
 	Type.HOVER:   preload("res://assets/cursors/kenney_cursor-pack/PNG/Outline/Default/hand_point.png"),
+	Type.CHOP:   preload("res://assets/cursors/kenney_cursor-pack/PNG/Outline/Default/tool_axe_single.png"),
+	Type.MINE:   preload("res://assets/cursors/kenney_cursor-pack/PNG/Outline/Default/tool_pickaxe.png"),
 	Type.ARROW_LEFT: preload("res://assets/cursors/kenney_cursor-pack/PNG/Outline/Default/arrow_w.png"),
 	Type.ARROW_RIGHT: preload("res://assets/cursors/kenney_cursor-pack/PNG/Outline/Default/arrow_e.png"),
 	Type.ARROW_UP: preload("res://assets/cursors/kenney_cursor-pack/PNG/Outline/Default/arrow_n.png"),
