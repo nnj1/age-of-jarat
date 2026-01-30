@@ -28,6 +28,7 @@ shader_parameter/default_border_color = Color(0, 0, 0, 1)
 shader_parameter/active_border_color = Color(1, 0, 0, 1)
 shader_parameter/default_border_width = 0.5
 shader_parameter/active_border_width = 0.25
+shader_parameter/glow_intensity = 1.0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_aqvaj"]
 properties/0/path = NodePath(".:position")
@@ -42,7 +43,7 @@ properties/2/replication_mode = 1
 
 [node name="Warrior" type="CharacterBody2D" groups=["units", "warriors"]]
 collision_layer = 2
-collision_mask = 7
+collision_mask = 15
 input_pickable = true
 motion_mode = 1
 script = ExtResource("1_tcob5")

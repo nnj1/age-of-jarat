@@ -1,8 +1,7 @@
 extends TabContainer
 
 func _ready() -> void:
-	# Optional: Automatically grab focus when the scene loads
-	# Or call this when your menu opens
+	# Initial focus
 	grab_focus()
 
 func _gui_input(event: InputEvent) -> void:

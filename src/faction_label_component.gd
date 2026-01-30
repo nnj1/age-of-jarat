@@ -8,8 +8,9 @@ extends Node2D
 func _ready() -> void:
 	
 	# set initial sprite value
-	if not get_parent().autonomous_mode:
-		hide_computer_icon()
+	if get_parent().has_node('WanderComponent'):
+		if not get_parent().autonomous_mode:
+			hide_computer_icon()
 	
 	if show_unit_faction_number:
 		if 'faction' in get_parent():

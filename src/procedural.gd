@@ -132,10 +132,7 @@ func determine_tiles(pos: Vector2i, noise_val: float, noise_val_2: float, noise_
 		# Grass
 		if randf() > 0.70:
 			decorator_layer.set_cell(pos, 0, grass_atlas_coords.pick_random())
-			# if no grass maybe spawn an animal:
-		elif randf() > 0.99:
-			main_game_node.spawn_animal(to_global(ground_layer.map_to_local(pos)))
-			
+
 	else:
 		# Rock Biome (will contain houses and village structures)
 		ground_layer.set_cell(pos, 0, rock_atlas_coords.pick_random())
@@ -161,6 +158,10 @@ func determine_tiles(pos: Vector2i, noise_val: float, noise_val_2: float, noise_
 		# handle minable resources (stone and gold)
 		elif noise_val_3 > -0.4:
 			decorator_layer.set_cell(pos, 0, mining_atlas_coords.pick_random())
+		# or potentially spawn an animal
+		elif randf() > 0.97:			
+			main_game_node.spawn_animal(to_global(ground_layer.map_to_local(pos)))
+
 
 func update_fow_for_all_units() -> void:
 	var units = get_tree().get_nodes_in_group("units")
