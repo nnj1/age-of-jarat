@@ -347,22 +347,23 @@ func update_structure_menu(structure: Structure, swap_to_tab:bool = true):
 	for child in spawn_button_container.get_children():
 		child.queue_free()
 		
-	for unit_name in structure.lore_data.tiers[str(structure.current_tier)].spawnable_units:
-		var spawn_button = Button.new()
-		spawn_button.text = unit_name
-		var icon_texture
-		if GlobalVars.filter_json_objects(GlobalVars.lore.units, 'name', unit_name)[0].sprite:
-			var sprite_atlas_coords = GlobalVars.filter_json_objects(GlobalVars.lore.units, 'name', unit_name)[0].sprite.pick_random()
-			icon_texture = get_cropped_tile_texture(str_to_var('Vector2i' + str(sprite_atlas_coords)))
-		else:
-			icon_texture = preload('res://assets/icons/kenney_game-icons-expansion/Game icons (base)/PNG/White/1x/singleplayer.png')
-		spawn_button.icon = icon_texture
-		spawn_button.icon_alignment = HorizontalAlignment.HORIZONTAL_ALIGNMENT_CENTER
-		spawn_button.vertical_icon_alignment = VerticalAlignment.VERTICAL_ALIGNMENT_TOP
-		spawn_button.expand_icon = true
-		spawn_button.custom_minimum_size = Vector2(75, 75)
-		spawn_button_container.add_child(spawn_button)
-		
+	if 'spawnable_units' in structure.lore_data.tiers[str(structure.current_tier)]:
+		for unit_name in structure.lore_data.tiers[str(structure.current_tier)].spawnable_units:
+			var spawn_button = Button.new()
+			spawn_button.text = unit_name
+			var icon_texture
+			if GlobalVars.filter_json_objects(GlobalVars.lore.units, 'name', unit_name)[0].sprite:
+				var sprite_atlas_coords = GlobalVars.filter_json_objects(GlobalVars.lore.units, 'name', unit_name)[0].sprite.pick_random()
+				icon_texture = get_cropped_tile_texture(str_to_var('Vector2i' + str(sprite_atlas_coords)))
+			else:
+				icon_texture = preload('res://assets/icons/kenney_game-icons-expansion/Game icons (base)/PNG/White/1x/singleplayer.png')
+			spawn_button.icon = icon_texture
+			spawn_button.icon_alignment = HorizontalAlignment.HORIZONTAL_ALIGNMENT_CENTER
+			spawn_button.vertical_icon_alignment = VerticalAlignment.VERTICAL_ALIGNMENT_TOP
+			spawn_button.expand_icon = true
+			spawn_button.custom_minimum_size = Vector2(75, 75)
+			spawn_button_container.add_child(spawn_button)
+			
 	
 	tier_upgrade_text += 'to upgrade.'
 	$UI/TabContainer/Structure/HBoxContainer/VBoxContainer3/RichTextLabel.text = tier_upgrade_text

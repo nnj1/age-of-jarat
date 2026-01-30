@@ -10,6 +10,8 @@ var allies: Array[int]
 
 @onready var current_tier: int = 1
 
+@export var base_modulation = Color(0.75, 0.75, 0.75, 1)
+
 # Variables governing building
 var building_status:bool = true # keeps track of if the unit is still being build
 var done_building:bool = false
@@ -38,7 +40,7 @@ func start_building():
 	$SoundComponent/buildingSound.play()
 	
 func stop_building():
-	self.modulate = Color(1, 1, 1, 1)
+	self.modulate = base_modulation
 	building_status = false
 	unassign_all_builders()
 		
@@ -123,7 +125,7 @@ func toggle_blue_tint(given_status: bool):
 	if given_status:
 		self.modulate = Color(0, 0, 1, 0.9)
 	else:
-		self.modulate = Color(1, 1, 1, 1)
+		self.modulate = base_modulation
 		
 func is_atlas_tile_non_black(atlas_coords: Vector2i, tileset_path: String = 'res://resources/urizen.tres', source_id: int = 0) -> bool:
 	# 1. Load the TileSet resource
