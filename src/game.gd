@@ -59,13 +59,17 @@ func _ready() -> void:
 # material incrementation functions
 func add_wood(amount: int = 1):
 	materials.wood += amount
+	$UI/VBoxContainer/GUIMatDisplay.boost_mat_animation('wood')
 func add_stone(amount: int = 1):
 	materials.stone += amount
+	$UI/VBoxContainer/GUIMatDisplay.boost_mat_animation('stone')
 func add_gold(amount: int = 1):
 	materials.gold += amount
+	$UI/VBoxContainer/GUIMatDisplay.boost_mat_animation('gold')
 func add_food(amount: int = 1):
 	materials.food += amount
-
+	$UI/VBoxContainer/GUIMatDisplay.boost_mat_animation('food')
+	
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
 	
@@ -103,7 +107,7 @@ func update_game_menu():
 	
 func update_material_display():
 	for mat_name in materials.keys():
-		get_node('UI/VBoxContainer/HBoxContainer/' + mat_name).text = str(int(materials[mat_name]))
+		get_node('UI/VBoxContainer/GUIMatDisplay/' + mat_name).text = str(int(materials[mat_name]))
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey:
