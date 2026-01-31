@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" uid="uid://b7p5oo0yqomr6" path="res://src/map_interaction_component.gd" id="1_xqqyq"]
 
-[node name="MapInteractionComponent" type="Node2D"]
+[node name="MapInteractionComponent" type="Node2D" groups=["map_interaction_component"]]
 script = ExtResource("1_xqqyq")

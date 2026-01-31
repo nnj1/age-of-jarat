@@ -34,3 +34,6 @@ func _cycle_tab(direction: int) -> void:
 		if not is_tab_hidden(next_index) and not is_tab_disabled(next_index):
 			current_tab = next_index
 			return
+
+func _on_mouse_entered() -> void:
+	CursorManager.reset_cursor()

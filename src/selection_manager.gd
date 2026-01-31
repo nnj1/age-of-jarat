@@ -26,8 +26,9 @@ func _unhandled_input(event):
 		if event.pressed:
 			dragging = true
 			drag_start = get_global_mouse_position()
-			# Only clear selection if we aren't holding shift
-			if not shift:
+			# Only clear selection if we aren't holding shift or mouse isn't over a cliclkable thing
+			var over_clickable_tile = get_tree().get_first_node_in_group('map_interaction_component').over_left_clickable_tile
+			if not shift and not over_clickable_tile:
 				deselect_all()
 		else:
 			dragging = false

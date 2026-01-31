@@ -515,5 +515,6 @@ current = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_fqmia")
 
+[connection signal="mouse_entered" from="UI/TabContainer" to="UI/TabContainer" method="_on_mouse_entered"]
 [connection signal="item_selected" from="UI/TabContainer/Build/HBoxContainer/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
 [connection signal="pressed" from="UI/TabContainer/Build/HBoxContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
