@@ -62,18 +62,20 @@ func _get_top_tile_at_mouse() -> Dictionary:
 func _on_tile_hover_entered(layer: TileMapLayer, map_coords: Vector2i, atlas_coords: Vector2i):
 	tile_hovered.emit(layer, map_coords, atlas_coords)
 	
-	# Check if the NEW tile is special
-	if atlas_coords in get_parent().trees_atlas_coords:
-		CursorManager.set_cursor(CursorManager.Type.CHOP)
-		over_left_clickable_tile = true
-	elif atlas_coords in get_parent().mining_atlas_coords:
-		CursorManager.set_cursor(CursorManager.Type.MINE)
-		over_left_clickable_tile = true
-	else:
-		# It's a valid tile, but not a special one (e.g., grass/dirt)
-		# We must reset here so the cursor doesn't stay as an AXE
-		CursorManager.reset_cursor()
-		over_left_clickable_tile = false
+	for unit in selection_manager.selected_units:
+		if unit.lore_data.type == 'villager':
+			# Check if the NEW tile is special
+			if atlas_coords in get_parent().trees_atlas_coords:
+				CursorManager.set_cursor(CursorManager.Type.CHOP)
+				over_left_clickable_tile = true
+			elif atlas_coords in get_parent().mining_atlas_coords:
+				CursorManager.set_cursor(CursorManager.Type.MINE)
+				over_left_clickable_tile = true
+			else:
+				# It's a valid tile, but not a special one (e.g., grass/dirt)
+				# We must reset here so the cursor doesn't stay as an AXE
+				CursorManager.reset_cursor()
+				over_left_clickable_tile = false
 
 @warning_ignore("unused_parameter")
 func _on_tile_clicked(layer: TileMapLayer, map_coords: Vector2i, atlas_coords: Vector2i):

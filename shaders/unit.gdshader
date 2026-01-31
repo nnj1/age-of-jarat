@@ -10,8 +10,10 @@ uniform float squash_amount : hint_range(0.0, 0.5) = 0.024;
 uniform float sprite_height = 12.0;
 
 // --- Transparency Logic ---
-uniform float threshold : hint_range(0.0, 1.0) = 0.1;
-uniform float edge_distance : hint_range(0.0, 1.0) = 0.055;
+// This now controls how "pure black" a pixel must be to vanish.
+// Set this to a small value (like 0.1)
+uniform float black_sensitivity : hint_range(0.0, 1.0) = 0.1;
+uniform float edge_distance : hint_range(0.0, 1.0) = 0.05;
 
 // --- Border Controls ---
 uniform bool use_active_state = false;
@@ -25,9 +27,13 @@ uniform float glow_intensity : hint_range(1.0, 10.0) = 1.0;
 float get_shape_alpha(sampler2D tex, vec2 uv, vec2 l_uv) {
     vec4 tex_color = texture(tex, uv);
     float dist = distance(l_uv, vec2(0.5, 0.5));
-    float brightness = (tex_color.r + tex_color.g + tex_color.b) / 3.0;
     
-    if (brightness < threshold && dist > edge_distance) {
+    // NEW LOGIC: Check how far the color is from PURE BLACK
+    // distance(RGB, Black) will be large for Gray/Yellow, but small for Black.
+    float dist_from_black = distance(tex_color.rgb, vec3(0.0));
+    
+    // If it's very close to black AND far from center, kill it.
+    if (dist_from_black < black_sensitivity && dist > edge_distance) {
         return 0.0;
     }
     return tex_color.a;
@@ -35,7 +41,6 @@ float get_shape_alpha(sampler2D tex, vec2 uv, vec2 l_uv) {
 
 void vertex() {
     local_uv = UV;
-    
     float time = (TIME + random_phase) * speed;
     float bounce_cycle = abs(sin(time)); 
     float squash_cycle = cos(time * 2.0); 
@@ -51,29 +56,30 @@ void vertex() {
 }
 
 void fragment() {
-    vec4 color = texture(TEXTURE, UV);
+    vec4 tex_raw = texture(TEXTURE, UV);
     float current_a = get_shape_alpha(TEXTURE, UV, local_uv);
-    color.a = current_a;
+    
+    vec4 b_color = use_active_state ? active_border_color : default_border_color;
+    float b_width = use_active_state ? active_border_width : default_border_width;
+    
+    vec4 final_color = vec4(0.0);
 
-    // Determine color AND width based on the active state
-    vec4 final_border_color = use_active_state ? active_border_color : default_border_color;
-    float final_width = use_active_state ? active_border_width : default_border_width;
-
-    // Border Logic
-    if (final_border_color.a > 0.0 && current_a <= 0.0) {
-        vec2 size = TEXTURE_PIXEL_SIZE * final_width;
+    if (current_a > 0.0) {
+        // Draw the actual sprite (Grays and Yellows will now stay intact)
+        final_color = vec4(tex_raw.rgb, current_a);
+    } else if (b_color.a > 0.0) {
+        // Draw the border
+        vec2 size = TEXTURE_PIXEL_SIZE * b_width;
+        float na = 0.0;
+        na += get_shape_alpha(TEXTURE, UV + vec2(0.0, -size.y), local_uv + vec2(0.0, -size.y));
+        na += get_shape_alpha(TEXTURE, UV + vec2(0.0, size.y), local_uv + vec2(0.0, size.y));
+        na += get_shape_alpha(TEXTURE, UV + vec2(-size.x, 0.0), local_uv + vec2(-size.x, 0.0));
+        na += get_shape_alpha(TEXTURE, UV + vec2(size.x, 0.0), local_uv + vec2(size.x, 0.0));
         
-        float neighbor_a = 0.0;
-        neighbor_a += get_shape_alpha(TEXTURE, UV + vec2(0.0, -size.y), local_uv + vec2(0.0, -size.y));
-        neighbor_a += get_shape_alpha(TEXTURE, UV + vec2(0.0, size.y), local_uv + vec2(0.0, size.y));
-        neighbor_a += get_shape_alpha(TEXTURE, UV + vec2(-size.x, 0.0), local_uv + vec2(-size.x, 0.0));
-        neighbor_a += get_shape_alpha(TEXTURE, UV + vec2(size.x, 0.0), local_uv + vec2(size.x, 0.0));
-        
-        if (neighbor_a > 0.0) {
-            color = final_border_color;
+        if (na > 0.0) {
+            final_color = b_color;
         }
     }
 
-	// Multiply the RGB channels by glow_intensity, but leave Alpha alone
-    COLOR = vec4(color.rgb * glow_intensity, color.a);
+    COLOR = vec4(final_color.rgb * glow_intensity, final_color.a);
 }

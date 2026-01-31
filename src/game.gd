@@ -76,7 +76,7 @@ func _process(delta: float) -> void:
 	
 	# Format the string
 	# %02d ensures leading zeros (e.g., 09 instead of 9)
-	var time_string = "%02d:%02d:%02d" % [datetime.hour, datetime.minute, datetime.second]
+	var time_string = $map/CanvasModulate.get_full_time_string()
 	var date_string = "%04d-%02d-%02d" % [datetime.year, datetime.month, datetime.day]
 	
 	# Update the label text
