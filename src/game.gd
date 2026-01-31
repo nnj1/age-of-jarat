@@ -1,5 +1,8 @@
 extends Node2D
 
+## for optimization
+var already_made_atlas_textures = {}
+
 var materials = {
 	'food': 0,
 	'wood': 0,
@@ -9,6 +12,7 @@ var materials = {
 
 var unit_list: Array[Unit] # contains all the units in faction
 var structure_list: Array[Structure] # contains all the structures in a faction
+var have_a_villager_in_selection:bool = false # self explantory
 
 var alt_held: bool = false # detects if alt key is held
 
@@ -190,9 +194,13 @@ func update_selection_menu(selected_units):
 	# clear the textures in the the grid container
 	for child in $UI/TabContainer/Selection/HBoxContainer/ScrollContainer/GridContainer.get_children():
 		child.queue_free()
-		
+	
+	have_a_villager_in_selection = false
 	# add them back in, which calculating stats
 	for unit in selected_units:
+		if unit.lore_data.type == 'villager':
+			have_a_villager_in_selection = true
+			
 		# 1. Create the TextureRect instance
 		var new_tex_rect = TextureRect.new()
 		# 2. Load and assign the texture
@@ -305,12 +313,17 @@ func update_unit_menu(unit, swap_to_tab:bool = true):
 	ai_toggle.pressed.connect(toggle_ai_unit)
 	
 func get_cropped_tile_texture(atlas_coords: Vector2i) -> AtlasTexture:
+	
+	if str(atlas_coords) in already_made_atlas_textures:
+		return already_made_atlas_textures[str(atlas_coords)]
+	
 	var source = preload('res://resources/urizen.tres').get_source(0) as TileSetAtlasSource
 	
 	if source:
 		var atlas_tex = AtlasTexture.new()
 		atlas_tex.atlas = source.texture
 		atlas_tex.region = source.get_tile_texture_region(atlas_coords)
+		already_made_atlas_textures[str(atlas_coords)] = atlas_tex
 		return atlas_tex
 	return null
 

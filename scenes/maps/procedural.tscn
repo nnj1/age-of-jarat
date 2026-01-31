@@ -24,9 +24,10 @@ shader_parameter/speed = 1.0
 shader_parameter/wave_intensity = 0.01
 shader_parameter/wave_frequency = 0.05
 shader_parameter/distortion_strength = 0.01
-shader_parameter/water_color = Color(0.35925403, 0.612757, 0.962974, 1)
 shader_parameter/water_opacity = 0.9010000427975
 shader_parameter/black_threshold = 0.1
+shader_parameter/glow_power = 5.00000019
+shader_parameter/light_blue_tint = Color(0.40018785, 0.86716837, 1, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ug44p"]
 shader = ExtResource("3_kc3lw")
@@ -47,6 +48,7 @@ stone_noise = SubResource("FastNoiseLite_fs631")
 tile_set = ExtResource("1_guuwn")
 
 [node name="water" type="TileMapLayer" parent="."]
+modulate = Color(0.7554169, 1, 1, 1)
 material = SubResource("ShaderMaterial_cxnnp")
 tile_set = ExtResource("1_guuwn")
 

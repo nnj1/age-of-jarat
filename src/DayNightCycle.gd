@@ -7,7 +7,7 @@ extends CanvasModulate
 
 ## The variable that will be synchronized across the network.
 ## Using a setter (set) ensures the color updates the moment the server sends a new value.
-@export var sync_time: float = 0.0:
+@export var sync_time: float = 0.5:
 	set(value):
 		sync_time = value
 		_update_visuals()

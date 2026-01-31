@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cpyqesdoe3cww"]
+
+[ext_resource type="Script" uid="uid://dwfa3rjsnusvx" path="res://src/popped_tile.gd" id="1_5mos6"]
+
+[node name="PoppedTile" type="Node2D"]
+script = ExtResource("1_5mos6")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
