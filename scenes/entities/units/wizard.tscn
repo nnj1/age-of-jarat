@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://dn6gry3n4rvt8" path="res://scenes/components/WanderComponent.tscn" id="10_882si"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vrepr"]
-radius = 6.0
+radius = 5.5
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_eg14d"]
 resource_local_to_scene = true
@@ -22,7 +22,7 @@ shader_parameter/speed = 5.00000023424012
 shader_parameter/height = 0.0
 shader_parameter/squash_amount = 0.02400000114
 shader_parameter/sprite_height = 12.0
-shader_parameter/threshold = 0.1
+shader_parameter/black_sensitivity = 0.1
 shader_parameter/edge_distance = 0.055
 shader_parameter/use_active_state = false
 shader_parameter/default_border_color = Color(0, 0, 0, 1)

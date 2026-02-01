@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://dn6gry3n4rvt8" path="res://scenes/components/WanderComponent.tscn" id="8_ojcu5"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vrepr"]
-radius = 6.0
+radius = 5.5
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_iy4rk"]
 resource_local_to_scene = true

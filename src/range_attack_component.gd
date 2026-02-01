@@ -73,9 +73,14 @@ func attack() -> void:
 	attack_timer.start()
 
 func _on_body_entered(body: Node2D) -> void:
-	if ((body is CharacterBody2D) or (body is StaticBody2D)) and body != self.get_parent() and not (body.faction in self.get_parent().allies):
-		# TODO: check if the person is a enemy
-		targets_in_range.append(body)
+	if ((body is CharacterBody2D) or (body is StaticBody2D)): # only attacks units and structures
+		if body != self.get_parent(): # don't attack self
+			if not (body.faction in self.get_parent().allies): # don't attack allies
+				# also make sure they aren't in a FOW if they have a wander component
+				if body.has_node('WanderComponent'):
+					if body.get_node('WanderComponent').is_in_fog:
+							return
+				targets_in_range.append(body)
 
 func _on_body_exited(body: Node2D) -> void:
 	targets_in_range.erase(body)
