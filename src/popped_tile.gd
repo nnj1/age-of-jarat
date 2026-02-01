@@ -21,9 +21,10 @@ var is_collecting: bool = false
 var material_type: String
 var material_amount: int
 
+
 @onready var main_game_node = get_tree().get_root().get_node('Game')
 
-func prepare(tile_texture: Texture2D, given_material_type: String, given_material_amount: int = 1) -> void:
+func prepare(given_material_type: String, given_material_amount: int, tile_texture: Texture2D) -> void:
 	var s = $Sprite2D
 	s.texture = tile_texture
 	# Start at zero for the pop effect
