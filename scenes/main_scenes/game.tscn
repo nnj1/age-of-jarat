@@ -75,6 +75,7 @@ offset_right = -490.0
 grow_horizontal = 2
 grow_vertical = 0
 focus_mode = 2
+mouse_filter = 0
 theme_override_font_sizes/font_size = 32
 current_tab = 4
 drag_to_rearrange_enabled = true

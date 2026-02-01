@@ -51,10 +51,10 @@ func _ready() -> void:
 	set_tab_hidden_by_name($UI/TabContainer, 'Structure', true)
 
 	# Spawn the first four villagers!
-	spawn_villager(Vector2(0,0))
-	spawn_villager(Vector2(20,0))
-	spawn_villager(Vector2(0,20))
-	spawn_villager(Vector2(20,20))
+	spawn_villager($map/procedural.get_optimal_villager_start_position())
+	spawn_villager($map/procedural.get_optimal_villager_start_position())
+	spawn_villager($map/procedural.get_optimal_villager_start_position())
+	spawn_villager($map/procedural.get_optimal_villager_start_position())
 	
 # material incrementation functions
 func add_wood(amount: int = 1):
@@ -110,6 +110,9 @@ func update_material_display():
 		get_node('UI/VBoxContainer/GUIMatDisplay/' + mat_name).text = str(int(materials[mat_name]))
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed('next_idle_unit'):
+		select_next_idle_unit()
+		
 	if event is InputEventKey:
 		if event.pressed and event.keycode == KEY_V:
 			spawn_villager(get_global_mouse_position())
@@ -132,6 +135,17 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if prespawned_structure:
 			actually_spawn_structure()
+
+func select_next_idle_unit():
+	var shuffled_unit_list = unit_list.duplicate()
+	shuffled_unit_list.shuffle()
+	for unit in shuffled_unit_list:
+		if unit:
+			if not unit.autonomous_mode and not unit in $SelectionManager.selected_units:
+				$SelectionManager.deselect_all()
+				$SelectionManager.handle_single_selection(unit.global_position, false)
+				$SelectionManager.center_camera_on_selection()
+				break
 			
 func spawn_villager(spawn_pos: Vector2):
 	var villager = preload("res://scenes/entities/units/villager.tscn").instantiate()

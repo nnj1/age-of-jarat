@@ -63,6 +63,9 @@ func _unhandled_input(event):
 	if event is InputEventKey and event.pressed:
 		# Deselect all on Escape
 		if event.keycode == KEY_ESCAPE:
+			# open the option menu if no selection
+			if not selected_units:
+				main_game_node.get_node('UI/TabContainer/Options').show()
 			deselect_all()
 			
 	if event is InputEventKey and event.pressed:

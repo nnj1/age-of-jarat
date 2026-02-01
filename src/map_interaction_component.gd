@@ -67,6 +67,20 @@ func _on_tile_hover_entered(layer: TileMapLayer, map_coords: Vector2i, atlas_coo
 	tile_hovered.emit(layer, map_coords, atlas_coords)
 	
 	if main_game_node.have_a_villager_in_selection:
+		# NOW CHECK IF THE THE MAP COORDINATES ARE CLOSE ENOUGH TO A VILLAGER
+		var resource_global_position:Vector2 = to_global(layer.map_to_local(map_coords))
+		var close_enough: bool = false
+		
+		for unit in selection_manager.selected_units:
+			if unit:
+				if resource_global_position.distance_squared_to(unit.global_position) < 2500:
+					close_enough  = true
+			
+		if not close_enough:
+			CursorManager.reset_cursor()
+			over_left_clickable_tile = false
+			return
+			
 		# Check if the NEW tile is special
 		if atlas_coords in get_parent().trees_atlas_coords:
 			CursorManager.set_cursor(CursorManager.Type.CHOP)

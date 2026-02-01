@@ -45,11 +45,58 @@ var road_mask = {}
 var update_timer: float = 0.0
 var update_interval: float = 0.15 # Update ~6 times per second (good for performance)
 
+# for determining ideal spawn locations for villagers
+var valid_villager_start_positions_global: Array[Vector2]
+
 func _process(delta: float) -> void:
 	update_timer += delta
 	if update_timer >= update_interval:
 		update_timer = 0.0
 		update_fow_for_all_units()
+		
+## useful function for starting the game and getting ideal villager starting positions
+func get_optimal_villager_start_position() -> Vector2:
+	return get_random_central_point(valid_villager_start_positions_global)
+	
+## Picks a random Vector2 from an array, weighted by proximity to the cluster's center.
+func get_random_central_point(points: Array[Vector2]) -> Vector2:
+	if points.is_empty():
+		push_warning("Attempted to pick from an empty array.")
+		return Vector2.ZERO
+
+	# 1. Calculate the arithmetic mean (the center point)
+	var center := Vector2.ZERO
+	for p in points:
+		center += p
+	center /= points.size()
+
+	# 2. Assign weights based on distance
+	# Points closer to 'center' get a higher weight.
+	var weights: Array[float] = []
+	var total_weight: float = 0.0
+	
+	for p in points:
+		var distance = p.distance_to(center)
+		
+		# Inverse distance weighting:
+		# Adding 1.0 prevents division by zero if a point is exactly at the center.
+		# Squaring the result (pow) makes the 'gravity' of the center much stronger.
+		var w = 1.0 / (distance + 1.0)
+		var strength = pow(w, 3) 
+		
+		weights.append(strength)
+		total_weight += strength
+
+	# 3. Perform a weighted random draw
+	var roll = randf_range(0, total_weight)
+	var cumulative_sum = 0.0
+	
+	for i in range(points.size()):
+		cumulative_sum += weights[i]
+		if roll <= cumulative_sum:
+			return points[i]
+			
+	return points[0]
 
 func _ready() -> void:
 	
@@ -66,7 +113,6 @@ func _ready() -> void:
 	vegetation_noise.seed = randi() + 2
 	#noise.frequency = noise_frequency
 	#noise.noise_type = FastNoiseLite.TYPE_PERLIN # Organic, smooth transitions
-	
 	
 	generate_world()
 	
@@ -161,6 +207,8 @@ func determine_tiles(pos: Vector2i, noise_val: float, noise_val_2: float, noise_
 		# or potentially spawn an animal
 		elif randf() > 0.97:			
 			main_game_node.spawn_animal(to_global(ground_layer.map_to_local(pos)))
+		else:
+			valid_villager_start_positions_global.append(to_global(ground_layer.map_to_local(pos)))
 
 
 func update_fow_for_all_units() -> void:
