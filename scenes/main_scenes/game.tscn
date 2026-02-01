@@ -521,6 +521,7 @@ spawn_path = NodePath("..")
 spawn_path = NodePath("..")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(-5, -5)
 zoom = Vector2(4, 4)
 position_smoothing_enabled = true
 script = ExtResource("3_ifh15")
