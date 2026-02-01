@@ -119,7 +119,7 @@ func play_damage_modulate_animation():
 			# Transition to Red
 			tween.tween_property(sprite, "modulate", Color.RED, 0.1).set_trans(Tween.TRANS_SINE)
 			# Transition back to White (Normal)
-			tween.tween_property(sprite, "modulate", Color.WHITE, 0.1).set_trans(Tween.TRANS_SINE)
+			tween.tween_property(sprite, "modulate", base_modulation, 0.1).set_trans(Tween.TRANS_SINE)
 
 func toggle_blue_tint(given_status: bool):
 	if given_status:
