@@ -22,6 +22,8 @@ func _process(delta: float) -> void:
 		# actual logic for spawning units here
 		if unit_spawn_queue:
 			spawn_queue_count_label.text = str(int(unit_spawn_queue.size()))
+			$loading.show()
+			spawn_queue_count_label.show()
 			var unit_lore_data = unit_spawn_queue[0]
 			wait_duration = unit_lore_data.spawn_speed
 			if time_passed_for_unit_spawning >= wait_duration:
@@ -30,7 +32,10 @@ func _process(delta: float) -> void:
 				time_passed_for_unit_spawning = 0.0
 				wait_duration = 0.0
 			time_passed_for_unit_spawning += delta
-		
+		else:
+			$loading.hide()
+			spawn_queue_count_label.hide()
+			
 		# update the progress timer
 		if wait_duration != 0.0:
 			loading_material_shader.set_shader_parameter('progress', time_passed_for_unit_spawning/wait_duration)
