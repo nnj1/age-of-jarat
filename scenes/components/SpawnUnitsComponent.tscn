@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://m513ufuqn6hy"]
+
+[ext_resource type="Script" uid="uid://crcx4kfxmsnum" path="res://src/spawn_units_component.gd" id="1_ai6o3"]
+
+[node name="SpawnUnitsComponent" type="Node2D"]
+script = ExtResource("1_ai6o3")
+
+[node name="spawn_position_marker" type="Marker2D" parent="."]
+position = Vector2(0, 42)

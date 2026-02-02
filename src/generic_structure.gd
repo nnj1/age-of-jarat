@@ -12,12 +12,12 @@ var allies: Array[int]
 
 @export var base_modulation = Color(0.75, 0.75, 0.75, 1)
 
-# Variables governing building
+## Variables governing building this structure
 var building_status:bool = true # keeps track of if the unit is still being build
-var done_building:bool = false
-var actually_spawned: bool = false
+var done_building:bool = false # one the building is done
+var actually_spawned: bool = false # if the unit is placed and the building has started
 
-var cooldown = 10.0 # base cooldown time
+var cooldown = 10.0 # base cooldown time, will be modified to be the spawn speed of the structure
 var time_passed = 0.0
 var speed_multiplier = 1.0 # Change this to 2.0, 5.0, etc. Will be modified by builders
 var assigned_builders = []  # contains the Units that can build the structure
@@ -90,6 +90,7 @@ func get_timer_percentage() -> float:
 	return time_passed / cooldown
 
 func _process(delta):
+	
 	if actually_spawned:
 		# adjust the speed multiplier based on units assigned to build the structure
 		speed_multiplier = 1.0
@@ -191,7 +192,7 @@ func assign_units(given_unit_list: Array):
 				assigned_builders.append(unit)
 
 func _on_mouse_entered() -> void:
-	CursorManager.set_cursor(CursorManager.Type.HOVER)
+	CursorManager.set_cursor(CursorManager.Type.STRUCTURE_HOVER)
 
 func _on_mouse_exited() -> void:
 	CursorManager.reset_cursor()

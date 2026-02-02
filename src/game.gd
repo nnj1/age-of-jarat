@@ -147,30 +147,30 @@ func select_next_idle_unit():
 				$SelectionManager.center_camera_on_selection()
 				break
 			
-func spawn_villager(spawn_pos: Vector2):
+func spawn_villager(spawn_pos: Vector2, unit_lore_data = null):
 	var villager = preload("res://scenes/entities/units/villager.tscn").instantiate()
-	villager.prepare(1, 0 if not alt_held else 1, null, 'villager')
+	villager.prepare(1, 0 if not alt_held else 1, unit_lore_data, 'villager')
 	villager.position = spawn_pos
 	$entities/units.add_child(villager, true)
 	unit_list.append(villager)
 	
-func spawn_warrior(spawn_pos: Vector2):
+func spawn_warrior(spawn_pos: Vector2, unit_lore_data = null):
 	var warrior = preload("res://scenes/entities/units/warrior.tscn").instantiate()
-	warrior.prepare(1, 0 if not alt_held else 1, null, 'warrior')
+	warrior.prepare(1, 0 if not alt_held else 1, unit_lore_data, 'warrior')
 	warrior.position = spawn_pos
 	$entities/units.add_child(warrior, true)
 	unit_list.append(warrior)
 
-func spawn_archer(spawn_pos: Vector2):
+func spawn_archer(spawn_pos: Vector2, unit_lore_data = null):
 	var archer = preload("res://scenes/entities/units/archer.tscn").instantiate()
-	archer.prepare(1, 0 if not alt_held else 1, null, 'archer')
+	archer.prepare(1, 0 if not alt_held else 1, unit_lore_data, 'archer')
 	archer.position = spawn_pos
 	$entities/units.add_child(archer, true)
 	unit_list.append(archer)
 	
-func spawn_wizard(spawn_pos: Vector2):
+func spawn_wizard(spawn_pos: Vector2, unit_lore_data = null):
 	var wizard = preload("res://scenes/entities/units/wizard.tscn").instantiate()
-	wizard.prepare(1, 0 if not alt_held else 1, null, 'wizard')
+	wizard.prepare(1, 0 if not alt_held else 1, unit_lore_data, 'wizard')
 	wizard.position = spawn_pos
 	$entities/units.add_child(wizard, true)
 	unit_list.append(wizard)
@@ -398,10 +398,6 @@ func update_structure_menu(structure: Structure, swap_to_tab:bool = true):
 	$UI/TabContainer/Structure/HBoxContainer/VBoxContainer/RichTextLabel.text = structure.lore_data.desc
 	$UI/TabContainer/Structure/HBoxContainer/VBoxContainer3/Label.text = 'Tier ' + str(structure.current_tier)
 	
-	# display tier upgrade info
-	var tier_upgrade_text:String = 'Needs:\n'
-	var _next_tier = clampi(structure.current_tier + 1, 1, 3) # there are only 3 tiers 
-	
 	# update the spawnable units menu
 	var spawn_button_container = $UI/TabContainer/Structure/HBoxContainer/VBoxContainer2/ScrollContainer/GridContainer
 	for child in spawn_button_container.get_children():
@@ -422,9 +418,22 @@ func update_structure_menu(structure: Structure, swap_to_tab:bool = true):
 			spawn_button.vertical_icon_alignment = VerticalAlignment.VERTICAL_ALIGNMENT_TOP
 			spawn_button.expand_icon = true
 			spawn_button.custom_minimum_size = Vector2(75, 75)
+			
+			# set the button to add to spawn queue when pressed
+			var add_unit_to_queue = func():
+				if structure.has_node('SpawnUnitsComponent'):
+					structure.get_node('SpawnUnitsComponent').add_new_unit_to_queue(unit_name)
+			spawn_button.pressed.connect(add_unit_to_queue)
+			
 			spawn_button_container.add_child(spawn_button)
 			
-	
+	# display tier upgrade info
+	var tier_upgrade_text:String = 'Needs:\n'
+	var _next_tier = clampi(structure.current_tier + 1, 1, 3) # there are only 3 tiers 
+	var upgrade_cost = structure.lore_data.tiers[str(int(structure.current_tier))].upgrade_cost
+	for key in upgrade_cost:
+		var mat_type = key
+		tier_upgrade_text += mat_type + ' ' + str(int(upgrade_cost[key])) + '\n'
 	tier_upgrade_text += 'to upgrade.'
 	$UI/TabContainer/Structure/HBoxContainer/VBoxContainer3/RichTextLabel.text = tier_upgrade_text
 	

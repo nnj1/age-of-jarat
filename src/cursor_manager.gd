@@ -1,7 +1,7 @@
 extends Node
 
 # Define your cursor types
-enum Type { DEFAULT, ATTACK, MOVE, BUILD, HOVER, CHOP, MINE, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, ARROW_DOWN, HARVEST }
+enum Type { DEFAULT, ATTACK, MOVE, BUILD, HOVER, CHOP, MINE, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, ARROW_DOWN, HARVEST, STRUCTURE_HOVER }
 
 # Dictionary to map types to their texture files
 # Update these paths to match your project folder!
@@ -17,8 +17,8 @@ var cursor_textures = {
 	Type.ARROW_RIGHT: preload("res://assets/cursors/kenney_cursor-pack/PNG/Outline/Default/arrow_e.png"),
 	Type.ARROW_UP: preload("res://assets/cursors/kenney_cursor-pack/PNG/Outline/Default/arrow_n.png"),
 	Type.ARROW_DOWN: preload("res://assets/cursors/kenney_cursor-pack/PNG/Outline/Default/arrow_s.png"),
-	Type.HARVEST: preload("res://assets/cursors/kenney_cursor-pack/PNG/Basic/Default/tool_hoe.png")
-	
+	Type.HARVEST: preload("res://assets/cursors/kenney_cursor-pack/PNG/Basic/Default/tool_hoe.png"),
+	Type.STRUCTURE_HOVER: preload("res://assets/cursors/kenney_cursor-pack/Vector/Basic/door_enter.svg")
 }
 
 func _ready():
