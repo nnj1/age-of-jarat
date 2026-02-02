@@ -1,9 +1,36 @@
-[gd_scene load_steps=2 format=3 uid="uid://m513ufuqn6hy"]
+[gd_scene load_steps=4 format=3 uid="uid://m513ufuqn6hy"]
 
 [ext_resource type="Script" uid="uid://crcx4kfxmsnum" path="res://src/spawn_units_component.gd" id="1_ai6o3"]
+[ext_resource type="Shader" uid="uid://baih854d4q36i" path="res://shaders/loadingspinner.gdshader" id="2_7kirg"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0isj0"]
+resource_local_to_scene = true
+shader = ExtResource("2_7kirg")
+shader_parameter/progress = 0.0
+shader_parameter/thickness = 0.0950000045125
+shader_parameter/radius = 0.2000000095
+shader_parameter/color = Color(0, 1, 0, 1)
 
 [node name="SpawnUnitsComponent" type="Node2D"]
 script = ExtResource("1_ai6o3")
 
 [node name="spawn_position_marker" type="Marker2D" parent="."]
 position = Vector2(0, 42)
+
+[node name="loading" type="ColorRect" parent="."]
+z_index = 3
+material = SubResource("ShaderMaterial_0isj0")
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+mouse_filter = 1
+
+[node name="spawn_queue_count_label" type="Label" parent="."]
+z_index = 4
+offset_left = -8.0
+offset_top = -7.0
+offset_right = 8.0
+offset_bottom = 7.0
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -70,6 +70,7 @@ func _get_top_tile_at_mouse() -> Dictionary:
 ## Specific logic for when the mouse enters a new tile
 func _on_tile_hover_entered(layer: TileMapLayer, map_coords: Vector2i, atlas_coords: Vector2i):
 	if main_game_node.prespawned_structure:
+		print('you have a presawn')
 		return
 		
 	tile_hovered.emit(layer, map_coords, atlas_coords)

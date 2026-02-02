@@ -6,8 +6,11 @@ extends Node2D
 var unit_spawn_queue: Array[Dictionary]
 var max_unit_spawn_queue_size: int = 5
 @onready var spawn_position_marker = $spawn_position_marker
+@onready var spawn_queue_count_label = $spawn_queue_count_label
 var wait_duration: float = 0.0
 var time_passed_for_unit_spawning: float = 0.0
+
+@onready var loading_material_shader = $loading.material
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -18,6 +21,7 @@ func _process(delta: float) -> void:
 	if get_parent().done_building:
 		# actual logic for spawning units here
 		if unit_spawn_queue:
+			spawn_queue_count_label.text = str(int(unit_spawn_queue.size()))
 			var unit_lore_data = unit_spawn_queue[0]
 			wait_duration = unit_lore_data.spawn_speed
 			if time_passed_for_unit_spawning >= wait_duration:
@@ -26,6 +30,10 @@ func _process(delta: float) -> void:
 				time_passed_for_unit_spawning = 0.0
 				wait_duration = 0.0
 			time_passed_for_unit_spawning += delta
+		
+		# update the progress timer
+		if wait_duration != 0.0:
+			loading_material_shader.set_shader_parameter('progress', time_passed_for_unit_spawning/wait_duration)
 		
 
 ## stuff regarding unit spawning
