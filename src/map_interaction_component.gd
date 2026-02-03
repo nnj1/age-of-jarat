@@ -143,7 +143,8 @@ func try_to_pop_tile(layer: TileMapLayer, map_coords: Vector2i, atlas_coords: Ve
 		material_type = 'food'
 			
 	if material_type:
-		if main_game_node.have_a_villager_in_selection:
+		# NO NEED TO HAVE A VILLAGER IN SELECTION, SINCE THIS FUNCTION WILL ONLY BE CALLED BY WANDER COMPOENENT
+		#if main_game_node.have_a_villager_in_selection:
 			# delete the tile
 			layer.set_cell(map_coords, 0, Vector2i(-1,-1))
 			# spawn a version of the tile as a PoppedTile
