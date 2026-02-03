@@ -64,6 +64,7 @@ tile_set = ExtResource("1_guuwn")
 modulate = Color(0.6337567, 0.6337568, 0.6337567, 1)
 material = SubResource("ShaderMaterial_ug44p")
 tile_set = ExtResource("1_guuwn")
+physics_quadrant_size = 1
 
 [node name="fow" type="TileMapLayer" parent="."]
 z_index = 1

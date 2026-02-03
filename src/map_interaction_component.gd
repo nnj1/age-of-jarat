@@ -135,7 +135,6 @@ func try_to_pop_tile(layer: TileMapLayer, map_coords: Vector2i, atlas_coords: Ve
 	var material_type: String
 	if atlas_coords in get_parent().trees_atlas_coords:
 		material_type = 'wood'
-		
 	elif atlas_coords == Vector2i(15,34):
 		material_type = 'stone'
 	elif atlas_coords == Vector2i(19,34):
@@ -151,7 +150,7 @@ func try_to_pop_tile(layer: TileMapLayer, map_coords: Vector2i, atlas_coords: Ve
 			var popped_tile = preload('res://scenes/entities/objects/popped_tile.tscn').instantiate()
 			popped_tile.prepare(material_type, 1, default_material_textures[material_type])
 			popped_tile.position = to_global(layer.map_to_local(map_coords))
-			main_game_node.get_node('entities/objects').add_child(popped_tile, true)
+			main_game_node.get_node('entities/objects').call_deferred('add_child', popped_tile, true)
 
 ## Specific logic for when the mouse leaves all tiles/layers
 func _on_tile_hover_exited():

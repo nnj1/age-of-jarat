@@ -24,6 +24,7 @@ var current_state: State = State.IDLE
 @onready var state_timer: Timer = $StateTimer
 @onready var think_timer: Timer = $ThinkTimer
 @onready var sensor_area: Area2D = $SensorArea
+@onready var gathering_sensor_area: Area2D = $GatheringSensorArea
 @onready var state_label: Label = $StateLabel
 
 var parent_unit: Unit
@@ -83,7 +84,7 @@ func _ready():
 	
 	sensor_area.body_entered.connect(_on_body_entered)
 	sensor_area.body_exited.connect(_on_body_exited)
-	sensor_area.body_shape_entered.connect(_on_body_shape_entered)
+	gathering_sensor_area.body_shape_entered.connect(_on_body_shape_entered)
 	
 	if enabled and not (is_in_fog and disable_in_fog):
 		think_timer.start()
@@ -175,7 +176,23 @@ func _on_state_timer_timeout():
 					_change_state(State.GATHERING)
 					return
 			_do_wander()
-		State.GATHERING, State.FRIGHTENED:
+		State.GATHERING:
+			if is_instance_valid(target_resource) and target_resource.has_meta("is_tile"):
+				var map = main_game_node.get_node('map/procedural')
+				var interaction = map.get_node('MapInteractionComponent')
+				
+				# do the pop before changing state back to RETURNING
+				interaction.try_to_pop_tile(
+					target_resource.get_meta("layer"), 
+					target_resource.get_meta("coords"), 
+					target_resource.get_meta("atlas_coords")
+				)
+				
+				# Remove the dummy so we don't try to gather it again
+				target_resource.queue_free()
+				target_resource = null
+			_change_state(State.RETURNING)
+		State.FRIGHTENED:
 			_change_state(State.RETURNING)
 
 func _on_body_entered(body):
@@ -186,19 +203,47 @@ func _on_body_entered(body):
 		threat = body
 		_evaluate_threat_by_stance()
 		
+## CODE FOR GATHERING SENSOR 
 func _on_body_shape_entered(body_rid: RID, body: Node2D, _body_shape_index: int, _local_shape_index: int):
+	# 1. EXIT if the brain is disabled (Manual Mode)
+	if not enabled: 
+		return
+	
+	# 2. EXIT if we are in fog and performance mode is on
+	if is_in_fog and disable_in_fog:
+		return
+
+	# 4. TileMapLayer Detection
 	if get_parent().lore_data.type == 'villager':
 		if body is TileMapLayer:
 			# This function asks the TileMap: "Which cell matches this physics RID?"
 			var coords = body.get_coords_for_body_rid(body_rid)
 			var atlas_coords = body.get_cell_atlas_coords(coords)
 			var map = main_game_node.get_node('map/procedural')
-			if atlas_coords in (map.trees_atlas_coords + map.crop_atlas_coords + [Vector2i(19,34), Vector2i(15,34)]):
-				# We found a tile! 
-				# Note: Since tiles aren't Nodes, you'll need to handle 'target_resource' 
-				# differently if you want to 'gather' from a static map.
-				print("Found a resource tile at: ", coords)
+			var all_resources = map.trees_atlas_coords + map.crop_atlas_coords + [Vector2i(19,34), Vector2i(15,34)]
+			if atlas_coords in all_resources:
+				# We found a tile resource!
+				_handle_tile_resource_found(body, coords)
 
+func _handle_tile_resource_found(layer: TileMapLayer, coords: Vector2i):
+	var tile_pos = layer.to_global(layer.map_to_local(coords))
+	var atlas_coords = layer.get_cell_atlas_coords(coords)
+	
+	var dummy = Marker2D.new()
+	dummy.global_position = tile_pos
+	dummy.add_to_group("Resources")
+	
+	# Store the specific tile info so we can use it later
+	dummy.set_meta("layer", layer)
+	dummy.set_meta("coords", coords)
+	dummy.set_meta("atlas_coords", atlas_coords)
+	dummy.set_meta("is_tile", true) # Flag to distinguish from regular Node resources
+	
+	get_tree().current_scene.add_child(dummy)
+	target_resource = dummy
+	parent_unit.set_move_target(tile_pos)
+	_change_state(State.GATHERING)
+	
 func _evaluate_threat_by_stance():
 	# If in fog, we don't react to threats automatically
 	if is_in_fog and disable_in_fog: return
@@ -242,6 +287,12 @@ func _find_best_resource():
 func _start_collecting():
 	parent_unit.is_moving = false
 	parent_unit.stop_jumping()
+	# Check if this dummy represents a tile
+	if is_instance_valid(target_resource) and target_resource.has_meta("is_tile"):
+		#var map = main_game_node.get_node('map/procedural')
+		#map.get_node('MapInteractionComponent').try_to_pop_tile(target_resource.get_meta("layer"), target_resource.get_meta("coords"), target_resource.get_meta("atlas_coords"))
+		# could do first pop here
+		pass
 	state_timer.start(collection_time)
 
 func _do_wander():
