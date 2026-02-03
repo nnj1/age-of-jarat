@@ -1,5 +1,7 @@
 extends Node2D
 
+@onready var main_game_node = get_tree().get_root().get_node('Game')
+
 enum State { IDLE, WANDER, AGGRO, FRIGHTENED, GATHERING, RETURNING }
 enum Stance { PASSIVE, DEFENSIVE, AGGRESSIVE }
 
@@ -81,6 +83,7 @@ func _ready():
 	
 	sensor_area.body_entered.connect(_on_body_entered)
 	sensor_area.body_exited.connect(_on_body_exited)
+	sensor_area.body_shape_entered.connect(_on_body_shape_entered)
 	
 	if enabled and not (is_in_fog and disable_in_fog):
 		think_timer.start()
@@ -182,6 +185,19 @@ func _on_body_entered(body):
 	elif ((body is Unit) or (body is Structure)) and not body.faction in parent_unit.allies and not body.faction == -1:
 		threat = body
 		_evaluate_threat_by_stance()
+		
+func _on_body_shape_entered(body_rid: RID, body: Node2D, _body_shape_index: int, _local_shape_index: int):
+	if get_parent().lore_data.type == 'villager':
+		if body is TileMapLayer:
+			# This function asks the TileMap: "Which cell matches this physics RID?"
+			var coords = body.get_coords_for_body_rid(body_rid)
+			var atlas_coords = body.get_cell_atlas_coords(coords)
+			var map = main_game_node.get_node('map/procedural')
+			if atlas_coords in (map.trees_atlas_coords + map.crop_atlas_coords + [Vector2i(19,34), Vector2i(15,34)]):
+				# We found a tile! 
+				# Note: Since tiles aren't Nodes, you'll need to handle 'target_resource' 
+				# differently if you want to 'gather' from a static map.
+				print("Found a resource tile at: ", coords)
 
 func _evaluate_threat_by_stance():
 	# If in fog, we don't react to threats automatically

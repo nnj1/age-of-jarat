@@ -130,6 +130,28 @@ func _on_tile_clicked(layer: TileMapLayer, map_coords: Vector2i, atlas_coords: V
 			popped_tile.position = to_global(layer.map_to_local(map_coords))
 			main_game_node.get_node('entities/objects').add_child(popped_tile, true)
 	
+func try_to_pop_tile(layer: TileMapLayer, map_coords: Vector2i, atlas_coords: Vector2i):
+	# Check if the NEW tile is special and poppable
+	var material_type: String
+	if atlas_coords in get_parent().trees_atlas_coords:
+		material_type = 'wood'
+		
+	elif atlas_coords == Vector2i(15,34):
+		material_type = 'stone'
+	elif atlas_coords == Vector2i(19,34):
+		material_type = 'gold'
+	elif atlas_coords in get_parent().crop_atlas_coords:
+		material_type = 'food'
+			
+	if material_type:
+		if main_game_node.have_a_villager_in_selection:
+			# delete the tile
+			layer.set_cell(map_coords, 0, Vector2i(-1,-1))
+			# spawn a version of the tile as a PoppedTile
+			var popped_tile = preload('res://scenes/entities/objects/popped_tile.tscn').instantiate()
+			popped_tile.prepare(material_type, 1, default_material_textures[material_type])
+			popped_tile.position = to_global(layer.map_to_local(map_coords))
+			main_game_node.get_node('entities/objects').add_child(popped_tile, true)
 
 ## Specific logic for when the mouse leaves all tiles/layers
 func _on_tile_hover_exited():

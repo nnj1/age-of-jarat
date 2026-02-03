@@ -245,11 +245,13 @@ func update_selection_menu(selected_units):
 	
 	var turn_ai_off_for_units = func():
 		for unit in selected_units:
-			unit.set_autonomous_mode(false)
+			if unit:
+				unit.set_autonomous_mode(false)
 		
 	var turn_ai_on_for_units = func():
 		for unit in selected_units:
-			unit.set_autonomous_mode(true)
+			if unit:
+				unit.set_autonomous_mode(true)
 			
 	# Connect signal to button after clearing prior signals
 	for connection in ai_on_button.get_signal_connection_list("pressed"):
