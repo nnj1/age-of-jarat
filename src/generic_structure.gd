@@ -25,6 +25,8 @@ var assigned_units = []  # contains the Units that are assigned to the structure
 
 @onready var selection_visual = $SelectionCircle # A Sprite2D child used for feedback
 
+signal structure_destroyed
+
 # sets the authority and faction of the unit
 func prepare(spawning_player_id: int = 1, given_faction:int = randi_range(0, 1), given_lore_data = GlobalVars.lore.structures.pick_random()):
 	set_multiplayer_authority(spawning_player_id)
@@ -83,6 +85,7 @@ func _ready():
 
 func on_death():
 	unassign_all_builders()
+	structure_destroyed.emit(self)
 	queue_free()
 	
 func get_timer_percentage() -> float:

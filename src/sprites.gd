@@ -36,3 +36,9 @@ func update_collision_to_layer() -> void:
 	
 	collision_shape.shape = shape
 	collision_shape.position = pixel_center
+
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
+	if body is Unit:
+		if body.has_node('HealthComponent'):
+			body.get_node('HealthComponent').take_damage(10)

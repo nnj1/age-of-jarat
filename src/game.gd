@@ -18,7 +18,7 @@ var alt_held: bool = false # detects if alt key is held
 
 var prespawned_structure:Structure # for drag and drop mechanic
 
-## FOR DEBUG MENU
+## FOR BUILD MENU
 @onready var option_button = $UI/TabContainer/Build/HBoxContainer/VBoxContainer/OptionButton
 
 var time_passed: float = 0.0
@@ -386,8 +386,15 @@ func actually_spawn_structure():
 		prespawned_structure.start_building()
 		prespawned_structure.actually_spawned = true
 		structure_list.append(prespawned_structure)
+		prespawned_structure.structure_destroyed.connect(on_structure_destroyed)
 		prespawned_structure = null
 		CursorManager.reset_cursor()
+		
+func on_structure_destroyed(destroyed_structure: Structure):
+	# update the build option button and stuff, so requirements are correct now that a structure is deleted
+	structure_list.erase(destroyed_structure)
+	_on_option_button_item_selected(option_button.get_selected_id())
+	
 
 func update_structure_menu(structure: Structure, swap_to_tab:bool = true):
 	# SHOW THE TAB
