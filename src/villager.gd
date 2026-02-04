@@ -10,6 +10,8 @@ var sprite_atlas_coords_corners = [
 	Vector2i(200,32)
 ]
 
+var spawning_player_id: int
+
 @export var speed: float = 25.0
 var target_position: Vector2 = Vector2.ZERO
 var is_moving: bool = false
@@ -46,10 +48,10 @@ var map_node = null
 
 @onready var selection_visual = $SelectionCircle # A Sprite2D child used for feedback
 
-# sets the authority and faction of the unit
+# constructor
 # Change the signature to default to null
-func prepare(spawning_player_id: int = 1, given_faction: int = -2, given_lore_data = null, given_unit_type = null):
-	set_multiplayer_authority(spawning_player_id)
+func prepare(given_spawning_player_id: int = 1, given_faction: int = -2, given_lore_data = null, given_unit_type = null):
+	spawning_player_id = given_spawning_player_id
 	
 	# Handle faction default
 	if given_faction == -2:
@@ -131,6 +133,10 @@ func prepare(spawning_player_id: int = 1, given_faction: int = -2, given_lore_da
 	# scale the unit accordingly:
 	if 'scale' in lore_data:
 		self.scale *= float(lore_data.scale)
+		
+	# sets the authority and faction of the unit	
+func _enter_tree() -> void:
+	set_multiplayer_authority(spawning_player_id)
 	
 func _ready():
 	if not is_multiplayer_authority(): return

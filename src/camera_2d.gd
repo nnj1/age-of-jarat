@@ -19,6 +19,18 @@ var _target_zoom: float = 1.0
 var _is_dragging: bool = false
 var _is_edge_panning: bool = false
 
+var _mouse_inside_window: bool = true
+
+func _notification(what):
+	match what:
+		NOTIFICATION_WM_MOUSE_EXIT:
+			_mouse_inside_window = false
+			# Reset cursor and panning state immediately
+			_is_edge_panning = false
+			CursorManager.reset_cursor()
+		NOTIFICATION_WM_MOUSE_ENTER:
+			_mouse_inside_window = true
+
 func _ready():
 	_target_zoom = zoom.x
 
@@ -56,7 +68,7 @@ func _process(delta: float):
 	input_dir.y = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
 	
 	# --- EDGE PANNING & CURSOR LOGIC ---
-	if edge_pan_enabled and not _is_dragging and not is_over_gui:
+	if edge_pan_enabled and not _is_dragging and not is_over_gui and _mouse_inside_window:
 		var mouse_pos = get_viewport().get_mouse_position()
 		var screen_size = get_viewport().get_visible_rect().size
 		var edge_dir = Vector2.ZERO

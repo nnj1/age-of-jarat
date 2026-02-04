@@ -50,7 +50,7 @@ func _ready() -> void:
 	# HIDE THE SELECTION STRUCTURE BY DEFAULT
 	set_tab_hidden_by_name($UI/TabContainer, 'Structure', true)
 
-	# Spawn the first four villagers!
+	# Spawn the first four villagers for the player!
 	spawn_villager($map/procedural.get_optimal_villager_start_position())
 	spawn_villager($map/procedural.get_optimal_villager_start_position())
 	spawn_villager($map/procedural.get_optimal_villager_start_position())
@@ -146,47 +146,90 @@ func select_next_idle_unit():
 				$SelectionManager.handle_single_selection(unit.global_position, false)
 				$SelectionManager.center_camera_on_selection()
 				break
-			
+
+@rpc('any_peer', 'call_remote', 'reliable')
 func spawn_villager(spawn_pos: Vector2, unit_lore_data = null):
-	var villager = preload("res://scenes/entities/units/villager.tscn").instantiate()
-	villager.prepare(1, 0 if not alt_held else 1, unit_lore_data, 'villager')
-	villager.position = spawn_pos
-	$entities/units.add_child(villager, true)
-	unit_list.append(villager)
-	
+	if multiplayer.is_server():
+		# AKA SERVER CALLING SERVER
+		var authority:int
+		if multiplayer.get_remote_sender_id() == 0:
+			authority = 1
+		else:
+			authority = multiplayer.get_remote_sender_id() 
+		var villager = preload("res://scenes/entities/units/villager.tscn").instantiate()
+		villager.prepare(authority, MultiplayerManager.get_faction_from_id(authority) if not alt_held else 7, unit_lore_data, 'villager')
+		villager.position = spawn_pos
+		$entities/units.add_child(villager, true)
+		unit_list.append(villager)
+
+@rpc('any_peer', 'call_remote', 'reliable')
 func spawn_warrior(spawn_pos: Vector2, unit_lore_data = null):
-	var warrior = preload("res://scenes/entities/units/warrior.tscn").instantiate()
-	warrior.prepare(1, 0 if not alt_held else 1, unit_lore_data, 'warrior')
-	warrior.position = spawn_pos
-	$entities/units.add_child(warrior, true)
-	unit_list.append(warrior)
+	if multiplayer.is_server():
+		# AKA SERVER CALLING SERVER
+		var authority:int
+		if multiplayer.get_remote_sender_id() == 0:
+			authority = 1
+		else:
+			authority = multiplayer.get_remote_sender_id() 
+		var warrior = preload("res://scenes/entities/units/warrior.tscn").instantiate()
+		warrior.prepare(authority, MultiplayerManager.get_faction_from_id(authority) if not alt_held else 7, unit_lore_data, 'warrior')
+		warrior.position = spawn_pos
+		$entities/units.add_child(warrior, true)
+		unit_list.append(warrior)
 
+@rpc('any_peer', 'call_remote', 'reliable')
 func spawn_archer(spawn_pos: Vector2, unit_lore_data = null):
-	var archer = preload("res://scenes/entities/units/archer.tscn").instantiate()
-	archer.prepare(1, 0 if not alt_held else 1, unit_lore_data, 'archer')
-	archer.position = spawn_pos
-	$entities/units.add_child(archer, true)
-	unit_list.append(archer)
-	
-func spawn_wizard(spawn_pos: Vector2, unit_lore_data = null):
-	var wizard = preload("res://scenes/entities/units/wizard.tscn").instantiate()
-	wizard.prepare(1, 0 if not alt_held else 1, unit_lore_data, 'wizard')
-	wizard.position = spawn_pos
-	$entities/units.add_child(wizard, true)
-	unit_list.append(wizard)
+	if multiplayer.is_server():
+		# AKA SERVER CALLING SERVER
+		var authority:int
+		if multiplayer.get_remote_sender_id() == 0:
+			authority = 1
+		else:
+			authority = multiplayer.get_remote_sender_id() 
+		var archer = preload("res://scenes/entities/units/archer.tscn").instantiate()
+		archer.prepare(authority, MultiplayerManager.get_faction_from_id(authority) if not alt_held else 7, unit_lore_data, 'archer')
+		archer.position = spawn_pos
+		$entities/units.add_child(archer, true)
+		unit_list.append(archer)
 
+@rpc('any_peer', 'call_remote', 'reliable')
+func spawn_wizard(spawn_pos: Vector2, unit_lore_data = null):
+	if multiplayer.is_server():
+		# AKA SERVER CALLING SERVER
+		var authority:int
+		if multiplayer.get_remote_sender_id() == 0:
+			authority = 1
+		else:
+			authority = multiplayer.get_remote_sender_id() 
+		var wizard = preload("res://scenes/entities/units/wizard.tscn").instantiate()
+		wizard.prepare(authority, MultiplayerManager.get_faction_from_id(authority) if not alt_held else 7, unit_lore_data, 'wizard')
+		wizard.position = spawn_pos
+		$entities/units.add_child(wizard, true)
+		unit_list.append(wizard)
+
+@rpc('any_peer', 'call_remote', 'reliable')
 func spawn_animal(spawn_pos: Vector2):
-	var animal = preload("res://scenes/entities/npcs/animal.tscn").instantiate()
-	animal.prepare(1, -1, null, "animal")
-	animal.position = spawn_pos
-	$entities/npcs.add_child(animal, true)
-	
+	if multiplayer.is_server():
+		var animal = preload("res://scenes/entities/npcs/animal.tscn").instantiate()
+		# animals will defualt have an authity of 1 (server) and a faction of (-1)
+		animal.prepare(1, -1, null, "animal")
+		animal.position = spawn_pos
+		$entities/npcs.add_child(animal, true)
+
+@rpc('any_peer', 'call_remote', 'reliable')	
 func spawn_house(spawn_pos: Vector2):
-	var house = preload("res://scenes/entities/structures/generic_structure.tscn").instantiate()
-	house.prepare(1, 0 if not alt_held else 1)
-	house.position = spawn_pos
-	$entities/structures.add_child(house, true)
-	structure_list.append(house)
+	if multiplayer.is_server():
+		# AKA SERVER CALLING SERVER
+		var authority:int
+		if multiplayer.get_remote_sender_id() == 0:
+			authority = 1
+		else:
+			authority = multiplayer.get_remote_sender_id() 
+		var house = preload("res://scenes/entities/structures/generic_structure.tscn").instantiate()
+		house.prepare(authority, MultiplayerManager.get_faction_from_id(authority) if not alt_held else 7)
+		house.position = spawn_pos
+		$entities/structures.add_child(house, true)
+		structure_list.append(house)
 
 @warning_ignore("unused_parameter")
 func update_object_menu(layer_node, map_coords, atlas_coords):

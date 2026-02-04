@@ -8,7 +8,7 @@ const BROADCAST_ADDRESS = "127.255.255.255"
 
 # --- Local Player State ---
 var player_name: String = "Commander" # Set this from Menu UI before hosting/joining
-var server_name: String = "RTS Match"    # Set this from Menu UI before hosting
+var server_name: String = "Generic Match"    # Set this from Menu UI before hosting
 var local_faction: int = -1            # Assigned by server (0-9). -1 is NPC/Neutral.
 
 # --- Global Match State ---
@@ -41,6 +41,16 @@ func _ready():
 	add_child(broadcast_timer)
 	
 	_reset_alliances()
+	
+	# Generate an initial random seed for the match
+	generate_new_seed()
+
+func generate_new_seed():
+	# Only the host/server should decide the seed
+	if multiplayer.is_server() or multiplayer.multiplayer_peer == null:
+		randomize() # Seed the global RNG for the generation process
+		server_settings["map_seed"] = randi() 
+		print("New seed generated: ", server_settings["map_seed"])
 
 func _reset_alliances():
 	alliances = []
@@ -209,3 +219,14 @@ func _get_next_available_faction() -> int:
 
 func load_game():
 	get_tree().change_scene_to_file("res://scenes/main_scenes/game.tscn")
+
+## Returns the faction index (0-9) for a given peer_id.
+## Returns -1 if the player is not found (useful for NPCs or disconnected players).
+func get_faction_from_id(peer_id: int) -> int:
+	var id_string = str(peer_id)
+	
+	if players.has(id_string):
+		return players[id_string]["faction"]
+	
+	# Fallback if the ID isn't in our player list
+	return -1

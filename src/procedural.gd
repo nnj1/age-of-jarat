@@ -2,6 +2,9 @@ extends Node2D
 
 @onready var main_game_node = get_tree().get_root().get_node('Game')
 
+# the random number generator
+var rng = RandomNumberGenerator.new()
+
 # 1. References to your TileMapLayer nodes
 # Ensure these names match your Scene Tree exactly
 @onready var seabed_layer: TileMapLayer = $seabed
@@ -88,7 +91,7 @@ func get_random_central_point(points: Array[Vector2]) -> Vector2:
 		total_weight += strength
 
 	# 3. Perform a weighted random draw
-	var roll = randf_range(0, total_weight)
+	var roll = rng.randf_range(0, total_weight)
 	var cumulative_sum = 0.0
 	
 	for i in range(points.size()):
@@ -107,10 +110,11 @@ func _ready() -> void:
 	self.position -= Vector2(map_size.x * 12.0 / 2, map_size.y * 12.0 / 2)
 	
 	# Initialize random seed and noise settings
-	randomize()
-	noise.seed = randi()
-	vegetation_noise.seed = randi() + 1
-	vegetation_noise.seed = randi() + 2
+	# Use the seed we got from the host!
+	rng.seed = MultiplayerManager.server_settings["map_seed"]
+	noise.seed = rng.randi()
+	vegetation_noise.seed = rng.randi() + 1
+	vegetation_noise.seed = rng.randi() + 2
 	#noise.frequency = noise_frequency
 	#noise.noise_type = FastNoiseLite.TYPE_PERLIN # Organic, smooth transitions
 	
@@ -148,11 +152,11 @@ func generate_world() -> void:
 			
 			counter += 1
 			# print occasional progress updates
-			if (x*y % 10000) == 0:
+			if (x*y % 50000) == 0:
 				print('Generation map...' + str(int(float(counter)/float(map_size.x * map_size.y) * 100.0)) +'%')
 	
 	prepare_road_mask(paveable_points)
-	var road_density = randi_range(25, 75) # Generate between 5 and 12 roads
+	var road_density = rng.randi_range(25, 75) # Generate between 5 and 12 roads
 	generate_random_roads(road_density)
 	
 func determine_tiles(pos: Vector2i, noise_val: float, noise_val_2: float, noise_val_3: float) -> void:
@@ -176,7 +180,7 @@ func determine_tiles(pos: Vector2i, noise_val: float, noise_val_2: float, noise_
 		ground_layer.set_cell(pos, 0, ground_atlas_coords.pick_random())
 		on_solid_ground = true
 		# Grass
-		if randf() > 0.70:
+		if rng.randf() > 0.70:
 			decorator_layer.set_cell(pos, 0, grass_atlas_coords.pick_random())
 
 	else:
@@ -190,7 +194,7 @@ func determine_tiles(pos: Vector2i, noise_val: float, noise_val_2: float, noise_
 			ground_layer.set_cell(pos, 0, tilled_dirt_coords.pick_random())
 			paveable = false
 			# scatter crops
-			if randf() > 0.75: 
+			if rng.randf() > 0.75: 
 				decorator_layer.set_cell(pos, 0, crop_atlas_coords.pick_random())
 				
 		# save region for possible road
@@ -205,8 +209,9 @@ func determine_tiles(pos: Vector2i, noise_val: float, noise_val_2: float, noise_
 		elif noise_val_3 > -0.4:
 			decorator_layer.set_cell(pos, 0, mining_atlas_coords.pick_random())
 		# or potentially spawn an animal
-		elif randf() > 0.97:			
-			main_game_node.spawn_animal(to_global(ground_layer.map_to_local(pos)))
+		elif rng.randf() > 0.97:
+			if multiplayer.is_server():	
+				main_game_node.spawn_animal(to_global(ground_layer.map_to_local(pos)))
 		else:
 			valid_villager_start_positions_global.append(to_global(ground_layer.map_to_local(pos)))
 
@@ -232,7 +237,7 @@ func reveal_area(center: Vector2i) -> void:
 ## functions that handles paving the roads
 func create_road_on_mask(start: Vector2i, end: Vector2i) -> void:
 	var current = start
-	var axis_is_x = randf() > 0.5
+	var axis_is_x = rng.randf() > 0.5
 	
 	var max_iterations = 20 # Safety cap for how many "turns" a road can make
 	
@@ -240,7 +245,7 @@ func create_road_on_mask(start: Vector2i, end: Vector2i) -> void:
 		if current == end: break
 		
 		# 1. Determine how far we want to go in a straight line
-		var distance = randi_range(4, 10) # Minimum 4 tiles straight to prevent "clumping"
+		var distance = rng.randi_range(4, 10) # Minimum 4 tiles straight to prevent "clumping"
 		
 		# 2. Draw the segment
 		for s in range(distance):
@@ -297,7 +302,7 @@ func generate_random_roads(count: int):
 		
 		# Optional: Make the new destination a new potential start point 
 		# This creates "branching" roads rather than just a star shape
-		if randf() > 0.5:
+		if rng.randf() > 0.5:
 			main_hub = destination
 
 ## Returns the world-space boundaries of the generated map

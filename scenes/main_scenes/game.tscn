@@ -490,6 +490,7 @@ day_duration_minutes = 20.0
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="map/CanvasModulate"]
 root_path = NodePath("../../..")
+delta_interval = 1.0
 replication_config = SubResource("SceneReplicationConfig_5amgp")
 
 [node name="SelectionManager" parent="." groups=["manager"] instance=ExtResource("1_fqmia")]
@@ -518,6 +519,7 @@ spawn_path = NodePath("..")
 [node name="structures" type="Node2D" parent="entities"]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="entities/structures"]
+_spawnable_scenes = PackedStringArray("uid://cu7nbbhhgay1a")
 spawn_path = NodePath("..")
 
 [node name="Camera2D" type="Camera2D" parent="."]
