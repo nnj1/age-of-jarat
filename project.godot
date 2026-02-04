@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="AgeOfJarat"
-run/main_scene="uid://66pne335f347"
+run/main_scene="uid://ccvhjlrutnnd0"
 config/features=PackedStringArray("4.5", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/image="uid://bn4wht0h0xa2l"
@@ -24,6 +24,7 @@ PostProcessor="*res://scenes/autoloads/PostProcessor.tscn"
 CursorManager="*res://scenes/autoloads/CursorManager.tscn"
 MusicManager="*res://scenes/autoloads/MusicManager.tscn"
 UiSoundsManager="*res://scenes/autoloads/UISoundsManager.tscn"
+MultiplayerManager="*res://src/multiplayer_manager.gd"
 
 [display]
 
