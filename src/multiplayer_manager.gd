@@ -15,12 +15,17 @@ var local_faction: int = -1            # Assigned by server (0-9). -1 is NPC/Neu
 var players = {}  # { "peer_id": {"name": "str", "faction": int} }
 var alliances = [] # 2D Array: alliances[faction_index] = [list_of_allied_indices]
 
-var server_settings = {
-	"starting_resources": 500,
-	"unit_cap": 50,
-	"map_seed": 12345,
-	"game_speed": 1.0
-}
+var server_settings = {}
+
+# exmaple server settings 
+#{
+	#"starting_resources": 500,
+	#"unit_cap": 50,
+	#"map_seed": 12345,
+	#"game_speed": 1.0
+#}
+
+signal settings_received
 
 # --- Networking Tools ---
 var udp_socket := PacketPeerUDP.new()
@@ -134,7 +139,8 @@ func update_all_clients(p_json: String, a_json: String):
 func sync_settings(s_json: String):
 	# CLIENTS: Update local server_settings from host
 	server_settings = JSON.parse_string(s_json)
-
+	#print(server_settings)
+	settings_received.emit()
 # --- ALLIANCE LOGIC ---
 
 func is_allied(faction_a: int, faction_b: int) -> bool:

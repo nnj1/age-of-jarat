@@ -39,7 +39,7 @@ func set_build_mode(value: bool):
 		
 var random_atlas_coords: Vector2i
 
-var lore_data # contains the JSON data that defines this unit
+@export var lore_data: Dictionary # contains the JSON data that defines this unit
 var faction: int
 var allies: Array[int]
 

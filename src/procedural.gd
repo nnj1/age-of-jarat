@@ -109,12 +109,26 @@ func _ready() -> void:
 	# OPTIONAL: center the map
 	self.position -= Vector2(map_size.x * 12.0 / 2, map_size.y * 12.0 / 2)
 	
+	if multiplayer.is_server():
+		# Server starts immediately
+		start_generation()
+	else:
+		# Client waits for the signal from your MultiplayerManager
+		MultiplayerManager.settings_received.connect(start_generation)
+		
+			
+func start_generation():
+	# Safely disconnect to avoid double-generation
+	if MultiplayerManager.settings_received.is_connected(start_generation):
+		MultiplayerManager.settings_received.disconnect(start_generation)
+		
 	# Initialize random seed and noise settings
 	# Use the seed we got from the host!
+	print('Making map with seed ' + str(MultiplayerManager.server_settings["map_seed"]))
 	rng.seed = MultiplayerManager.server_settings["map_seed"]
 	noise.seed = rng.randi()
-	vegetation_noise.seed = rng.randi() + 1
-	vegetation_noise.seed = rng.randi() + 2
+	vegetation_noise.seed = rng.randi()
+	stone_noise.seed = rng.randi()
 	#noise.frequency = noise_frequency
 	#noise.noise_type = FastNoiseLite.TYPE_PERLIN # Organic, smooth transitions
 	
@@ -152,9 +166,10 @@ func generate_world() -> void:
 			
 			counter += 1
 			# print occasional progress updates
-			if (x*y % 50000) == 0:
-				print('Generation map...' + str(int(float(counter)/float(map_size.x * map_size.y) * 100.0)) +'%')
-	
+			if (x*y % 50000000) == 0:
+				#print('Generation map...' + str(int(float(counter)/float(map_size.x * map_size.y) * 100.0)) +'%')
+				pass
+				
 	prepare_road_mask(paveable_points)
 	var road_density = rng.randi_range(25, 75) # Generate between 5 and 12 roads
 	generate_random_roads(road_density)
@@ -169,33 +184,33 @@ func determine_tiles(pos: Vector2i, noise_val: float, noise_val_2: float, noise_
 	# Thresholds determine the "elevation" or biome
 	if noise_val < -0.1:
 		# Water Biome
-		seabed_layer.set_cell(pos, 0, seabed_atlas_coords.pick_random())
-		water_layer.set_cell(pos, 0, water_atlas_coords.pick_random())
+		seabed_layer.set_cell(pos, 0, seeded_pick(seabed_atlas_coords))
+		water_layer.set_cell(pos, 0, seeded_pick(water_atlas_coords))
 	elif noise_val < -0.075:
 		# sand/beach biome
-		seabed_layer.set_cell(pos, 0, seabed_atlas_coords.pick_random())
-		ground_layer.set_cell(pos, 0, sand_atlas_coords.pick_random())
+		seabed_layer.set_cell(pos, 0, seeded_pick(seabed_atlas_coords))
+		ground_layer.set_cell(pos, 0, seeded_pick(sand_atlas_coords))
 	elif noise_val < 0.2:
 		# Ground/Dirt Biome
-		ground_layer.set_cell(pos, 0, ground_atlas_coords.pick_random())
+		ground_layer.set_cell(pos, 0, seeded_pick(ground_atlas_coords))
 		on_solid_ground = true
 		# Grass
 		if rng.randf() > 0.70:
-			decorator_layer.set_cell(pos, 0, grass_atlas_coords.pick_random())
+			decorator_layer.set_cell(pos, 0, seeded_pick(grass_atlas_coords))
 
 	else:
 		# Rock Biome (will contain houses and village structures)
-		ground_layer.set_cell(pos, 0, rock_atlas_coords.pick_random())
+		ground_layer.set_cell(pos, 0, seeded_pick(rock_atlas_coords))
 		var paveable:bool = true
 		if noise_val_3 > -0.4:
-			decorator_layer.set_cell(pos, 0, housing_atlas_coords.pick_random())
+			decorator_layer.set_cell(pos, 0, seeded_pick(housing_atlas_coords))
 			paveable = false
 		if noise_val_2 > 0.0:
-			ground_layer.set_cell(pos, 0, tilled_dirt_coords.pick_random())
+			ground_layer.set_cell(pos, 0, seeded_pick(tilled_dirt_coords))
 			paveable = false
 			# scatter crops
 			if rng.randf() > 0.75: 
-				decorator_layer.set_cell(pos, 0, crop_atlas_coords.pick_random())
+				decorator_layer.set_cell(pos, 0, seeded_pick(crop_atlas_coords))
 				
 		# save region for possible road
 		if paveable:
@@ -204,10 +219,10 @@ func determine_tiles(pos: Vector2i, noise_val: float, noise_val_2: float, noise_
 	if on_solid_ground:
 		# handle vegetation (forests)
 		if noise_val_2 > 0.0:
-			decorator_layer.set_cell(pos, 0, trees_atlas_coords.pick_random())
+			decorator_layer.set_cell(pos, 0, seeded_pick(trees_atlas_coords))
 		# handle minable resources (stone and gold)
 		elif noise_val_3 > -0.4:
-			decorator_layer.set_cell(pos, 0, mining_atlas_coords.pick_random())
+			decorator_layer.set_cell(pos, 0, seeded_pick(mining_atlas_coords))
 		# or potentially spawn an animal
 		elif rng.randf() > 0.97:
 			if multiplayer.is_server():	
@@ -274,7 +289,7 @@ func _place_road_safely(p: Vector2i, moving_on_x: bool):
 	if existing != Vector2i(-1, -1):
 		roads_layer.set_cell(p, 0, road_cross)
 	else:
-		var tile = road_h.pick_random() if moving_on_x else road_v.pick_random()
+		var tile = seeded_pick(road_h) if moving_on_x else seeded_pick(road_v)
 		roads_layer.set_cell(p, 0, tile)
 		
 func prepare_road_mask(points_array: Array):
@@ -289,12 +304,12 @@ func generate_random_roads(count: int):
 		return
 
 	# 1. Pick a "Central Hub" to start from
-	var main_hub = paveable_points.pick_random()
+	var main_hub = seeded_pick(paveable_points)
 	
 	# 2. Generate 'count' number of roads
 	for i in range(count):
 		# Pick a random destination from your valid points
-		var destination = paveable_points.pick_random()
+		var destination = seeded_pick(paveable_points)
 		
 		# Choose which road style to draw:
 		# Use the mask function so roads only appear on valid tiles
@@ -318,3 +333,7 @@ func get_map_bounds() -> Rect2:
 	var top_left = self.global_position
 	
 	return Rect2(top_left.x, top_left.y, width_px, height_px)
+
+## helper function alternative to .pick_random()
+func seeded_pick(arr: Array):
+	return arr[rng.randi() % arr.size()]
