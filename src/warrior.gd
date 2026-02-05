@@ -5,4 +5,3 @@ func _ready():
 	$MeleeAttackComponent.just_melee_attacked.connect($SoundComponent.play_attack_grunt)
 	
 	super._ready()
-	

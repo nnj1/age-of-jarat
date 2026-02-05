@@ -7,12 +7,7 @@ func prepare(given_spawning_player_id: int = 1, given_faction: int = -1, given_l
 	# NPCs like animals are -1 faction
 	super.prepare(given_spawning_player_id, given_faction, given_lore_data, given_unit_type)
 	
-	
-func _ready():
-	super._ready()
-	
 func on_death():
-	
 	#spawn some meat
 	var popped_tile = preload('res://scenes/entities/objects/popped_tile.tscn').instantiate()
 	popped_tile.prepare('food', randi_range(1, 5), main_game_node.get_cropped_tile_texture(Vector2i(1,17)))

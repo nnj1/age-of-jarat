@@ -69,6 +69,8 @@ func _resume_brain():
 # --- Core Setup ---
 
 func _ready():
+	if not is_multiplayer_authority(): return
+	
 	if not DEBUG_MODE:
 		state_label = null
 		
@@ -196,6 +198,7 @@ func _on_state_timer_timeout():
 			_change_state(State.RETURNING)
 
 func _on_body_entered(body):
+	if not is_multiplayer_authority(): return
 	if body == parent_unit: return
 	if body.is_in_group("Resources"):
 		nearby_resources.append(body)
@@ -205,6 +208,7 @@ func _on_body_entered(body):
 		
 ## CODE FOR GATHERING SENSOR 
 func _on_body_shape_entered(body_rid: RID, body: Node2D, _body_shape_index: int, _local_shape_index: int):
+	if not is_multiplayer_authority(): return
 	# 1. EXIT if the brain is disabled (Manual Mode)
 	if not enabled: 
 		return

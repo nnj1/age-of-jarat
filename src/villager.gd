@@ -10,7 +10,7 @@ var sprite_atlas_coords_corners = [
 	Vector2i(200,32)
 ]
 
-var spawning_player_id: int
+@export var spawning_player_id: int
 
 @export var speed: float = 25.0
 var target_position: Vector2 = Vector2.ZERO
@@ -25,6 +25,7 @@ var knockback_velocity: Vector2 = Vector2.ZERO
 @export var build_mode: bool = false : set = set_build_mode
 
 func set_autonomous_mode(value: bool):
+	if not is_multiplayer_authority(): return
 	autonomous_mode = value
 	if has_node("WanderComponent"):
 		$WanderComponent.set_enabled(value)
@@ -37,10 +38,20 @@ func set_autonomous_mode(value: bool):
 func set_build_mode(value: bool):
 	build_mode = value
 		
-var random_atlas_coords: Vector2i
+@export var random_atlas_coords: Vector2i :
+	set(val):
+		random_atlas_coords = val
+		if is_node_ready():
+			set_unit_texture(val)
 
-@export var lore_data: Dictionary # contains the JSON data that defines this unit
-var faction: int
+# contains the JSON data that defines this unit
+@export var lore_data: Dictionary :
+	set(val):
+		lore_data = val
+		if is_node_ready(): 
+			apply_visuals_and_stats()
+			
+@export var faction: int
 var allies: Array[int]
 
 @export var margin: float = 8.0
@@ -134,30 +145,37 @@ func prepare(given_spawning_player_id: int = 1, given_faction: int = -2, given_l
 	if 'scale' in lore_data:
 		self.scale *= float(lore_data.scale)
 		
-	# sets the authority and faction of the unit	
-func _enter_tree() -> void:
-	set_multiplayer_authority(spawning_player_id)
-	
-func _ready():
-	if not is_multiplayer_authority(): return
-	
-	# pick a random player sprite
+	## HANDLE SPRITE FOR THE UNIT
+	# initially pick a random player sprite
 	random_atlas_coords = GlobalVars.get_vectors_in_range(sprite_atlas_coords_corners[0], sprite_atlas_coords_corners[1]).pick_random()
-	
 	# make sure it's nonblack otherwise pick again
 	while not is_atlas_tile_non_black(random_atlas_coords):
 		random_atlas_coords = GlobalVars.get_vectors_in_range(sprite_atlas_coords_corners[0], sprite_atlas_coords_corners[1]).pick_random()
 	
 	# if the lore data specifies a sprite, actually use that
-	if lore_data.sprite:
-		random_atlas_coords = str_to_var("Vector2i" + str(lore_data.sprite.pick_random()))
+	if lore_data:
+		if lore_data.sprite:
+			random_atlas_coords = str_to_var("Vector2i" + str(lore_data.sprite.pick_random()))
+		
+# sets the authority and faction of the unit	
+func _enter_tree() -> void:
+	# Don't force authority here if spawning_player_id hasn't arrived yet
+	if spawning_player_id != 0:
+		set_multiplayer_authority(spawning_player_id)
+	pass
+	
+func _ready():
+	# If we are the client, the lore_data might be empty for a few frames.
+	# We only run setup if we actually have the data.
+	if not lore_data.is_empty():
+		apply_visuals_and_stats()
+		
+	if not is_multiplayer_authority(): return
 		
 	target_position = global_position
+	# hide the selection visual
 	if selection_visual:
-		selection_visual.visible = false
-	
-	# TODO: make this an rpc call
-	set_unit_texture.rpc(random_atlas_coords)
+		selection_visual.visible = false	
 	
 	# create random shader offsets
 	$Sprite.material.set_shader_parameter('random_phase', randf_range(0.0, 100.0))
@@ -168,6 +186,50 @@ func _ready():
 	# Find the map node (assuming it's named 'Map' in your scene)
 	map_node = get_tree().get_first_node_in_group("FogSystem")
 
+func apply_visuals_and_stats():
+	if lore_data.is_empty(): 
+		return
+	
+	# A. Handle Stats & Components
+	if lore_data.has("stats"):
+		var stats = lore_data.stats
+		
+		# Health
+		if has_node("HealthComponent"):
+			$HealthComponent.max_health = float(stats.hp)
+			if 'armor' in stats:
+				$HealthComponent.armor = int(stats.armor)
+			
+			# Signals (ensure we don't double-connect)
+			if not $HealthComponent.died.is_connected(on_death):
+				$HealthComponent.died.connect(on_death)
+				$HealthComponent.just_took_damage.connect(play_damage_modulate_animation)
+				if has_node("SoundComponent"):
+					$HealthComponent.died.connect($SoundComponent.play_death_sound)
+					$HealthComponent.just_took_damage.connect($SoundComponent.play_hurt_sound)
+
+		speed = float(stats.speed)
+		
+		# Melee
+		var melee = get_node_or_null('MeleeAttackComponent')
+		if melee:
+			melee.attack_speed = float(stats.attack_speed)
+			melee.damage = float(stats.damage)
+		
+		# Range
+		var ranged = get_node_or_null('RangeAttackComponent')
+		if ranged:
+			ranged.attack_speed = float(stats.attack_speed)
+			if 'damage' in stats: ranged.damage = float(stats.damage)
+			if 'spell_damage' in stats: ranged.damage = float(stats.spell_damage)
+			if 'range' in stats: ranged.detection_range = float(stats.range)
+	
+	# B. Handle Visuals
+	if 'scale' in lore_data:
+		self.scale = Vector2.ONE * float(lore_data.scale)
+	
+	set_unit_texture(random_atlas_coords)
+	
 func _setup_fog_timer():
 	var timer = Timer.new()
 	add_child(timer)
@@ -185,7 +247,6 @@ func _check_visibility():
 	if has_node("WanderComponent"):
 		$WanderComponent.is_in_fog = !is_seen
 		
-@rpc("any_peer","call_local","reliable")
 func set_unit_texture(given_random_atlas_coords: Vector2i):
 	$Sprite.set_cell(Vector2i(0,0), 0, given_random_atlas_coords)
 

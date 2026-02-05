@@ -166,8 +166,8 @@ func generate_world() -> void:
 			
 			counter += 1
 			# print occasional progress updates
-			if (x*y % 50000000) == 0:
-				#print('Generation map...' + str(int(float(counter)/float(map_size.x * map_size.y) * 100.0)) +'%')
+			if (x*y % 500000000000) == 0:
+				print('Generation map...' + str(int(float(counter)/float(map_size.x * map_size.y) * 100.0)) +'%')
 				pass
 				
 	prepare_road_mask(paveable_points)

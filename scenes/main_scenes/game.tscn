@@ -76,12 +76,11 @@ grow_horizontal = 2
 grow_vertical = 0
 focus_mode = 2
 theme_override_font_sizes/font_size = 32
-current_tab = 4
+current_tab = 0
 drag_to_rearrange_enabled = true
 script = ExtResource("2_leqql")
 
 [node name="Game" type="Panel" parent="UI/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -112,6 +111,15 @@ theme_override_font_sizes/bold_italics_font_size = 25
 theme_override_font_sizes/italics_font_size = 25
 theme_override_font_sizes/mono_font_size = 25
 bbcode_enabled = true
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="UI/TabContainer/Game/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/normal_font_size = 25
+theme_override_font_sizes/bold_font_size = 25
+theme_override_font_sizes/bold_italics_font_size = 25
+theme_override_font_sizes/italics_font_size = 25
+theme_override_font_sizes/mono_font_size = 25
 
 [node name="Structure" type="Panel" parent="UI/TabContainer"]
 visible = false
@@ -305,6 +313,7 @@ theme_override_font_sizes/font_size = 25
 text = "Delete"
 
 [node name="Selection" type="Panel" parent="UI/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 4
 
@@ -507,7 +516,7 @@ spawn_path = NodePath("..")
 [node name="units" type="Node2D" parent="entities"]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="entities/units"]
-_spawnable_scenes = PackedStringArray("uid://fix3rwufx5qv")
+_spawnable_scenes = PackedStringArray("uid://fix3rwufx5qv", "uid://c6v2fmujemnrj", "uid://chyttskvx63th", "uid://bpaubt37se7ph")
 spawn_path = NodePath("..")
 
 [node name="objects" type="Node2D" parent="entities"]

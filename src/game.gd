@@ -51,10 +51,10 @@ func _ready() -> void:
 	set_tab_hidden_by_name($UI/TabContainer, 'Structure', true)
 
 	# Spawn the first four villagers for the player!
-	spawn_villager($map/procedural.get_optimal_villager_start_position())
-	spawn_villager($map/procedural.get_optimal_villager_start_position())
-	spawn_villager($map/procedural.get_optimal_villager_start_position())
-	spawn_villager($map/procedural.get_optimal_villager_start_position())
+	spawn_villager.rpc_id(1, $map/procedural.get_optimal_villager_start_position())
+	spawn_villager.rpc_id(1, $map/procedural.get_optimal_villager_start_position())
+	spawn_villager.rpc_id(1, $map/procedural.get_optimal_villager_start_position())
+	spawn_villager.rpc_id(1, $map/procedural.get_optimal_villager_start_position())
 	
 # material incrementation functions
 func add_wood(amount: int = 1):
@@ -104,6 +104,7 @@ func _process(delta: float) -> void:
 func update_game_menu():
 	$UI/TabContainer/Game/HBoxContainer/RichTextLabel.text = dict_to_bbcode_list(count_group_membership(unit_list))
 	$UI/TabContainer/Game/HBoxContainer/RichTextLabel2.text = dict_to_bbcode_list(count_group_membership(structure_list))
+	$UI/TabContainer/Game/HBoxContainer/RichTextLabel3.text = str(MultiplayerManager.player_name) + '\nFaction: ' + str(MultiplayerManager.local_faction)
 	
 func update_material_display():
 	for mat_name in materials.keys():
@@ -115,17 +116,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		
 	if event is InputEventKey:
 		if event.pressed and event.keycode == KEY_V:
-			spawn_villager(get_global_mouse_position())
+			spawn_villager.rpc_id(1, get_global_mouse_position())
 		if event.pressed and event.keycode == KEY_W:
-			spawn_warrior(get_global_mouse_position())
+			spawn_warrior.rpc_id(1, get_global_mouse_position())
 		if event.pressed and event.keycode == KEY_M:
-			spawn_wizard(get_global_mouse_position())
+			spawn_wizard.rpc_id(1, get_global_mouse_position())
 		if event.pressed and event.keycode == KEY_A:
-			spawn_archer(get_global_mouse_position())
+			spawn_archer.rpc_id(1, get_global_mouse_position())
 		if event.pressed and event.keycode == KEY_B:
-			spawn_animal(get_global_mouse_position())
+			spawn_animal.rpc_id(1, get_global_mouse_position())
 		if event.pressed and event.keycode == KEY_H:
-			spawn_house(get_global_mouse_position())
+			spawn_house.rpc_id(1, get_global_mouse_position())
 		if event.pressed and event.keycode == KEY_ESCAPE:
 			if prespawned_structure:
 				prespawned_structure.queue_free()
@@ -147,7 +148,7 @@ func select_next_idle_unit():
 				$SelectionManager.center_camera_on_selection()
 				break
 
-@rpc('any_peer', 'call_remote', 'reliable')
+@rpc('any_peer', 'call_local', 'reliable')
 func spawn_villager(spawn_pos: Vector2, unit_lore_data = null):
 	if multiplayer.is_server():
 		# AKA SERVER CALLING SERVER
@@ -157,12 +158,13 @@ func spawn_villager(spawn_pos: Vector2, unit_lore_data = null):
 		else:
 			authority = multiplayer.get_remote_sender_id() 
 		var villager = preload("res://scenes/entities/units/villager.tscn").instantiate()
+		villager.set_multiplayer_authority(authority)
 		villager.prepare(authority, MultiplayerManager.get_faction_from_id(authority) if not alt_held else 7, unit_lore_data, 'villager')
 		villager.position = spawn_pos
 		$entities/units.add_child(villager, true)
 		unit_list.append(villager)
 
-@rpc('any_peer', 'call_remote', 'reliable')
+@rpc('any_peer', 'call_local', 'reliable')
 func spawn_warrior(spawn_pos: Vector2, unit_lore_data = null):
 	if multiplayer.is_server():
 		# AKA SERVER CALLING SERVER
@@ -172,12 +174,13 @@ func spawn_warrior(spawn_pos: Vector2, unit_lore_data = null):
 		else:
 			authority = multiplayer.get_remote_sender_id() 
 		var warrior = preload("res://scenes/entities/units/warrior.tscn").instantiate()
+		warrior.set_multiplayer_authority(authority)
 		warrior.prepare(authority, MultiplayerManager.get_faction_from_id(authority) if not alt_held else 7, unit_lore_data, 'warrior')
 		warrior.position = spawn_pos
 		$entities/units.add_child(warrior, true)
 		unit_list.append(warrior)
 
-@rpc('any_peer', 'call_remote', 'reliable')
+@rpc('any_peer', 'call_local', 'reliable')
 func spawn_archer(spawn_pos: Vector2, unit_lore_data = null):
 	if multiplayer.is_server():
 		# AKA SERVER CALLING SERVER
@@ -187,12 +190,13 @@ func spawn_archer(spawn_pos: Vector2, unit_lore_data = null):
 		else:
 			authority = multiplayer.get_remote_sender_id() 
 		var archer = preload("res://scenes/entities/units/archer.tscn").instantiate()
+		archer.set_multiplayer_authority(authority)
 		archer.prepare(authority, MultiplayerManager.get_faction_from_id(authority) if not alt_held else 7, unit_lore_data, 'archer')
 		archer.position = spawn_pos
 		$entities/units.add_child(archer, true)
 		unit_list.append(archer)
 
-@rpc('any_peer', 'call_remote', 'reliable')
+@rpc('any_peer', 'call_local', 'reliable')
 func spawn_wizard(spawn_pos: Vector2, unit_lore_data = null):
 	if multiplayer.is_server():
 		# AKA SERVER CALLING SERVER
@@ -202,21 +206,24 @@ func spawn_wizard(spawn_pos: Vector2, unit_lore_data = null):
 		else:
 			authority = multiplayer.get_remote_sender_id() 
 		var wizard = preload("res://scenes/entities/units/wizard.tscn").instantiate()
+		wizard.set_multiplayer_authority(authority)
 		wizard.prepare(authority, MultiplayerManager.get_faction_from_id(authority) if not alt_held else 7, unit_lore_data, 'wizard')
 		wizard.position = spawn_pos
 		$entities/units.add_child(wizard, true)
 		unit_list.append(wizard)
 
-@rpc('any_peer', 'call_remote', 'reliable')
+@rpc('any_peer', 'call_local', 'reliable')
 func spawn_animal(spawn_pos: Vector2):
 	if multiplayer.is_server():
 		var animal = preload("res://scenes/entities/npcs/animal.tscn").instantiate()
 		# animals will defualt have an authity of 1 (server) and a faction of (-1)
+		animal.set_multiplayer_authority(1)
 		animal.prepare(1, -1, null, "animal")
 		animal.position = spawn_pos
-		$entities/npcs.add_child(animal, true)
-
-@rpc('any_peer', 'call_remote', 'reliable')	
+		#$entities/npcs.add_child(animal, true)
+		$entities/npcs.call_deferred('add_child', animal, true)
+		
+@rpc('any_peer', 'call_local', 'reliable')	
 func spawn_house(spawn_pos: Vector2):
 	if multiplayer.is_server():
 		# AKA SERVER CALLING SERVER
@@ -226,6 +233,7 @@ func spawn_house(spawn_pos: Vector2):
 		else:
 			authority = multiplayer.get_remote_sender_id() 
 		var house = preload("res://scenes/entities/structures/generic_structure.tscn").instantiate()
+		house.set_multiplayer_authority(authority)
 		house.prepare(authority, MultiplayerManager.get_faction_from_id(authority) if not alt_held else 7)
 		house.position = spawn_pos
 		$entities/structures.add_child(house, true)
