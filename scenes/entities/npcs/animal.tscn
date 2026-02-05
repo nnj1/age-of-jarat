@@ -42,7 +42,10 @@ properties/3/spawn = true
 properties/3/replication_mode = 1
 properties/4/path = NodePath("Sprite:scale")
 properties/4/spawn = true
-properties/4/replication_mode = 1
+properties/4/replication_mode = 2
+properties/5/path = NodePath("Sprite:position")
+properties/5/spawn = true
+properties/5/replication_mode = 2
 
 [node name="Animal" type="CharacterBody2D" groups=["animals"]]
 collision_layer = 2

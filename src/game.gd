@@ -24,6 +24,10 @@ var prespawned_structure:Structure # for drag and drop mechanic
 var time_passed: float = 0.0
 var material_spawn_interval: float = 15.0
 
+func _enter_tree() -> void:
+	# set up unit spawner function
+	$entities/units/MultiplayerSpawner.spawn_function = _on_unit_spawned
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	
@@ -157,12 +161,15 @@ func spawn_villager(spawn_pos: Vector2, unit_lore_data = null):
 			authority = 1
 		else:
 			authority = multiplayer.get_remote_sender_id() 
-		var villager = preload("res://scenes/entities/units/villager.tscn").instantiate()
-		villager.set_multiplayer_authority(authority)
-		villager.prepare(authority, MultiplayerManager.get_faction_from_id(authority) if not alt_held else 7, unit_lore_data, 'villager')
-		villager.position = spawn_pos
-		$entities/units.add_child(villager, true)
-		unit_list.append(villager)
+		var spawn_data = {
+			'type': 'villager', 
+			'spawn_pos': spawn_pos, 
+			'auth': authority, 
+			'faction': MultiplayerManager.get_faction_from_id(authority) if not alt_held else 7,
+			'unit_lore_data': unit_lore_data
+			}
+		# This triggers _on_unit_spawned on BOTH server and all clients
+		$entities/units/MultiplayerSpawner.call_deferred("spawn", spawn_data)
 
 @rpc('any_peer', 'call_local', 'reliable')
 func spawn_warrior(spawn_pos: Vector2, unit_lore_data = null):
@@ -215,13 +222,46 @@ func spawn_wizard(spawn_pos: Vector2, unit_lore_data = null):
 @rpc('any_peer', 'call_local', 'reliable')
 func spawn_animal(spawn_pos: Vector2):
 	if multiplayer.is_server():
-		var animal = preload("res://scenes/entities/npcs/animal.tscn").instantiate()
-		# animals will defualt have an authity of 1 (server) and a faction of (-1)
-		animal.set_multiplayer_authority(1)
-		animal.prepare(1, -1, null, "animal")
-		animal.position = spawn_pos
-		#$entities/npcs.add_child(animal, true)
-		$entities/npcs.call_deferred('add_child', animal, true)
+		var spawn_data = {
+			'type': 'animal', 
+			'spawn_pos': spawn_pos, 
+			'auth': 1,
+			'faction': -1,
+			'unit_lore_data': null
+			}
+		# This triggers _on_unit_spawned on BOTH server and all clients
+		$entities/units/MultiplayerSpawner.call_deferred("spawn", spawn_data)
+
+# generic on unit spawned function for spawner
+func _on_unit_spawned(spawning_data: Dictionary) -> Node:
+	var type = spawning_data.type 
+	var spawn_pos = spawning_data.spawn_pos
+	var auth = spawning_data.auth
+	var faction = spawning_data.faction
+	var unit_lore_data = spawning_data.unit_lore_data
+	match type:
+		'villager': 
+			var villager = preload("res://scenes/entities/units/villager.tscn").instantiate()
+			villager.set_multiplayer_authority(auth)
+			villager.prepare(auth, faction, unit_lore_data, 'villager')
+			villager.position = spawn_pos
+			unit_list.append(villager) # TODO: DO SOMETHIN ABOUT THIS
+			return villager
+		'wizard': 
+			pass	
+		'warrior': 
+			pass
+		'archer': 
+			pass
+		'animal': 
+			var animal = preload("res://scenes/entities/npcs/animal.tscn").instantiate()
+			# animals will defualt have an authity of 1 (server) and a faction of (-1)
+			animal.set_multiplayer_authority(auth)
+			animal.prepare(auth, faction, null, "animal")
+			animal.position = spawn_pos
+			return animal
+		#_: pass
+	return null
 		
 @rpc('any_peer', 'call_local', 'reliable')	
 func spawn_house(spawn_pos: Vector2):
