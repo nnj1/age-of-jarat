@@ -180,12 +180,15 @@ func spawn_warrior(spawn_pos: Vector2, unit_lore_data = null):
 			authority = 1
 		else:
 			authority = multiplayer.get_remote_sender_id() 
-		var warrior = preload("res://scenes/entities/units/warrior.tscn").instantiate()
-		warrior.set_multiplayer_authority(authority)
-		warrior.prepare(authority, MultiplayerManager.get_faction_from_id(authority) if not alt_held else 7, unit_lore_data, 'warrior')
-		warrior.position = spawn_pos
-		$entities/units.add_child(warrior, true)
-		unit_list.append(warrior)
+		var spawn_data = {
+			'type': 'warrior', 
+			'spawn_pos': spawn_pos, 
+			'auth': authority, 
+			'faction': MultiplayerManager.get_faction_from_id(authority) if not alt_held else 7,
+			'unit_lore_data': unit_lore_data
+			}
+		# This triggers _on_unit_spawned on BOTH server and all clients
+		$entities/units/MultiplayerSpawner.call_deferred("spawn", spawn_data)
 
 @rpc('any_peer', 'call_local', 'reliable')
 func spawn_archer(spawn_pos: Vector2, unit_lore_data = null):
@@ -196,12 +199,15 @@ func spawn_archer(spawn_pos: Vector2, unit_lore_data = null):
 			authority = 1
 		else:
 			authority = multiplayer.get_remote_sender_id() 
-		var archer = preload("res://scenes/entities/units/archer.tscn").instantiate()
-		archer.set_multiplayer_authority(authority)
-		archer.prepare(authority, MultiplayerManager.get_faction_from_id(authority) if not alt_held else 7, unit_lore_data, 'archer')
-		archer.position = spawn_pos
-		$entities/units.add_child(archer, true)
-		unit_list.append(archer)
+		var spawn_data = {
+			'type': 'archer', 
+			'spawn_pos': spawn_pos, 
+			'auth': authority, 
+			'faction': MultiplayerManager.get_faction_from_id(authority) if not alt_held else 7,
+			'unit_lore_data': unit_lore_data
+			}
+		# This triggers _on_unit_spawned on BOTH server and all clients
+		$entities/units/MultiplayerSpawner.call_deferred("spawn", spawn_data)
 
 @rpc('any_peer', 'call_local', 'reliable')
 func spawn_wizard(spawn_pos: Vector2, unit_lore_data = null):
@@ -212,12 +218,15 @@ func spawn_wizard(spawn_pos: Vector2, unit_lore_data = null):
 			authority = 1
 		else:
 			authority = multiplayer.get_remote_sender_id() 
-		var wizard = preload("res://scenes/entities/units/wizard.tscn").instantiate()
-		wizard.set_multiplayer_authority(authority)
-		wizard.prepare(authority, MultiplayerManager.get_faction_from_id(authority) if not alt_held else 7, unit_lore_data, 'wizard')
-		wizard.position = spawn_pos
-		$entities/units.add_child(wizard, true)
-		unit_list.append(wizard)
+		var spawn_data = {
+			'type': 'wizard', 
+			'spawn_pos': spawn_pos, 
+			'auth': authority, 
+			'faction': MultiplayerManager.get_faction_from_id(authority) if not alt_held else 7,
+			'unit_lore_data': unit_lore_data
+			}
+		# This triggers _on_unit_spawned on BOTH server and all clients
+		$entities/units/MultiplayerSpawner.call_deferred("spawn", spawn_data)
 
 @rpc('any_peer', 'call_local', 'reliable')
 func spawn_animal(spawn_pos: Vector2):
@@ -239,20 +248,17 @@ func _on_unit_spawned(spawning_data: Dictionary) -> Node:
 	var auth = spawning_data.auth
 	var faction = spawning_data.faction
 	var unit_lore_data = spawning_data.unit_lore_data
+	
+	var unit_scene
 	match type:
 		'villager': 
-			var villager = preload("res://scenes/entities/units/villager.tscn").instantiate()
-			villager.set_multiplayer_authority(auth)
-			villager.prepare(auth, faction, unit_lore_data, 'villager')
-			villager.position = spawn_pos
-			unit_list.append(villager) # TODO: DO SOMETHIN ABOUT THIS
-			return villager
+			unit_scene = preload("res://scenes/entities/units/villager.tscn")
 		'wizard': 
-			pass	
+			unit_scene = preload("res://scenes/entities/units/wizard.tscn")	
 		'warrior': 
-			pass
+			unit_scene = preload("res://scenes/entities/units/warrior.tscn")
 		'archer': 
-			pass
+			unit_scene = preload("res://scenes/entities/units/archer.tscn")
 		'animal': 
 			var animal = preload("res://scenes/entities/npcs/animal.tscn").instantiate()
 			# animals will defualt have an authity of 1 (server) and a faction of (-1)
@@ -261,7 +267,15 @@ func _on_unit_spawned(spawning_data: Dictionary) -> Node:
 			animal.position = spawn_pos
 			return animal
 		#_: pass
-	return null
+	var unit = unit_scene.instantiate()
+	unit.set_multiplayer_authority(auth)
+	unit.prepare(auth, faction, unit_lore_data, type)
+	unit.position = spawn_pos
+	if auth == multiplayer.get_unique_id():
+		unit_list.append(unit)
+		# Connect a signal to remove it when it dies
+		unit.tree_exiting.connect(func(): unit_list.erase(unit))
+	return unit
 		
 @rpc('any_peer', 'call_local', 'reliable')	
 func spawn_house(spawn_pos: Vector2):

@@ -118,10 +118,12 @@ func handle_single_selection(click_pos: Vector2, shift: bool):
 	var min_dist = 5.0 # Interaction radius
 
 	for unit in all_units:
-		var dist = unit.global_position.distance_to(click_pos)
-		if dist < min_dist:
-			min_dist = dist
-			closest_unit = unit
+		# Only consider our own units
+		if unit.is_multiplayer_authority():
+			var dist = unit.global_position.distance_to(click_pos)
+			if dist < min_dist:
+				min_dist = dist
+				closest_unit = unit
 	
 	if closest_unit:
 		if shift and selected_units.has(closest_unit):
@@ -132,10 +134,15 @@ func handle_single_selection(click_pos: Vector2, shift: bool):
 func select_units_in_box(_shift: bool):
 	var box = Rect2(drag_start, drag_end - drag_start).abs()
 	for unit in get_tree().get_nodes_in_group("units"):
-		if box.has_point(unit.global_position):
-			add_to_selection(unit)
+		# Only check units that belong to us
+		if unit.is_multiplayer_authority():
+			if box.has_point(unit.global_position):
+				add_to_selection(unit)
 
 func add_to_selection(unit):
+	# CRITICAL: Only allow selection if the local player is the authority of this unit
+	if not unit.is_multiplayer_authority():
+		return
 	
 	# This was the last unit added to the selection, show it's details in the UI
 	unit_just_added.emit(unit)

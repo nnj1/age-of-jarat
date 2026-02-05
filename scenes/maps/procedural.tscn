@@ -67,7 +67,6 @@ tile_set = ExtResource("1_guuwn")
 physics_quadrant_size = 1
 
 [node name="fow" type="TileMapLayer" parent="."]
-visible = false
 z_index = 1
 tile_set = ExtResource("1_guuwn")
 
