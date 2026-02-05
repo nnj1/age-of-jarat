@@ -10,7 +10,7 @@ var current_state: State = State.IDLE
 @export_group("Behavior Toggles")
 @export var enabled: bool = true
 @export var current_stance: Stance = Stance.DEFENSIVE
-@export var can_gather: bool = true 
+@export var can_gather: bool = true
 @export var disable_in_fog: bool = true # Toggle for performance
 
 @export_group("Settings")
@@ -70,7 +70,7 @@ func _resume_brain():
 
 func _ready():
 	if not is_multiplayer_authority(): return
-	
+
 	if not DEBUG_MODE:
 		state_label = null
 		
@@ -86,7 +86,9 @@ func _ready():
 	
 	sensor_area.body_entered.connect(_on_body_entered)
 	sensor_area.body_exited.connect(_on_body_exited)
-	gathering_sensor_area.body_shape_entered.connect(_on_body_shape_entered)
+	
+	if can_gather:
+		gathering_sensor_area.body_shape_entered.connect(_on_body_shape_entered)
 	
 	if enabled and not (is_in_fog and disable_in_fog):
 		think_timer.start()
