@@ -1,5 +1,7 @@
 extends Node2D
 
+@onready var map_interaction_component = get_tree().get_first_node_in_group('map_interaction_component')
+
 @export_group("Movement")
 @export var speed: float = 200.0
 @export var arrival_threshold: float = 5.0
@@ -17,10 +19,16 @@ extends Node2D
 @onready var sprite: Sprite2D = $Sprite2D
 
 var target_villager: Node2D = null
-var is_collecting: bool = false
-var material_type: String
-var material_amount: int
-
+@export var is_collecting: bool = false
+@export var material_type: String:
+	set(value):
+		material_type = value
+		# If the node is ready, update visuals immediately when the value arrives
+		if is_node_ready():
+			load_visuals()
+			
+@export var material_amount: int
+var faction_that_mined: int
 
 @onready var main_game_node = get_tree().get_root().get_node('Game')
 
@@ -33,10 +41,21 @@ func prepare(given_material_type: String, given_material_amount: int, tile_textu
 	material_type = given_material_type
 	material_amount = given_material_amount
 	
+func load_visuals():
+	var s = $Sprite2D
+	if map_interaction_component.default_material_textures:
+		s.texture = map_interaction_component.default_material_textures[material_type]
+		# Start at zero for the pop effect
+	s.scale = Vector2.ZERO 
+	
 func _ready() -> void:
 	play_spawn_effects()
-
+	if not multiplayer.is_server():
+		load_visuals()
+	
 func _process(delta: float) -> void:
+	if not multiplayer.is_server(): return
+	
 	if is_collecting or target_villager == null:
 		return
 
@@ -51,7 +70,9 @@ func _process(delta: float) -> void:
 
 func _on_detection_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("villagers") and target_villager == null:
-		target_villager = body
+		# only faction associated body can pick up the item
+		if body.faction == faction_that_mined: 
+			target_villager = body
 
 ## --- Visual Animations ---
 
@@ -92,4 +113,5 @@ func finalize_collection() -> void:
 
 func destroy():
 	main_game_node.call('add_' + material_type, material_amount)
+	# TODO: ADD THE MATERIAL TO THE CLIENT
 	queue_free()

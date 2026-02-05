@@ -525,7 +525,7 @@ spawn_path = NodePath("..")
 [node name="objects" type="Node2D" parent="entities"]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="entities/objects"]
-_spawnable_scenes = PackedStringArray("uid://kx24nn30dqql", "uid://bfu1iccj67rot")
+_spawnable_scenes = PackedStringArray("uid://kx24nn30dqql", "uid://bfu1iccj67rot", "uid://cpyqesdoe3cww")
 spawn_path = NodePath("..")
 
 [node name="structures" type="Node2D" parent="entities"]

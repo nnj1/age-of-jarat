@@ -78,7 +78,6 @@ position = Vector2(0, -9)
 scale = Vector2(0.05, 0.04)
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_interval = 0.1
 delta_interval = 0.1
 replication_config = SubResource("SceneReplicationConfig_aqvaj")
 
