@@ -3,6 +3,7 @@ extends CharacterBody2D
 class_name Unit
 
 @onready var main_game_node = get_tree().get_root().get_node('Game')
+@onready var fog_system = get_tree().get_first_node_in_group("FogSystem")
 
 # SHOULD ONLY CONTAIN VILLAGER SPRITES
 var sprite_atlas_coords_corners = [
@@ -238,7 +239,6 @@ func _setup_fog_timer():
 	timer.start()
 
 func _check_visibility():
-	var fog_system = get_tree().get_first_node_in_group("FogSystem")
 	if not fog_system: return
 	
 	var is_seen = fog_system.is_pos_revealed(global_position)
@@ -301,7 +301,6 @@ func apply_knockback(force: Vector2) -> void:
 func _physics_process(_delta):
 	if not is_multiplayer_authority(): return
 	
-
 	if not is_moving:
 		# only susceptible to knockback, if not moving
 		# Gradually friction away the knockback so they don't slide forever
@@ -327,7 +326,6 @@ func _physics_process(_delta):
 		var direction = global_position.direction_to(target_position)
 		velocity = direction * speed + knockback_velocity
 		
-		
 		# 3. Move and Slide
 		move_and_slide()
 		
@@ -347,8 +345,8 @@ func on_death():
 	
 func unassign_from_structure():
 	if self.assigned_structure:
-			self.assigned_structure.assigned_builders.erase(self)
-			self.assigned_structure = null
+		self.assigned_structure.assigned_builders.erase(self)
+		self.assigned_structure = null
 
 func play_damage_modulate_animation():
 	var tween = get_tree().create_tween()

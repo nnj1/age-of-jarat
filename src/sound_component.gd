@@ -30,11 +30,6 @@ func _ready() -> void:
 	# start random idle sound
 	$idleSound/Timer.start(randf_range(3, 10))
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
-
 func _on_timer_timeout() -> void:
 	if is_human:
 		$idleSound.stream = MusicManager.idle_streams.pick_random()

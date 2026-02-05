@@ -73,6 +73,12 @@ next_idle_unit={
 2d_physics/layer_3="water"
 2d_physics/layer_4="decorators"
 
+[physics]
+
+2d/run_on_separate_thread=true
+2d/physics_engine="GodotPhysics2D"
+2d/solver/solver_iterations=4
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0

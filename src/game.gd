@@ -321,8 +321,9 @@ func update_selection_menu(selected_units):
 	have_a_villager_in_selection = false
 	# add them back in, which calculating stats
 	for unit in selected_units:
-		if unit.lore_data.type == 'villager':
-			have_a_villager_in_selection = true
+		if unit:
+			if unit.lore_data.type == 'villager':
+				have_a_villager_in_selection = true
 			
 		# 1. Create the TextureRect instance
 		var new_tex_rect = TextureRect.new()
