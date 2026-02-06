@@ -26,7 +26,7 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -438.0
+offset_left = -487.0
 offset_top = -148.0
 grow_horizontal = 0
 grow_vertical = 0
@@ -40,21 +40,24 @@ mouse_filter = 2
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
-theme_override_font_sizes/normal_font_size = 20
-theme_override_font_sizes/bold_font_size = 20
-theme_override_font_sizes/bold_italics_font_size = 20
-theme_override_font_sizes/italics_font_size = 20
-theme_override_font_sizes/mono_font_size = 20
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 24
+theme_override_font_sizes/bold_italics_font_size = 24
+theme_override_font_sizes/italics_font_size = 24
+theme_override_font_sizes/mono_font_size = 24
 bbcode_enabled = true
 scroll_following = true
+horizontal_alignment = 2
+vertical_alignment = 2
 
 [node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 8
 mouse_filter = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_qpaxy")
 placeholder_text = "Press enter to chat"
+alignment = 2
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_hlcic")

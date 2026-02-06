@@ -186,11 +186,10 @@ func _on_state_timer_timeout():
 				var interaction = map.get_node('MapInteractionComponent')
 				
 				# do the pop before changing state back to RETURNING
-				interaction.try_to_pop_tile(
-					target_resource.get_meta("layer"), 
+				interaction.rpc('try_to_pop_tile',
+					target_resource.get_meta("layer").get_path(), 
 					target_resource.get_meta("coords"), 
-					target_resource.get_meta("atlas_coords")
-				)
+					target_resource.get_meta("atlas_coords"))
 				
 				# Remove the dummy so we don't try to gather it again
 				target_resource.queue_free()
