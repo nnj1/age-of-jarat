@@ -236,3 +236,9 @@ func get_faction_from_id(peer_id: int) -> int:
 	
 	# Fallback if the ID isn't in our player list
 	return -1
+
+func get_id_from_faction(faction: int) -> int:
+	for peer_id in players.keys():
+		if players[peer_id].faction == faction:
+			return int(peer_id)
+	return -1

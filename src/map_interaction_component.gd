@@ -1,6 +1,7 @@
 extends Node2D
 
 @onready var main_game_node = get_tree().get_root().get_node('Game')
+@onready var ui_label = main_game_node.get_node('UI/Label')
 @onready var selection_manager = get_tree().get_first_node_in_group('manager')
 
 @onready var default_material_textures = {
@@ -9,7 +10,6 @@ extends Node2D
 	'food': main_game_node.get_cropped_tile_texture(Vector2i(5,17)),
 	'stone': main_game_node.get_cropped_tile_texture(Vector2i(5,23))
 }
-
 
 # Signals for both interactions
 signal tile_pressed(layer_node, map_coords, atlas_coords)
@@ -39,7 +39,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			if tile_data.atlas_coords != last_hovered_tile or tile_data.layer != last_hovered_layer:
 				last_hovered_tile = tile_data.atlas_coords
 				last_hovered_layer = tile_data.layer
-				
+				ui_label.text = str(tile_data.map_coords)
 				_on_tile_hover_entered(tile_data.layer, tile_data.map_coords, tile_data.atlas_coords)
 		else:
 			# Mouse is over empty space

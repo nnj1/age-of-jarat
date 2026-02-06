@@ -112,6 +112,7 @@ func finalize_collection() -> void:
 	tween.finished.connect(destroy)
 
 func destroy():
-	main_game_node.call('add_' + material_type, material_amount)
-	# TODO: ADD THE MATERIAL TO THE CLIENT
+	var id_that_mined:int = MultiplayerManager.get_id_from_faction(faction_that_mined)
+	# only update materials for the player that mined it
+	main_game_node.rpc_id(id_that_mined, 'add_' + material_type, material_amount)
 	queue_free()

@@ -61,15 +61,19 @@ func _ready() -> void:
 	spawn_villager.rpc_id(1, $map/procedural.get_optimal_villager_start_position())
 	
 # material incrementation functions
+@rpc("any_peer","call_local","reliable")
 func add_wood(amount: int = 1):
 	materials.wood += amount
 	$UI/VBoxContainer/GUIMatDisplay.boost_mat_animation('wood')
+@rpc("any_peer","call_local","reliable")
 func add_stone(amount: int = 1):
 	materials.stone += amount
 	$UI/VBoxContainer/GUIMatDisplay.boost_mat_animation('stone')
+@rpc("any_peer","call_local","reliable")
 func add_gold(amount: int = 1):
 	materials.gold += amount
 	$UI/VBoxContainer/GUIMatDisplay.boost_mat_animation('gold')
+@rpc("any_peer","call_local","reliable")
 func add_food(amount: int = 1):
 	materials.food += amount
 	$UI/VBoxContainer/GUIMatDisplay.boost_mat_animation('food')

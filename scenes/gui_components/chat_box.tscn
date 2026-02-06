@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://cj483srcy00c8"]
+[gd_scene load_steps=4 format=3 uid="uid://cj483srcy00c8"]
 
 [ext_resource type="Script" uid="uid://dd6fdfo8oa2qe" path="res://src/chat_box.gd" id="1_w6t58"]
+[ext_resource type="AudioStream" uid="uid://dldcflnobf4vk" path="res://assets/sfx/UI Soundpack/UI Soundpack/MP3/Modern3.mp3" id="2_hlcic"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qpaxy"]
 content_margin_left = 10.0
@@ -54,3 +55,7 @@ mouse_filter = 2
 theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxFlat_qpaxy")
 placeholder_text = "Press enter to chat"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_hlcic")
+bus = &"Sfx"

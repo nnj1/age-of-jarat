@@ -31,3 +31,4 @@ func _on_text_submitted(new_text: String):
 @rpc("any_peer", "call_local", "reliable")
 func update_chat_display(message: String):
 	chat_display.append_text("\n" + message)
+	$AudioStreamPlayer.play()
