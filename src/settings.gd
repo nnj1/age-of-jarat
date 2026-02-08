@@ -109,7 +109,7 @@ func _on_fullscreen_toggled(is_pressed: bool):
 # --- Navigation Logic ---
 
 func _on_main_menu_pressed():
-	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
+	get_tree().change_scene_to_file("res://scenes/main_scenes/menu.tscn")
 
 func _on_exit_desktop_pressed():
 	get_tree().quit()

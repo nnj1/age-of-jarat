@@ -537,6 +537,8 @@ func update_structure_menu(structure: Structure, swap_to_tab:bool = true):
 			spawn_button.vertical_icon_alignment = VerticalAlignment.VERTICAL_ALIGNMENT_TOP
 			spawn_button.expand_icon = true
 			spawn_button.custom_minimum_size = Vector2(75, 75)
+			var unit_spawn_material_reqs = str(GlobalVars.filter_json_objects(GlobalVars.lore.units, 'name', unit_name)[0].cost)
+			spawn_button.tooltip_text = unit_spawn_material_reqs
 			
 			# set the button to add to spawn queue when pressed
 			var add_unit_to_queue = func():
@@ -651,12 +653,14 @@ func _on_option_button_item_selected(index: int) -> void:
 	else:
 		$UI/TabContainer/Build/HBoxContainer/VBoxContainer/Button.disabled = true
 
+@rpc("any_peer","call_local","reliable")
 func check_if_enough_materials(material_req:Dictionary):
 	for key in material_req.keys():
 		if materials[key] < material_req[key]:
 			return false
 	return true
-	
+
+@rpc("any_peer","call_local","reliable")
 func subtract_materials(material_req:Dictionary):
 	for key in material_req.keys():
 		materials[key] -= material_req[key]
