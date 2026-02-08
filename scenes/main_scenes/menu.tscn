@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://ccvhjlrutnnd0"]
+[gd_scene load_steps=10 format=3 uid="uid://ccvhjlrutnnd0"]
 
 [ext_resource type="Script" uid="uid://du2gglm53gqmu" path="res://src/menu.gd" id="1_walen"]
 [ext_resource type="Texture2D" uid="uid://gbs0miw5qgvw" path="res://assets/sprites/background.png" id="2_51wap"]
@@ -74,6 +74,43 @@ TooltipLabel/font_sizes/font_size = 16
 Tree/font_sizes/font_size = 16
 Tree/font_sizes/title_button_font_size = 16
 Window/font_sizes/title_font_size = 16
+
+[sub_resource type="Animation" id="Animation_2w4yo"]
+resource_name = "pan"
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-2283, -1303)]
+}
+
+[sub_resource type="Animation" id="Animation_nuf48"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_r34be"]
+_data = {
+&"RESET": SubResource("Animation_nuf48"),
+&"pan": SubResource("Animation_2w4yo")
+}
 
 [node name="Menu" type="Node2D"]
 script = ExtResource("1_walen")
@@ -172,8 +209,18 @@ autostart = true
 [node name="CanvasLayer2" type="CanvasLayer" parent="."]
 
 [node name="Background" type="Sprite2D" parent="."]
-position = Vector2(574, 306)
+scale = Vector2(3, 3)
 texture = ExtResource("2_51wap")
+offset = Vector2(573, 325)
+region_enabled = true
+region_rect = Rect2(26, 65, 1145, 650)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Background"]
+libraries = {
+&"": SubResource("AnimationLibrary_r34be")
+}
+autoplay = "pan"
+speed_scale = 0.01
 
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/ClientButton" to="." method="_on_join_manual_pressed"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/ServerButton" to="." method="_on_host_button_pressed"]
