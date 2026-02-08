@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://bycfdcdf3fmcy"]
+[gd_scene load_steps=10 format=3 uid="uid://bycfdcdf3fmcy"]
 
 [ext_resource type="Script" uid="uid://ch4e4unywe2ak" path="res://src/popup_window.gd" id="1_fhgwo"]
 
@@ -18,6 +18,78 @@ expand_margin_top = 4.0
 expand_margin_right = 4.0
 expand_margin_bottom = 4.0
 anti_aliasing = false
+
+[sub_resource type="ImageTexture" id="ImageTexture_fhgwo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6ljbk"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b4dlq"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.75)
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4np1e"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.75, 0.75, 0.75, 0.75)
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hx0pu"]
+content_margin_left = 4.0
+content_margin_top = 0.0
+content_margin_right = 4.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7qdw4"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.75)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="Theme" id="Theme_fhgwo"]
+VScrollBar/icons/decrement = SubResource("ImageTexture_fhgwo")
+VScrollBar/icons/decrement_highlight = SubResource("ImageTexture_fhgwo")
+VScrollBar/icons/decrement_pressed = SubResource("ImageTexture_fhgwo")
+VScrollBar/icons/increment = SubResource("ImageTexture_fhgwo")
+VScrollBar/icons/increment_highlight = SubResource("ImageTexture_fhgwo")
+VScrollBar/icons/increment_pressed = SubResource("ImageTexture_fhgwo")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_6ljbk")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_b4dlq")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_4np1e")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_hx0pu")
+VScrollBar/styles/scroll_focus = SubResource("StyleBoxFlat_7qdw4")
 
 [node name="PopupWindow" type="Control"]
 z_index = 4
@@ -75,10 +147,47 @@ text = " X "
 [node name="RichTextLabel" type="RichTextLabel" parent="Panel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+theme = SubResource("Theme_fhgwo")
 theme_override_font_sizes/normal_font_size = 24
 theme_override_font_sizes/bold_font_size = 24
 theme_override_font_sizes/bold_italics_font_size = 24
 theme_override_font_sizes/italics_font_size = 24
 theme_override_font_sizes/mono_font_size = 24
+text = "asdf
+asdf
+sa
+df
+sad
+fdsa
+f
+sadf
+dsa
+fsad
+f
+sadf
+asdf
+sad
+fsa
+df
+dsaf
+sda
+f
+sad
+f
+safd
+sadf
+
+dsaf
+sadf
+sad
+f
+dsaf
+asdf
+sad
+f
+sadf
+sadf
+sad
+f"
 
 [connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/Button" to="." method="_on_button_pressed"]
