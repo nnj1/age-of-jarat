@@ -10,6 +10,8 @@ var materials = {
 	'gold': 0
 }
 
+signal materials_changed
+
 var unit_list: Array[Unit] # contains all the units in faction
 var structure_list: Array[Structure] # contains all the structures in a faction
 var have_a_villager_in_selection:bool = false # self explantory
@@ -47,6 +49,9 @@ func _ready() -> void:
 	#$SelectionManager.unit_just_added.connect(update_unit_menu)
 	$SelectionManager.selected_units_changed.connect(update_selection_menu)
 	
+	# conncet signal that updates state of a spawnable button if the materials amount changes
+	materials_changed.connect(update_spawnable_buttons)
+	
 	# HIDE UNIT TAB BY DEFAULT
 	set_tab_hidden_by_name($UI/TabContainer, 'Unit', true)
 	# HIDE THE SELECTION TAB BY DEFAULT
@@ -65,18 +70,22 @@ func _ready() -> void:
 func add_wood(amount: int = 1):
 	materials.wood += amount
 	$UI/VBoxContainer/GUIMatDisplay.boost_mat_animation('wood')
+	materials_changed.emit()
 @rpc("any_peer","call_local","reliable")
 func add_stone(amount: int = 1):
 	materials.stone += amount
 	$UI/VBoxContainer/GUIMatDisplay.boost_mat_animation('stone')
+	materials_changed.emit()
 @rpc("any_peer","call_local","reliable")
 func add_gold(amount: int = 1):
 	materials.gold += amount
 	$UI/VBoxContainer/GUIMatDisplay.boost_mat_animation('gold')
+	materials_changed.emit()
 @rpc("any_peer","call_local","reliable")
 func add_food(amount: int = 1):
 	materials.food += amount
 	$UI/VBoxContainer/GUIMatDisplay.boost_mat_animation('food')
+	materials_changed.emit()
 	
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
@@ -526,6 +535,7 @@ func update_structure_menu(structure: Structure, swap_to_tab:bool = true):
 		for unit_name in structure.lore_data.tiers[str(structure.current_tier)].spawnable_units:
 			var spawn_button = Button.new()
 			spawn_button.text = unit_name
+			spawn_button.add_to_group("spawnable_buttons")
 			var icon_texture
 			if GlobalVars.filter_json_objects(GlobalVars.lore.units, 'name', unit_name)[0].sprite:
 				var sprite_atlas_coords = GlobalVars.filter_json_objects(GlobalVars.lore.units, 'name', unit_name)[0].sprite.pick_random()
@@ -537,15 +547,26 @@ func update_structure_menu(structure: Structure, swap_to_tab:bool = true):
 			spawn_button.vertical_icon_alignment = VerticalAlignment.VERTICAL_ALIGNMENT_TOP
 			spawn_button.expand_icon = true
 			spawn_button.custom_minimum_size = Vector2(75, 75)
-			var unit_spawn_material_reqs = str(GlobalVars.filter_json_objects(GlobalVars.lore.units, 'name', unit_name)[0].cost)
-			spawn_button.tooltip_text = unit_spawn_material_reqs
+			var unit_spawn_material_reqs = GlobalVars.filter_json_objects(GlobalVars.lore.units, 'name', unit_name)[0].cost
+			spawn_button.tooltip_text = str(unit_spawn_material_reqs)
+			spawn_button.set_meta('material_reqs', unit_spawn_material_reqs)
+			
+			# set the initial button state
+			if not check_if_enough_materials(unit_spawn_material_reqs):
+				spawn_button.disabled = true
 			
 			# set the button to add to spawn queue when pressed
 			var add_unit_to_queue = func():
 				if structure.has_node('SpawnUnitsComponent'):
-					structure.get_node('SpawnUnitsComponent').add_new_unit_to_queue(unit_name)
+					# only add if enough materials
+					if check_if_enough_materials(unit_spawn_material_reqs):
+						# subtract the materials and add the unit to the spawn queue
+						subtract_materials(unit_spawn_material_reqs)
+						structure.get_node('SpawnUnitsComponent').add_new_unit_to_queue(unit_name)
+
 			spawn_button.pressed.connect(add_unit_to_queue)
 			
+			# finally add the button
 			spawn_button_container.add_child(spawn_button)
 			
 	# display tier upgrade info
@@ -666,3 +687,14 @@ func subtract_materials(material_req:Dictionary):
 		materials[key] -= material_req[key]
 		if materials[key] < 0:
 			materials[key] = 0
+	materials_changed.emit()
+	
+# update any spawnbale buttons that are there 
+func update_spawnable_buttons():
+	for button in get_tree().get_nodes_in_group("spawnable_buttons"):
+		if button:
+			var material_reqs = button.get_meta('material_reqs')
+			if check_if_enough_materials(material_reqs):
+				button.disabled = false
+			else:
+				button.disabled = true
