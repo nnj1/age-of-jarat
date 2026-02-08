@@ -650,3 +650,15 @@ func _on_option_button_item_selected(index: int) -> void:
 		$UI/TabContainer/Build/HBoxContainer/VBoxContainer/Button.disabled = false
 	else:
 		$UI/TabContainer/Build/HBoxContainer/VBoxContainer/Button.disabled = true
+
+func check_if_enough_materials(material_req:Dictionary):
+	for key in material_req.keys():
+		if materials[key] < material_req[key]:
+			return false
+	return true
+	
+func subtract_materials(material_req:Dictionary):
+	for key in material_req.keys():
+		materials[key] -= material_req[key]
+		if materials[key] < 0:
+			materials[key] = 0
