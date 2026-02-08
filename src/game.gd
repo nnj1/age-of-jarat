@@ -698,3 +698,8 @@ func update_spawnable_buttons():
 				button.disabled = false
 			else:
 				button.disabled = true
+
+func _on_lore_button_pressed() -> void:
+	var menu_scene = preload('res://scenes/gui_components/popup_window.tscn')
+	# TODO: can modify stuff here or just go with defaults
+	$UI.add_child(menu_scene.instantiate())

@@ -101,5 +101,47 @@
 	  "stats": { "hp": 10, "speed": 45, "food_yield": 25 }, 
 	  "behavior": "flee_on_sight" 
 	}
+  ],
+"world_metadata": {
+	"game_title": "Age of Jarat",
+	"world_name": "The Great Release",
+	"origin_event": "The Celestial Cramp"
+  },
+  "world_history": [
+	"In the Era of the Empty Void, the gods were tidy, dignified beings who spent eons grooming their nebulae and polishing the stars. This era of cleanliness ended abruptly during the 'Feast of the Infinite,' when Malphas, the God of Consumption, mistakenly ingested a spicy, fermented supernova. The resulting internal pressure was more than a divine constitution could bear. In a moment of sheer, undignified desperation, Malphas bypassed the celestial gates and 'released' a massive, steaming torrent of raw, unprocessed reality into the void. This was the first Jarat—a chaotic, high-viscosity mass of matter that the other gods immediately tried to flush into the abyss. However, the mass was too dense, too stubborn, and far too 'sticky' to be removed from the fabric of space-time.",
+	"The first humans did not evolve; they were accidentally 'trapped' in the spill. These early ancestors were actually celestial janitors sent by the other deities to scrub the mess away. Armed with divine plungers and cosmic mops, they descended into the Bowel Bottoms. But as they worked, they realized the sludge was surprisingly fertile. They discovered that if they planted seeds in the warm, brown earth, crops grew at a terrifying rate. The janitors eventually traded their mops for hoes, deciding that living in a divine accident was better than working a 9-to-5 in a sterile heaven. They built the first Strongholds out of 'Two-Ply Timber' and learned to coexist with the Jarat Eaters, the world’s natural sanitation crew.",
+	"The gods, horrified that their janitors had started a civilization in a literal waste-bin, began the 'Great Scrubbing.' They sent down 'The Eraser Monoliths' and freezing blasts of energy to try and sanitize the realm, creating the Cryo-Stasis Rim. The humans, however, proved as stubborn as the land itself. They developed RTS tactics (Rapid Toilet-site Stabilization) to fortify their villages against the gods' attempts to 'flush' them. This led to a stalemate: the gods continue to look down in disgust, occasionally sending 'Night-Phase Contractions' to purge the world, while the humans of Jarat continue to build, farm, and expand, treating the divine's greatest embarrassment as their greatest inheritance.",
+    "Today, the world exists in a state of 'Constant Churn.' The interactions between the divine and the mortal have become a cycle of rejection and persistence. Humans have learned to harness the 'Pulse' of the world's biology to power their Mystic Spires, while the gods have largely given up on deletion, opting instead to occasionally toss 'Celestial Deodorant' (snowstorms) or 'Divine Fiber' (meteors) at the planet. The Age of Jarat is now defined by the 'Sovereign Remnant,' a faction of humans who believe that if they build a big enough army, they can eventually march up the Great Drain and demand an apology from Malphas himself."
+  ],
+  "biomes": [
+	{
+	  "id": "the_bowel_bottoms",
+	  "name": "The Bowel Bottoms",
+	  "threat_level": 1,
+	  "description": "The site of the original 'Release.' The soil is soft, warm, and highly productive, but the air carries a heavy, unmistakable musk of antiquity.",
+	  "inhabitants": "Jarat Eaters",
+	  "exclusive_resources": ["Organic Sludge", "Fiber-Rich Grain"]
+	},
+	{
+	  "id": "the_petrified_pulp",
+	  "name": "The Petrified Pulp Forest",
+	  "threat_level": 2,
+	  "description": "Where the divine janitors abandoned their cleaning supplies. The trees are tall, white rolls of absorbent wood that are excellent for soak-up-based defenses.",
+	  "exclusive_resources": ["Two-Ply Timber", "Sticky Sap"]
+	},
+	{
+	  "id": "the_porcelain_sea",
+	  "name": "The Porcelain Sea",
+	  "threat_level": 3,
+	  "description": "A cold, sterile ocean of white tile and blue chemical water. It is the gods' attempt at a 'clean' zone, inhabited by aggressive, bleached predators.",
+	  "exclusive_resources": ["Bleached Kelp", "Fragile Ceramic"]
+	},
+	{
+	  "id": "the_constipated_peaks",
+	  "name": "The Constipated Peaks",
+	  "threat_level": 4,
+	  "description": "Mountain ranges formed during the gods' most difficult attempts to purge the world. Hard, grey, and completely immovable without heavy siege equipment.",
+	  "exclusive_resources": ["Hard-Packed Ore", "Mineral Blockage"]
+	}
   ]
 }

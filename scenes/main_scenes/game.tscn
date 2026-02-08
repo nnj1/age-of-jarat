@@ -122,6 +122,16 @@ theme_override_font_sizes/bold_italics_font_size = 25
 theme_override_font_sizes/italics_font_size = 25
 theme_override_font_sizes/mono_font_size = 25
 
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/TabContainer/Game/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+
+[node name="LoreButton" type="Button" parent="UI/TabContainer/Game/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "World Lore"
+
 [node name="Structure" type="Panel" parent="UI/TabContainer"]
 visible = false
 layout_mode = 2
@@ -560,5 +570,6 @@ current = true
 environment = SubResource("Environment_fqmia")
 
 [connection signal="mouse_entered" from="UI/TabContainer" to="UI/TabContainer" method="_on_mouse_entered"]
+[connection signal="pressed" from="UI/TabContainer/Game/HBoxContainer/VBoxContainer/LoreButton" to="." method="_on_lore_button_pressed"]
 [connection signal="item_selected" from="UI/TabContainer/Build/HBoxContainer/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
 [connection signal="pressed" from="UI/TabContainer/Build/HBoxContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
