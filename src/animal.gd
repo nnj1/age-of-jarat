@@ -10,7 +10,10 @@ func prepare(given_spawning_player_id: int = 1, given_faction: int = -1, given_l
 func on_death():
 	#spawn some meat
 	var popped_tile = preload('res://scenes/entities/objects/popped_tile.tscn').instantiate()
-	popped_tile.prepare('food', randi_range(1, 5), main_game_node.get_cropped_tile_texture(Vector2i(1,17)))
+	var food_yield = randi_range(1, 5)
+	if 'food_yield' in lore_data.stats:
+		food_yield = int(lore_data.stats.food_yield)
+	popped_tile.prepare('food', food_yield, main_game_node.get_cropped_tile_texture(Vector2i(1,17)))
 	popped_tile.position = self.global_position
 	main_game_node.get_node('entities/objects').call_deferred('add_child', popped_tile, true)
 	super.on_death()

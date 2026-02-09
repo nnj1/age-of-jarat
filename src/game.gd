@@ -700,6 +700,30 @@ func update_spawnable_buttons():
 				button.disabled = true
 
 func _on_lore_button_pressed() -> void:
-	var menu_scene = preload('res://scenes/gui_components/popup_window.tscn')
+	var scene = preload('res://scenes/gui_components/popup_window.tscn').instantiate()
 	# TODO: can modify stuff here or just go with defaults
-	$UI.add_child(menu_scene.instantiate())
+	$UI.add_child(scene)
+
+func _on_controls_button_pressed() -> void:
+	var scene = preload('res://scenes/gui_components/popup_window.tscn').instantiate()
+	scene.window_title = 'Controls'
+	scene.contents_bb_code = 'Info about controls here.'
+	$UI.add_child(scene)
+
+func _on_units_button_pressed() -> void:
+	var scene = preload('res://scenes/gui_components/popup_window.tscn').instantiate()
+	scene.window_title = 'Units'
+	scene.contents_bb_code = JSON.stringify(GlobalVars.lore.units)
+	$UI.add_child(scene)
+
+func _on_structures_button_pressed() -> void:
+	var scene = preload('res://scenes/gui_components/popup_window.tscn').instantiate()
+	scene.window_title = 'Structures'
+	scene.contents_bb_code = JSON.stringify(GlobalVars.lore.structures)
+	$UI.add_child(scene)
+
+func _on_beastiary_button_pressed() -> void:
+	var scene = preload('res://scenes/gui_components/popup_window.tscn').instantiate()
+	scene.window_title = 'Beastiary'
+	scene.contents_bb_code = JSON.stringify(GlobalVars.lore.animals)
+	$UI.add_child(scene)
