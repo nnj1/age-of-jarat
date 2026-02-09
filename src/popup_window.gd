@@ -36,6 +36,8 @@ func _on_button_pressed() -> void:
 func _input(event):
 	if event is InputEventKey and event.is_pressed():
 		print("Control caught key: ", event.as_text())
+		# This stops the input from reaching other nodes or the UI
+		get_viewport().set_input_as_handled()
 		
 	if event.is_action_pressed('ui_cancel'):
 		queue_free()
@@ -61,6 +63,8 @@ func setup_tree_view():
 	tree.set_column_title(0, "Property / Index")
 	tree.set_column_title(1, "Value")
 	tree.column_titles_visible = true
+	tree.add_theme_font_size_override('font_size', 20)
+	tree.add_theme_font_size_override('title_button_font_size', 20)
 	
 	var root = tree.create_item()
 	tree.hide_root = true
@@ -73,7 +77,7 @@ func populate_from_array(data_array: Array, root_item: TreeItem, tree: Tree):
 		# Create a parent node for each Dictionary in the array
 		var entry_node = tree.create_item(root_item)
 		entry_node.set_text(0, "Entry " + str(i))
-		entry_node.set_custom_bg_color(0, Color(1, 1, 1, 0.1)) # Subtle highlight for entries
+		#entry_node.set_custom_bg_color(0, Color(1, 1, 1, 0.1)) # Subtle highlight for entries
 		
 		# Now parse the dictionary inside that entry
 		var dict = data_array[i]

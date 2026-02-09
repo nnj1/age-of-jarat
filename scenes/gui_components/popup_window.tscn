@@ -85,4 +85,7 @@ theme_override_font_sizes/italics_font_size = 24
 theme_override_font_sizes/mono_font_size = 24
 bbcode_enabled = true
 
+[node name="Tree" type="Tree" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
 [connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/Button" to="." method="_on_button_pressed"]
