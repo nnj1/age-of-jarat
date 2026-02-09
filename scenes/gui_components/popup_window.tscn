@@ -153,41 +153,6 @@ theme_override_font_sizes/bold_font_size = 24
 theme_override_font_sizes/bold_italics_font_size = 24
 theme_override_font_sizes/italics_font_size = 24
 theme_override_font_sizes/mono_font_size = 24
-text = "asdf
-asdf
-sa
-df
-sad
-fdsa
-f
-sadf
-dsa
-fsad
-f
-sadf
-asdf
-sad
-fsa
-df
-dsaf
-sda
-f
-sad
-f
-safd
-sadf
-
-dsaf
-sadf
-sad
-f
-dsaf
-asdf
-sad
-f
-sadf
-sadf
-sad
-f"
+bbcode_enabled = true
 
 [connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/Button" to="." method="_on_button_pressed"]

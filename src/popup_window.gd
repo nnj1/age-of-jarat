@@ -31,3 +31,8 @@ func _on_header_gui_input(event: InputEvent) -> void:
 
 func _on_button_pressed() -> void:
 	queue_free()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed('ui_cancel'):
+		get_viewport().set_input_as_handled()
+		queue_free()
