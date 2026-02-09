@@ -51,6 +51,8 @@ func _ready() -> void:
 	
 	# conncet signal that updates state of a spawnable button if the materials amount changes
 	materials_changed.connect(update_spawnable_buttons)
+	# conncet signal that updates state of a upgrade button if the materials amount changes
+	materials_changed.connect(update_upgrade_buttons)
 	
 	# HIDE UNIT TAB BY DEFAULT
 	set_tab_hidden_by_name($UI/TabContainer, 'Unit', true)
@@ -573,11 +575,29 @@ func update_structure_menu(structure: Structure, swap_to_tab:bool = true):
 	var tier_upgrade_text:String = 'Needs:\n'
 	var _next_tier = clampi(structure.current_tier + 1, 1, 3) # there are only 3 tiers 
 	var upgrade_cost = structure.lore_data.tiers[str(int(structure.current_tier))].upgrade_cost
+	
 	for key in upgrade_cost:
 		var mat_type = key
 		tier_upgrade_text += mat_type + ' ' + str(int(upgrade_cost[key])) + '\n'
 	tier_upgrade_text += 'to upgrade.'
 	$UI/TabContainer/Structure/HBoxContainer/VBoxContainer3/RichTextLabel.text = tier_upgrade_text
+	
+	# check to see if enough materials to upgrade and set the upgrade button accordingly
+	var upgrade_button = $UI/TabContainer/Structure/HBoxContainer/VBoxContainer3/Button
+	upgrade_button.set_meta('material_reqs', upgrade_cost)
+	if check_if_enough_materials(upgrade_cost):
+		upgrade_button.disabled = false
+	else:
+		upgrade_button.disabled = true
+		
+	# set up upgrade function to actually upgrade
+	var upgrade_structure = func():
+		structure.upgrade_structure()
+	
+	# Connect signal to button after clearing prior signals
+	for connection in upgrade_button.get_signal_connection_list("pressed"):
+		connection.signal.disconnect(connection.callable)
+	upgrade_button.pressed.connect(upgrade_structure)
 	
 	# display any mats the structure periodically spawns
 	var mat_gui = $UI/TabContainer/Structure/HBoxContainer/VBoxContainer/HBoxContainer
@@ -689,9 +709,18 @@ func subtract_materials(material_req:Dictionary):
 			materials[key] = 0
 	materials_changed.emit()
 	
-# update any spawnbale buttons that are there 
+# update any spawnable buttons that are there 
 func update_spawnable_buttons():
 	for button in get_tree().get_nodes_in_group("spawnable_buttons"):
+		if button:
+			var material_reqs = button.get_meta('material_reqs')
+			if check_if_enough_materials(material_reqs):
+				button.disabled = false
+			else:
+				button.disabled = true
+
+func update_upgrade_buttons():
+	for button in get_tree().get_nodes_in_group("upgrade_buttons"):
 		if button:
 			var material_reqs = button.get_meta('material_reqs')
 			if check_if_enough_materials(material_reqs):

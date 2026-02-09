@@ -205,3 +205,14 @@ func get_child_in_group(group_name: String) -> Node:
 		if child.is_in_group(group_name):
 			return child
 	return null # Returns null if nobody matches
+
+# return true or false depending on if if the structure is upgraded
+func upgrade_structure() -> bool:
+	var next_tier = current_tier + 1
+	if not str(int(next_tier)) in lore_data.tiers:
+		return false
+	else:
+		next_tier += 1
+		return true
+		
+		
