@@ -719,7 +719,9 @@ func _on_units_button_pressed() -> void:
 func _on_structures_button_pressed() -> void:
 	var scene = preload('res://scenes/gui_components/popup_window.tscn').instantiate()
 	scene.window_title = 'Structures'
-	scene.contents_bb_code = JSON.stringify(GlobalVars.lore.structures)
+	#scene.contents_bb_code = "This is a list of all the structures you can build."
+	scene.contents_json = GlobalVars.lore.structures
+	scene.setup_tree_view()
 	$UI.add_child(scene)
 
 func _on_beastiary_button_pressed() -> void:
