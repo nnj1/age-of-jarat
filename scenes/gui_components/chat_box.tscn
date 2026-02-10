@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://cj483srcy00c8"]
+[gd_scene format=3 uid="uid://cj483srcy00c8"]
 
 [ext_resource type="Script" uid="uid://dd6fdfo8oa2qe" path="res://src/chat_box.gd" id="1_w6t58"]
 [ext_resource type="AudioStream" uid="uid://dldcflnobf4vk" path="res://assets/sfx/UI Soundpack/UI Soundpack/MP3/Modern3.mp3" id="2_hlcic"]
@@ -8,7 +8,7 @@ content_margin_left = 10.0
 content_margin_right = 10.0
 bg_color = Color(0, 0, 0, 0.19900002)
 
-[node name="ChatBox" type="Control"]
+[node name="ChatBox" type="Control" unique_id=685031447]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -18,7 +18,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_w6t58")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=800105156]
 self_modulate = Color(1, 1, 1, 0.11100001)
 layout_mode = 1
 anchors_preset = 3
@@ -32,11 +32,11 @@ grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=1426153660]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/VBoxContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/VBoxContainer" unique_id=1724343261]
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
@@ -50,7 +50,7 @@ scroll_following = true
 horizontal_alignment = 2
 vertical_alignment = 2
 
-[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer" unique_id=1940844683]
 layout_mode = 2
 size_flags_vertical = 8
 mouse_filter = 2
@@ -59,6 +59,6 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_qpaxy")
 placeholder_text = "Press enter to chat"
 alignment = 2
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2123287317]
 stream = ExtResource("2_hlcic")
 bus = &"Sfx"

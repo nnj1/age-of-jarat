@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://cgig36v2tr1w3"]
+[gd_resource type="TileSet" format=3 uid="uid://cgig36v2tr1w3"]
 
 [ext_resource type="Texture2D" uid="uid://fik2xyspevag" path="res://assets/tilesets/urizen_onebit_tileset__v2d0.png" id="1_ax7cu"]
 

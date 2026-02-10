@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=66 format=3 uid="uid://3b6jfloh1m1l"]
+[gd_resource type="Theme" format=3 uid="uid://3b6jfloh1m1l"]
 
 [ext_resource type="Texture2D" uid="uid://crnrlbavwukpg" path="res://assets/themes/black_and_white_theme/black_and_white_theme/icons/slider_grabber.svg" id="1_a5rho"]
 [ext_resource type="Texture2D" uid="uid://03nobdvaymon" path="res://assets/themes/black_and_white_theme/black_and_white_theme/icons/slider_grabber_hl.svg" id="2_fj6ix"]
