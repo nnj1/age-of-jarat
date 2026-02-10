@@ -728,7 +728,9 @@ func update_spawnable_buttons():
 func update_upgrade_buttons():
 	for button in get_tree().get_nodes_in_group("upgrade_buttons"):
 		if button:
-			var material_reqs = button.get_meta('material_reqs', null)
+			var material_reqs = null
+			if button.has_meta('material_reqs'):
+				material_reqs = button.get_meta('material_reqs', null)
 			if material_reqs:
 				if check_if_enough_materials(material_reqs):
 					button.disabled = false
