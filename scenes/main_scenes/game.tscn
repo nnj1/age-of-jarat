@@ -58,6 +58,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="UI/VBoxContainer" unique_id=739201247]
 layout_mode = 2

@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bycfdcdf3fmcy"]
+[gd_scene format=3 uid="uid://bycfdcdf3fmcy"]
 
 [ext_resource type="Theme" uid="uid://ct81ym1v10hk6" path="res://resources/proper_scroll_theme.tres" id="1_6ljbk"]
 [ext_resource type="Script" uid="uid://ch4e4unywe2ak" path="res://src/popup_window.gd" id="1_fhgwo"]
@@ -20,7 +20,7 @@ expand_margin_right = 4.0
 expand_margin_bottom = 4.0
 anti_aliasing = false
 
-[node name="PopupWindow" type="Control"]
+[node name="PopupWindow" type="Control" unique_id=212338648]
 z_index = 4
 layout_mode = 3
 anchors_preset = 15
@@ -33,7 +33,7 @@ size_flags_vertical = 3
 theme = ExtResource("1_6ljbk")
 script = ExtResource("1_fhgwo")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=1002249232]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -48,7 +48,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fhgwo")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=719159803]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -56,10 +56,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer" unique_id=1958811159]
 layout_mode = 2
 
-[node name="window_title" type="Label" parent="Panel/VBoxContainer/HBoxContainer"]
+[node name="window_title" type="Label" parent="Panel/VBoxContainer/HBoxContainer" unique_id=624489656]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -69,12 +69,12 @@ theme_override_font_sizes/font_size = 32
 text = "Lore"
 horizontal_alignment = 1
 
-[node name="Button" type="Button" parent="Panel/VBoxContainer/HBoxContainer"]
+[node name="Button" type="Button" parent="Panel/VBoxContainer/HBoxContainer" unique_id=941774425]
 layout_mode = 2
 size_flags_horizontal = 8
 text = " X "
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Panel/VBoxContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel/VBoxContainer" unique_id=287270351]
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("1_6ljbk")
@@ -84,8 +84,5 @@ theme_override_font_sizes/bold_italics_font_size = 24
 theme_override_font_sizes/italics_font_size = 24
 theme_override_font_sizes/mono_font_size = 24
 bbcode_enabled = true
-
-[node name="Tree" type="Tree" parent="Panel/VBoxContainer"]
-layout_mode = 2
 
 [connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/Button" to="." method="_on_button_pressed"]
