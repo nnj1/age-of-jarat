@@ -49,7 +49,7 @@ func _unhandled_input(event):
 		var target = get_global_mouse_position()
 		for i in range(selected_units.size()):
 			# Basic spread so they don't all overlap at the exact same pixel
-			var offset = Vector2(randf_range(-5, 5), randf_range(-5, 5))
+			var offset = Vector2(randf_range(-6, 6), randf_range(-6, 6))
 			var unit = selected_units[i]
 			
 			# Access the component we renamed to UnitController

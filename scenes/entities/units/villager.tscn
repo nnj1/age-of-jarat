@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://fix3rwufx5qv"]
+[gd_scene format=3 uid="uid://fix3rwufx5qv"]
 
 [ext_resource type="Script" uid="uid://sjnwhxik4yas" path="res://src/villager.gd" id="1_t12mu"]
 [ext_resource type="PackedScene" uid="uid://cldxrxi6cj4ln" path="res://scenes/components/HealthComponent.tscn" id="2_vrepr"]
@@ -55,48 +55,48 @@ properties/7/path = NodePath(".:faction")
 properties/7/spawn = true
 properties/7/replication_mode = 2
 
-[node name="Villager" type="CharacterBody2D" groups=["units", "villagers"]]
+[node name="Villager" type="CharacterBody2D" unique_id=1841291669 groups=["units", "villagers"]]
 collision_layer = 2
 collision_mask = 15
 input_pickable = true
 motion_mode = 1
 script = ExtResource("1_t12mu")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1227123667]
 position = Vector2(0, 9.536743e-07)
 shape = SubResource("CircleShape2D_vrepr")
 
-[node name="UnitController" parent="." instance=ExtResource("4_q8lqd")]
+[node name="UnitController" parent="." unique_id=853692782 instance=ExtResource("4_q8lqd")]
 position = Vector2(-6, -5.999999)
 
-[node name="SelectionCircle" type="Sprite2D" parent="."]
+[node name="SelectionCircle" type="Sprite2D" parent="." unique_id=1204965436]
 position = Vector2(-6, -5.999999)
 
-[node name="ColorRect" type="ColorRect" parent="SelectionCircle"]
+[node name="ColorRect" type="ColorRect" parent="SelectionCircle" unique_id=1451600947]
 z_index = -1
 offset_right = 12.0
 offset_bottom = 12.0
 metadata/_edit_use_anchors_ = true
 
-[node name="Sprite" type="TileMapLayer" parent="."]
+[node name="Sprite" type="TileMapLayer" parent="." unique_id=694133325]
 material = SubResource("ShaderMaterial_iy4rk")
 position = Vector2(-6, -6)
 tile_set = ExtResource("4_eg14d")
 
-[node name="HealthComponent" parent="." instance=ExtResource("2_vrepr")]
+[node name="HealthComponent" parent="." unique_id=2141843244 instance=ExtResource("2_vrepr")]
 position = Vector2(0, -9)
 scale = Vector2(0.05, 0.04)
 
-[node name="SoundComponent" parent="." instance=ExtResource("6_aqvaj")]
+[node name="SoundComponent" parent="." unique_id=1853832311 instance=ExtResource("6_aqvaj")]
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1733228535]
 replication_config = SubResource("SceneReplicationConfig_aqvaj")
 
-[node name="FactionLabelComponent" parent="." instance=ExtResource("7_iy4rk")]
+[node name="FactionLabelComponent" parent="." unique_id=719053713 instance=ExtResource("7_iy4rk")]
 position = Vector2(0, 8)
 scale = Vector2(0.25, 0.25)
 
-[node name="WanderComponent" parent="." instance=ExtResource("8_ojcu5")]
+[node name="WanderComponent" parent="." unique_id=1934634523 instance=ExtResource("8_ojcu5")]
 current_stance = 0
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
