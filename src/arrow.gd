@@ -3,7 +3,7 @@ extends Node2D
 class_name Projectile
 
 @export var speed: float = 100.0
-var direction: Vector2 = Vector2.ZERO
+@export var direction: Vector2 = Vector2.ZERO
 var damage: float = 0.0
 var attacker: CharacterBody2D = null
 var attackers_allies = []
@@ -24,7 +24,7 @@ func _ready() -> void:
 			$PoisonGPUParticles2D.emitting = false
 	
 func _physics_process(delta: float) -> void:
-	if not multiplayer.is_server(): return
+	
 	# Move the arrow in the set direction
 	global_position += direction * speed * delta
 	
@@ -34,6 +34,8 @@ func _physics_process(delta: float) -> void:
 		queue_free()
 
 func launch(target_direction: Vector2, incoming_damage: float) -> void:
+	if not multiplayer.is_server(): return 
+	
 	direction = target_direction
 	damage = incoming_damage
 	
@@ -42,6 +44,7 @@ func launch(target_direction: Vector2, incoming_damage: float) -> void:
 	rotation = direction.angle()
 
 func _on_body_entered(body: Node2D) -> void:
+	if not multiplayer.is_server(): return
 	if body != attacker:
 		# FRIENDLY FIRE CHECK, TODO: MAKE THIS TOGGLEABLE
 		if not (body.faction in attackers_allies):
@@ -52,4 +55,11 @@ func _on_body_entered(body: Node2D) -> void:
 			if health and health.has_method("take_damage"):
 				health.take_damage(damage)
 				
-			queue_free() # Destroy arrow after hitting something
+			#rpc('smart_queue_free') # Destroy arrow after hitting something
+			queue_free()
+
+@rpc("any_peer","call_local","reliable")
+func smart_queue_free():
+	self.hide()
+	await get_tree().process_frame
+	queue_free()
