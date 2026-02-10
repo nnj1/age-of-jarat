@@ -43,6 +43,8 @@ var road_mask = {}
 @export var stone_noise = FastNoiseLite.new()
 @export var stone_noise_frequency = 0.08
 
+signal done_with_map_generation
+
 # 4. FOW Settings
 @export var vision_radius: int = 8
 var update_timer: float = 0.0
@@ -103,11 +105,10 @@ func get_random_central_point(points: Array[Vector2]) -> Vector2:
 
 func _ready() -> void:
 	
+	center_map()
+	
 	# ADD THIS: Register this node as the FogSystem
 	add_to_group("FogSystem")
-	
-	# OPTIONAL: center the map
-	self.position -= Vector2(map_size.x * 12.0 / 2, map_size.y * 12.0 / 2)
 	
 	if multiplayer.is_server():
 		# Server starts immediately
@@ -116,7 +117,10 @@ func _ready() -> void:
 		# Client waits for the signal from your MultiplayerManager
 		MultiplayerManager.settings_received.connect(start_generation)
 		
-			
+func center_map():
+	# OPTIONAL: center the map
+	self.position -= Vector2(map_size.x * 12.0 / 2, map_size.y * 12.0 / 2)
+
 func start_generation():
 	# Safely disconnect to avoid double-generation
 	if MultiplayerManager.settings_received.is_connected(start_generation):
@@ -165,14 +169,27 @@ func generate_world() -> void:
 			determine_tiles(pos, n, n2, n3)
 			
 			counter += 1
+
 			# print occasional progress updates
 			if (x*y % 500000000000) == 0:
 				print('Generation map...' + str(int(float(counter)/float(map_size.x * map_size.y) * 100.0)) +'%')
-				pass
+				
+				# code for updating loading screen
+				
+				#var custom_progress = 10 + int(float(counter)/float(map_size.x * map_size.y) * 90.0)
+				#LoadingScreen.update_bar(custom_progress)
+				# VERY IMPORTANT: This prevents the game from freezing
+				#await get_tree().process_frame
 				
 	prepare_road_mask(paveable_points)
 	var road_density = rng.randi_range(25, 75) # Generate between 5 and 12 roads
 	generate_random_roads(road_density)
+	
+	done_with_map_generation.emit()
+	
+	# Once the heavy generation is done, tell the singleton to fade out
+	#LoadingScreen.finish_transition()
+	
 	
 func determine_tiles(pos: Vector2i, noise_val: float, noise_val_2: float, noise_val_3: float) -> void:
 	

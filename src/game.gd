@@ -61,12 +61,16 @@ func _ready() -> void:
 	# HIDE THE SELECTION STRUCTURE BY DEFAULT
 	set_tab_hidden_by_name($UI/TabContainer, 'Structure', true)
 
+	#$map/procedural.done_with_map_generation.connect(spawn_intial_villagers)
+	spawn_intial_villagers()
+	
+func spawn_intial_villagers():
 	# Spawn the first four villagers for the player!
 	spawn_villager.rpc_id(1, $map/procedural.get_optimal_villager_start_position())
 	spawn_villager.rpc_id(1, $map/procedural.get_optimal_villager_start_position())
 	spawn_villager.rpc_id(1, $map/procedural.get_optimal_villager_start_position())
 	spawn_villager.rpc_id(1, $map/procedural.get_optimal_villager_start_position())
-	
+
 # material incrementation functions
 @rpc("any_peer","call_local","reliable")
 func add_wood(amount: int = 1):

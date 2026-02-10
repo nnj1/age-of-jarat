@@ -119,7 +119,7 @@ func _on_peer_connected(id: int):
 	# SERVER: Send gameplay settings to the specific new peer
 	if multiplayer.is_server():
 		sync_settings.rpc_id(id, JSON.stringify(server_settings))
-
+			
 func _sync_global_state():
 	# SERVER: Push full player/alliance state to all connected peers
 	update_all_clients.rpc(JSON.stringify(players), JSON.stringify(alliances))
@@ -225,6 +225,7 @@ func _get_next_available_faction() -> int:
 
 func load_game():
 	get_tree().change_scene_to_file("res://scenes/main_scenes/game.tscn")
+	#LoadingScreen.transition_to("res://scenes/main_scenes/game.tscn")
 
 ## Returns the faction index (0-9) for a given peer_id.
 ## Returns -1 if the player is not found (useful for NPCs or disconnected players).

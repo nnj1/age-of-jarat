@@ -25,6 +25,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 GlobalVars="*res://src/global_vars.gd"
+LoadingScreen="*uid://bds2p8hp0mhiu"
 PostProcessor="*res://scenes/autoloads/PostProcessor.tscn"
 CursorManager="*res://scenes/autoloads/CursorManager.tscn"
 MusicManager="*res://scenes/autoloads/MusicManager.tscn"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://24ncf3ybr3hc"]
+[gd_scene format=3 uid="uid://24ncf3ybr3hc"]
 
 [ext_resource type="Script" uid="uid://dq6a3ori1r0vs" path="res://src/procedural.gd" id="1_e5la6"]
 [ext_resource type="TileSet" uid="uid://cgig36v2tr1w3" path="res://resources/urizen.tres" id="1_guuwn"]
@@ -38,36 +38,36 @@ shader_parameter/vertical_variation = 5.0
 shader_parameter/wind_direction = 1.0
 shader_parameter/black_threshold = 0.1
 
-[node name="procedural" type="Node2D"]
+[node name="procedural" type="Node2D" unique_id=695397710]
 script = ExtResource("1_e5la6")
 noise = SubResource("FastNoiseLite_ug44p")
 vegetation_noise = SubResource("FastNoiseLite_cxnnp")
 stone_noise = SubResource("FastNoiseLite_fs631")
 
-[node name="seabed" type="TileMapLayer" parent="."]
+[node name="seabed" type="TileMapLayer" parent="." unique_id=1974524755]
 tile_set = ExtResource("1_guuwn")
 
-[node name="water" type="TileMapLayer" parent="."]
+[node name="water" type="TileMapLayer" parent="." unique_id=366287153]
 modulate = Color(0.7554169, 1, 1, 1)
 material = SubResource("ShaderMaterial_cxnnp")
 tile_set = ExtResource("1_guuwn")
 
-[node name="ground" type="TileMapLayer" parent="."]
+[node name="ground" type="TileMapLayer" parent="." unique_id=1250503292]
 modulate = Color(0.29586652, 0.2958665, 0.2958665, 1)
 tile_set = ExtResource("1_guuwn")
 
-[node name="roads" type="TileMapLayer" parent="."]
+[node name="roads" type="TileMapLayer" parent="." unique_id=1910949149]
 material = SubResource("ShaderMaterial_ug44p")
 tile_set = ExtResource("1_guuwn")
 
-[node name="decorators" type="TileMapLayer" parent="."]
+[node name="decorators" type="TileMapLayer" parent="." unique_id=777688901]
 modulate = Color(0.6337567, 0.6337568, 0.6337567, 1)
 material = SubResource("ShaderMaterial_ug44p")
 tile_set = ExtResource("1_guuwn")
 physics_quadrant_size = 1
 
-[node name="fow" type="TileMapLayer" parent="."]
+[node name="fow" type="TileMapLayer" parent="." unique_id=899688930]
 z_index = 1
 tile_set = ExtResource("1_guuwn")
 
-[node name="MapInteractionComponent" parent="." instance=ExtResource("5_cxnnp")]
+[node name="MapInteractionComponent" parent="." unique_id=461780866 instance=ExtResource("5_cxnnp")]
