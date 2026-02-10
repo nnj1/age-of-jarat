@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bfu1iccj67rot"]
+[gd_scene format=3 uid="uid://bfu1iccj67rot"]
 
 [ext_resource type="Script" uid="uid://dk26clul6uf2m" path="res://src/arrow.gd" id="1_3sgs4"]
 [ext_resource type="Texture2D" uid="uid://fik2xyspevag" path="res://assets/tilesets/urizen_onebit_tileset__v2d0.png" id="3_f8n3w"]
@@ -112,32 +112,49 @@ direction = Vector3(-1, 0, 0)
 spread = 5.0
 gravity = Vector3(0, 0, 0)
 
-[node name="Arrow" type="Area2D"]
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_24gab"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("PoisonGPUParticles2D:emitting")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath("PoisonGPUParticles2D:visible")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+
+[node name="Arrow" type="Area2D" unique_id=1718636598]
 collision_layer = 0
 collision_mask = 3
 script = ExtResource("1_3sgs4")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=167961135]
 material = SubResource("ShaderMaterial_f8n3w")
 rotation = 0.7853982
 scale = Vector2(0.99999994, 0.99999994)
 texture = SubResource("AtlasTexture_g0f7c")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1107174817]
 position = Vector2(5, 0)
 shape = SubResource("CircleShape2D_24gab")
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1973172680]
 stream = ExtResource("4_f8n3w")
 autoplay = true
 bus = &"Sfx"
 
-[node name="PoisonGPUParticles2D" type="GPUParticles2D" parent="."]
+[node name="PoisonGPUParticles2D" type="GPUParticles2D" parent="." unique_id=339624519]
 modulate = Color(0.5897365, 0.00025441914, 0.5897323, 1)
 position = Vector2(-4, 1)
 amount = 100
 lifetime = 0.5
 randomness = 1.0
 process_material = SubResource("ParticleProcessMaterial_24gab")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1072848856]
+replication_config = SubResource("SceneReplicationConfig_24gab")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
