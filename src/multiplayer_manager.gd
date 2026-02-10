@@ -15,7 +15,7 @@ var local_faction: int = -1            # Assigned by server (0-9). -1 is NPC/Neu
 var players = {}  # { "peer_id": {"name": "str", "faction": int} }
 var alliances = [] # 2D Array: alliances[faction_index] = [list_of_allied_indices]
 
-var server_settings = {}
+var server_settings = {'god_mode': true}
 
 # exmaple server settings 
 #{

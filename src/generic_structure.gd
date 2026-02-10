@@ -212,7 +212,7 @@ func upgrade_structure() -> bool:
 	if not str(int(next_tier)) in lore_data.tiers:
 		return false
 	else:
-		next_tier += 1
+		current_tier += 1
 		return true
 		
 		
