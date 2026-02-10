@@ -30,7 +30,14 @@ func _unhandled_input(event: InputEvent):
 			chat_input.grab_focus()
 			# Consume the event so it doesn't trigger other things
 			get_viewport().set_input_as_handled()
-
+	if event.is_action_pressed("console"):
+		if not chat_input.has_focus():
+			chat_input.grab_focus()
+			# Consume the event so it doesn't trigger other things
+			get_viewport().set_input_as_handled()
+			chat_input.text = '/'
+			chat_input.caret_column = 1
+			
 func _on_text_submitted(new_text: String):
 	if new_text != "":
 		# 1. Send the text to the chat
