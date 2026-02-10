@@ -19,7 +19,7 @@ var current_target = null # could be characterbody2d or staticbody2d
 signal just_range_attacked
 
 func _ready() -> void:
-	
+	if not is_multiplayer_authority(): return
 	poison_status = str(get_parent().lore_data.name) in ['Poison Saboteur']
 	
 	$DetectionArea/CollisionShape2D.shape.radius = detection_range
@@ -30,6 +30,8 @@ func _ready() -> void:
 	detection_area.body_exited.connect(_on_body_exited)
 
 func _process(_delta: float) -> void:
+	if not is_multiplayer_authority(): return
+	
 	_update_target()
 	
 	if current_target and attack_timer.is_stopped():
@@ -56,9 +58,18 @@ func attack() -> void:
 		
 	# Spawn the projectile
 	#TODO: SHOULD REQUEST SERVER FOR PROJECTILE HERE ACTUALLY
+	rpc('request_projectile', self.get_parent().get_path(), current_target.get_path(), poison_status)
+	
+	just_range_attacked.emit()
+	
+	attack_timer.start()
+	
+@rpc("any_peer", "call_local", "reliable")
+func request_projectile(unit_node_path: NodePath, target_node_path: NodePath, given_poison_status: bool):
+	if not multiplayer.is_server(): return 
 	var projectile = projectile_scene.instantiate()
 		
-	projectile.prepare(self.get_parent(), poison_status)
+	projectile.prepare(get_node(unit_node_path), given_poison_status)
 	
 	# give it a unique name
 	projectile.name = str(multiplayer.get_unique_id()) + "_" + str(Time.get_ticks_msec())
@@ -67,15 +78,12 @@ func attack() -> void:
 	
 	# Set projectile position and direction
 	projectile.global_position = global_position
-	var direction = (current_target.global_position - global_position).normalized()
+	var target = get_node(target_node_path)
+	var direction = (target.global_position - global_position).normalized()
 	
 	# Check if your projectile has a 'setup' or 'launch' method
 	if projectile.has_method("launch"):
 		projectile.launch(direction, damage)
-		
-	just_range_attacked.emit()
-	
-	attack_timer.start()
 
 func _on_body_entered(body: Node2D) -> void:
 	if ((body is CharacterBody2D) or (body is StaticBody2D)): # only attacks units and structures

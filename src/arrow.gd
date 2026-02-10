@@ -24,7 +24,6 @@ func _ready() -> void:
 			$PoisonGPUParticles2D.emitting = false
 	
 func _physics_process(delta: float) -> void:
-	
 	# Move the arrow in the set direction
 	global_position += direction * speed * delta
 	
@@ -34,8 +33,6 @@ func _physics_process(delta: float) -> void:
 		queue_free()
 
 func launch(target_direction: Vector2, incoming_damage: float) -> void:
-	if not multiplayer.is_server(): return 
-	
 	direction = target_direction
 	damage = incoming_damage
 	
