@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dlc6j71thoj8i"
+path="res://.godot/imported/ogre5.wav-f1c48e74f29c85a22ae2cd5b1787728e.sample"
+
+[deps]
+
+source_file="res://assets/sfx/RPG Sound Pack/NPC/ogre/ogre5.wav"
+dest_files=["res://.godot/imported/ogre5.wav-f1c48e74f29c85a22ae2cd5b1787728e.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

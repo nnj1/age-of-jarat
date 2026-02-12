@@ -1,6 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://biv4fm7r5qtt5"]
+[gd_scene format=3 uid="uid://biv4fm7r5qtt5"]
 
 [ext_resource type="Script" uid="uid://b7p5oo0yqomr6" path="res://src/map_interaction_component.gd" id="1_xqqyq"]
+[ext_resource type="AudioStream" uid="uid://c2om4clmm3hjw" path="res://assets/sfx/UI Soundpack/UI Soundpack/WAV/Wood Block2.wav" id="2_43nib"]
 
-[node name="MapInteractionComponent" type="Node2D" groups=["map_interaction_component"]]
+[node name="MapInteractionComponent" type="Node2D" unique_id=1616917535 groups=["map_interaction_component"]]
 script = ExtResource("1_xqqyq")
+chopping_sound_stream = ExtResource("2_43nib")
+
+[node name="miningSound" type="AudioStreamPlayer" parent="." unique_id=1751741843]
+bus = &"Sfx"
+
+[node name="choppingSound" type="AudioStreamPlayer" parent="." unique_id=671128283]
+bus = &"Sfx"
+
+[node name="harvestingSound" type="AudioStreamPlayer" parent="." unique_id=1419556990]
+bus = &"Sfx"

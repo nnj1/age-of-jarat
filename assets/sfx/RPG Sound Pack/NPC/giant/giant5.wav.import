@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bt4mihb8anuft"
+path="res://.godot/imported/giant5.wav-21d38cc25bc3305e21a2c324c2be14de.sample"
+
+[deps]
+
+source_file="res://assets/sfx/RPG Sound Pack/NPC/giant/giant5.wav"
+dest_files=["res://.godot/imported/giant5.wav-21d38cc25bc3305e21a2c324c2be14de.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

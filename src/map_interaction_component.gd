@@ -11,6 +11,16 @@ extends Node2D
 	'stone': main_game_node.get_cropped_tile_texture(Vector2i(5,23))
 }
 
+@export_category('Sounds')
+# initiate sounds nodes
+@onready var mining_sound: AudioStreamPlayer = $miningSound
+@onready var chopping_sound: AudioStreamPlayer = $choppingSound
+@onready var harvesting_sound: AudioStreamPlayer = $harvestingSound
+
+@export var mining_sound_stream: AudioStream = preload('res://assets/sfx/RPG Sound Pack/inventory/metal-small2.wav')
+@export var chopping_sound_stream: AudioStream = preload('res://assets/sfx/RPG Sound Pack/inventory/wood-small.wav')
+@export var harvesting_sound_stream: AudioStream = preload('res://assets/sfx/RPG Sound Pack/battle/swing.wav')
+
 # Signals for both interactions
 signal tile_pressed(layer_node, map_coords, atlas_coords)
 signal tile_hovered(layer_node, map_coords, atlas_coords)
@@ -20,6 +30,11 @@ var last_hovered_tile: Vector2i = Vector2i(-1, -1)
 var last_hovered_layer: TileMapLayer = null
 
 var over_left_clickable_tile: bool = false
+
+func _ready() -> void:
+	mining_sound.stream = mining_sound_stream
+	chopping_sound.stream = chopping_sound_stream
+	harvesting_sound.stream = harvesting_sound_stream
 
 func _unhandled_input(event: InputEvent) -> void:
 	# 1. HANDLE CLICKS
@@ -141,7 +156,18 @@ func try_to_pop_tile(tile_path: NodePath, map_coords: Vector2i, atlas_coords: Ve
 				popped_tile.position = to_global(layer.map_to_local(map_coords))
 				popped_tile.faction_that_mined = MultiplayerManager.get_faction_from_id(multiplayer.get_remote_sender_id())
 				main_game_node.get_node('entities/objects').call_deferred('add_child', popped_tile, true)
-
+			
+			# only play the sound on the client that did the popping
+			if multiplayer.get_remote_sender_id() == multiplayer.get_unique_id():
+				if material_type == 'wood':
+					chopping_sound.play()
+				elif material_type == 'food':
+					harvesting_sound.play()
+				elif material_type == 'stone':
+					mining_sound.play()
+				elif material_type == 'gold':
+					mining_sound.play()
+			
 ## Specific logic for when the mouse leaves all tiles/layers
 func _on_tile_hover_exited():
 	# reset to default cursor
