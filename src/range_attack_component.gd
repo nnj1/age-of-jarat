@@ -74,7 +74,7 @@ func request_projectile(unit_node_path: NodePath, target_node_path: NodePath, gi
 	# give it a unique name
 	projectile.name = str(multiplayer.get_unique_id()) + "_" + str(Time.get_ticks_msec())
 	
-	main_game_node.get_node('entities/objects').add_child(projectile) # Or add to a specific projectiles folder
+	main_game_node.get_node('entities/objects').add_child(projectile, true) # Or add to a specific projectiles folder
 	
 	# Set projectile position and direction
 	projectile.global_position = global_position
